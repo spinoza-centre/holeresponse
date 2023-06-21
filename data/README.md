@@ -1,229 +1,237 @@
-
-
 # Partial preprocessing with fMRIPrep
-I have yet to encounter a partial FOV dataset such as this to be fully compatible with [fMRIPrep](https://fmriprep.org/en/stable/index.html). Most often, the brain-masking will fail which results in problems with `aCompCor`. Additionally, registration is a pain. Because I already have some sort of registration matrix (the one mapping `FreeSurfer` (*ses-1*) to *ses-2*, I modified the [fMRIPrep](https://fmriprep.org/en/stable/index.html)-workflow to only do `motion correction` and `distortion correction`).
 
-This is all wrapped in the `call_topup`-command:
-```
----------------------------------------------------------------------------------------------------
-call_topup
+## Basic steps
 
-This script runs only the initializing nodes from fMRIPrep. E.g., is will do all the header stuff, 
-validation, but most most importantly, motion correction and topup. Under the hood, it utilizes the
-functions in 'linescanning.fmriprep', which are literally the workflows from fMRIPrep, but with all
-other irrelevant stuff commented out (it's still there just in case). 
-
-Input needs to be the full project root directory so the correct fieldmaps can be found. Using the 
-fmriprep_config?.json files you can select particular subsets of the entire dataset. E.g., I only 
-use this script for my limited FOV data, as the brainmasking fails on that data causing aCompCor to
-fail. Therefore, I just need motion-corrected, topup data for a very select part of the dataset. 
-
-Parameters
-----------
-    -s  subject ID
-    -i  subject-directory containing the files that need to be run through Topup.
-    -o  output directory containing the topup'ed data. Easiest is to give the fMRIPrep folder, it
-        will be formatted accordingly automatically
-    -w  working directory where fMRIPrep's intermediate files are stored; default is some folder 
-        in /tmp
-    -b  bids filter file (maps to --bids-filter-file from fMRIPrep); allows you to select parti-
-        cular files
-                        
-Example
-----------
->>> call_topup -s 001 -i DIR_DATA_HOME -o DIR_DATA_DERIV/fmriprep -w DIR_DATA_SOURCE/sub-001/ses-2
->>> call_topup -s 001 -i DIR_DATA_HOME -o DIR_DATA_DERIV/fmriprep -b misc/fmriprep_config1.json
-
----------------------------------------------------------------------------------------------------
-```
-Note that this is a bash script, while the workflows are implemented in python. This is because when running a python version of this script in the terminal, nodes will mix up during `fmap_wf.resample`, causing the process to crash. This does not happen when you run it interactively in python, so this bash script sends a block of code to python:
+### Convert PAR/REC to nifti
 
 ```bash
-# this is the actual code
-PYTHON_CODE=$(cat <<END
-from linescanning import fmriprep
-wf = fmriprep.init_single_subject_wf("${subject}", 
-                                     bids_dir="${inputdir}", 
-                                     fmriprep_dir="${outputdir}", 
-                                     bids_filters="${bids_filters}", 
-                                     workdir="${workdir}")
-wf.run()                                     
-END
-)
-
-# run the code
-res="$(python -c "$PYTHON_CODE")"
+subID=002
+master -m 02a -s ${subID} -n 2 --lines --sge
 ```
 
-It might not be the cleanest operation, but it's pretty cool and it works. So I'll take it.
+### Reconstruct lines
 
-We can construct our command as follows:
 ```bash
-call_topup -s ${subID} -i ${DIR_DATA_HOME} -b ${DIR_SCRIPTS}/misc/fmriprep_config1.json -w ${DIR_DATA_SOURCE}/sub-${subID}/ses-2
+subID=002
+master -m 03 -s ${subID} - n2 -e 5 --sge
 ```
 
-## Project to ses-1 surface
-This partial FOV acquisition serves as an additional confirmation of the location of the vertex. To do so, we need to project the data to the same surface on which the pRF-estimates from `ses-1` are based. We'll do this in two steps:
-
-1) Get matrix mapping `ses-1` to `ses-2` with [call_ses1_to_ses](https://github.com/gjheij/linescanning/blob/main/bin/call_ses1_to_ses)
-2) Get matrix mapping `bold` to `T1w` with `call_bbregwf`
-3) Apply `bold-to-T1w` and `T1w-to-fsnative` in one step
-4) Project this to the surface with [call_vol2fsaverage](https://github.com/gjheij/linescanning/blob/main/bin/call_vol2fsaverage)
-
-### Matrix mapping `ses-1` to `ses-2`
+### Preprocess lines
 ```bash
-# set sub/ses IDs
-subID=008
+subID=002
+call_lsprep -s sub-${subID} -n 2 --verbose --filter_pca 0.18 --no_button --ica
+```
+
+### Run NORDIC
+
+```bash
+subID=002
+master -m 10 -s ${subID} -n 2 --sge
+```
+
+---
+## Exotic preprocessing
+### Run motion correction with ANTs
+
+First, create a reference image with ANTs
+
+```bash
+subID=002
+
+for runID in `seq 1 2`; do
+    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
+    ref_file=$(dirname ${orig_file})/$(basename ${orig_file} .nii.gz)ref.nii.gz
+
+    call_antsreference ${orig_file} ${ref_file}
+done
+```
+
+use this reference image to warp the brainmask in T1w-space to func-space. Also project the WM-segmentation to func-space because the SDC-workflow report requires one. Now also create a registration file between the two sessions:
+
+```bash
+# create transformation mapping ses-2 to ses-1
+call_ses1_to_ses --inv sub-${subID} ${sesID}
+call_ses1_to_ses sub-${subID} ${sesID}
+tfm_fwd=${DIR_DATA_DERIV}/pycortex/sub-${subID}/transforms/sub-${subID}_from-ses${sesID}_to-ses1_desc-genaff.mat
+tfm_inv=${DIR_DATA_DERIV}/pycortex/sub-${subID}/transforms/sub-${subID}_from-ses1_to-ses${sesID}_desc-genaff.mat
+
+```
+
+and apply this to the brainmask and white-matter segmentation
+```bash
+for runID in `seq 1 2`; do
+
+    # set orig file and reference file previously created
+    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
+    ref_file=$(dirname ${orig_file})/$(basename ${orig_file} .nii.gz)ref.nii.gz
+
+    # warp brainmask to func-space
+    inv=1
+    mov=${DIR_DATA_DERIV}/manual_masks/sub-${subID}/ses-1/sub-${subID}_ses-1_acq-MP2RAGE_desc-spm_mask.nii.gz
+    mask=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
+    call_antsapplytransforms --gen ${ref_file} ${mov} ${mask} ${tfm_inv}
+
+    # warp white matter segmentation to func-space
+    mov=${DIR_DATA_DERIV}/manual_masks/sub-${subID}/ses-1/sub-${subID}_ses-1_acq-MP2RAGE_label-WM_probseg.nii.gz
+    wm=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_label-WM_probseg.nii.gz
+    call_antsapplytransforms --gen ${ref_file} ${mov} ${wm} ${tfm_inv}
+
+    # enforce 3D images
+    for img in ${mask} ${wm}; do
+        dm=`fslval ${img} dim0`
+        if [[ ${dm} -gt 3 ]]; then
+            fslroi ${img} ${img} 0 1
+            fslorient -copyqform2sform ${img}
+        fi
+    done
+done
+```
+
+run motion correction; before doing so, we'll back up the original files with an extra ``rec``-tag and name the motion corrected files exactly like the original files. That way, the FMAP still has the correct ``IntendedFor``-field.
+
+```bash
+for runID in `seq 1 2`; do
+
+    # set orig file
+    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
+    
+    # set reference
+    ref_file=$(dirname ${orig_file})/$(basename ${orig_file} .nii.gz)ref.nii.gz
+
+    # set output
+    out_base=$(dirname ${orig_file})/$(basename ${orig_file} _bold.nii.gz)
+
+    # rename orig file
+    new_orig=${out_base}_desc-bold_nomoco.nii.gz
+    mv ${orig_file} ${new_orig}
+
+    # get mask
+    mask=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
+    
+    # run; the output will now be named exactly like the original file
+    call_antsmotioncorr --in ${new_orig} --mask ${mask} --out ${out_base} --ref ${ref_file} --verbose
+done
+```
+
+`call_topup` takes these files as input, but it can also look for them in the ``workdir`` as if McFlirt module was run. For this, we need to create additional directories and rename the files.
+
+```bash
+wf_folder=${DIR_DATA_SOURCE}/sub-${subID}/ses-2
+for runID in `seq 1 2`; do
+
+    # set orig file
+    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
+
+    # set output
+    out_base=$(dirname ${orig_file})/$(basename ${orig_file} _bold.nii.gz)
+
+    # set full working directory
+    full_wf=${wf_folder}/single_subject_${subID}_wf/func_preproc_ses_2_task_SRFi_run_${runID}_acq_3DEPI_wf
+
+    # make bold_hmc_wf folder
+    mkdir -p ${full_wf}/bold_hmc_wf
+
+    # make mcflirt for RMS-file
+    mkdir -p ${full_wf}/bold_hmc_wf/mcflirt
+    cp ${out_base}*.rms ${full_wf}/bold_hmc_wf/mcflirt
+
+    # copy motion parameters
+    mkdir -p ${full_wf}/bold_hmc_wf/normalize_motion
+    cp ${out_base}_desc-motionpars.txt ${full_wf}/bold_hmc_wf/normalize_motion/motion_params.txt
+done
+```
+
+### Distortion correction (topup)
+```bash
+call_topup --sub ${subID} --ses 2 --acq 3DEPI --mask ${mask} --wm ${wm}
+```
+
+### Confounds
+```bash
+subID=002
+sesID=2
+for runID in `seq 1 2`; do
+    in_file=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_acq-3DEPI_run-${runID}_desc-preproc_bold.nii.gz
+
+    # tfm_inv describes ses1-to-ses2
+    call_confounds -s sub-${subID} -n ${sesID} --in ${in_file} --tfm ${tfm_inv}
+done
+```
+
+### refine registration to T1w with bbregister
+```bash
+subID=002
 sesID=2
 
-# create file
-call_ses1_to_ses sub-${subID} ${sesID}
-matrix1=${DIR_DATA_DERIV}/pycortex/sub-${subID}/transforms/sub-${subID}_from-ses1_to-ses${sesID}_desc-genaff.mat
+# create transformation mapping ses-2 to ses-1
+matrix1=${DIR_DATA_DERIV}/pycortex/sub-${subID}/transforms/sub-${subID}_from-ses${sesID}_to-ses1_desc-genaff.mat
+
+# register
+for runID in `seq 1 2`; do
+
+    # define BOLD timeseries
+    ref_file=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_acq-3DEPI_run-${runID}_boldref.nii.gz
+
+    # t1w-space as reference
+    ref_anat=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-1/anat/sub-${subID}_ses-1_acq-MP2RAGE_desc-preproc_T1w.nii.gz
+
+    # run bbregister
+    call_bbregwf --in ${ref_file} --tfm ${matrix1} --ref ${ref_anat} --verbose
+
+done
 ```
 
-### Matrix mapping bold of `ses-2` to T1w of `ses-1`
+### Denoising with pybest
+
+From here, we can use the ``master`` command again to run pybest. Make sure to specify the ``--func`` flag, which will output nifti-files that we can use for Feat
+
 ```bash
-# get bold file
-bold=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-pRF_acq-3DEPI_run-1_desc-preproc_bold.nii.gz
+master -m 16 -s ${subID} -n ${sesID} --func -t SRFi
 
-# get reference
-ref=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-1/anat/sub-${subID}_ses-1_acq-MP2RAGE_desc-preproc_T1w.nii.gz
-
-# set output; call it space-tmp for now as we need to refine with bbregister
-out=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-pRF_acq-3DEPI_run-1_space-tmp_desc-preproc_bold.nii.gz
-json=$(dirname ${out})/$(basename ${out} .nii.gz).json
-
-# make json file
-if [ -f ${json} ]; then
-    rm ${json}
-fi
-
-(
-echo "{"
-echo "  \"RepetitionTime\": 1.11149,"
-echo "  \"SkullStripped\": false,"
-echo "  \"SliceTimingCorrected\": false,"
-echo "  \"MatrixApplied\": \"${matrix1}\","
-echo "  \"SourceFile\": \"${bold}\","
-echo "  \"Description\": \"temporary space (to be refined with BBR) before projection to FSNative\""
-echo "}" 
-) >> ${json}
-
-# we need to invert matrix to go to tmp-space > bbregister will fail is the partial FOV itself is inserted
-call_antsapplytransforms -i 1 ${ref} ${bold} ${out} ${matrix1}
-
-# make boldref
-boldref1=$(dirname ${out})/$(basename ${out} desc-preproc_bold.nii.gz)boldref.nii.gz
-fslmaths ${out} -Tmean ${boldref1}
 ```
 
-This registration is not perfect, so we can refine the registration with `bbregister` from here by taking another workflow from fMRIPrep called `bold_reg_wf`, and we'll input the motion/distortion corrected registered file (`boldref`) as input. The output consists of the directory + basename:
+---
+## Feat
+
+### Run level 1 analysis
+
 ```bash
-workdir=${DIR_DATA_SOURCE}/sub-${subID}/ses-2/single_subject_${subID}_wf/func_preproc_ses_${sesID}_task_pRF_run_1_acq_3DEPI_wf # store with other workflow outputs
-outdir=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-pRF_acq-3DEPI_run-1 # 'from-{bold|T1w}_to-{bold|T1w}_mode-image_xfm.txt will be appended
-call_bbregwf -s ${subID} -b ${boldref1} -w ${workdir} -o ${outdir}
+# first convert all *tsv-files to 3-column format files
+call_onsets2fsl --in ${DIR_DATA_HOME}/${subID}/ses-${sesID}
 ```
 
-## Combine `from-tmp_to-T1w` and `from-T1w_to-fsnative` in one step:
 ```bash
-# set old output to new input
-bold=${out}
+cd ${DIR_DATA_HOME}/code
+./call_feat2 -s sub-${subID} -n ${sesID} -j 10 --pybest #--debug
+```
+### Run level 2 analysis to average runs
 
-# set new output
-out=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-pRF_acq-3DEPI_run-1_space-fsnative_desc-preproc_bold.nii.gz
-
-# define json file
-json=$(dirname ${out})/$(basename ${out} .nii.gz).json
-
-# get the anatomical from ses-1
-anat=${DIR_DATA_DERIV}/freesurfer/sub-${subID}/mri/orig.nii.gz
-
-# from bold-to-T1w
-matrix2=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-pRF_acq-3DEPI_run-1_from-bold_to-T1w_mode-image_xfm.txt
-
-# get the T1w-to-fsnative matrix
-matrix3=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-1/anat/sub-${subID}_ses-1_acq-MP2RAGE_from-T1w_to-fsnative_mode-image_xfm.txt
-
-# make json file
-if [ -f ${json} ]; then
-    rm ${json}
-fi
-
-(
-echo "{"
-echo "  \"RepetitionTime\": 1.11149,"
-echo "  \"SkullStripped\": false,"
-echo "  \"SliceTimingCorrected\": false,"
-echo "  \"MatrixApplied\": [\"${matrix2}\", \"${matrix3}\"],"
-echo "  \"SourceFile\": \"${bold}\","
-echo "  \"Description\": \"volumetric FSnative space\""
-echo "}" 
-) >> ${json}
-
-# apply the matrix to space-tmp to get space-fsnative > "0 0" means invert neither of the matrices
-call_antsapplytransforms -i "0 0" ${anat} ${bold} ${out} "${matrix2} ${matrix3}"
-
-# make boldref
-boldref2=$(dirname ${out})/$(basename ${out} desc-preproc_bold.nii.gz)boldref.nii.gz
-fslmaths ${out} -Tmean ${boldref2}
+```bash
+# inject identity matrix into Feat
+call_injectmatrices -n "2" -l level1 -r "1,2"
 ```
 
-### Project to surface
-Now that we have the bold data in `FSNative`-space, our final task is to project it to the surface. This is actually the easiest step, we just have to run [call_vol2fsaverage](https://github.com/gjheij/linescanning/blob/main/bin/call_vol2fsaverage), and the required intermediate files are produced:
-
 ```bash
-outdir=$(dirname ${out})
-
-# 'space-{fsnative|fsaverage}' will be inserted inbetween $prefix and $suffix
-prefix=sub-${subID}_ses-${sesID}_task-pRF_acq-3DEPI_run-1
-suffix=bold.func
-
-# build command
-call_vol2fsaverage -t -o ${outdir} -p ${prefix} sub-${subID} ${out} ${suffix}
+# run Feat
+cd $DIR_DATA_HOME/code
+./call_feat2 -s sub-${subID} -g level2 -l level1 -j 10 --ow
 ```
 
-Aside from `gii`-files, [call_vol2fsaverage](https://github.com/gjheij/linescanning/blob/main/bin/call_vol2fsaverage) will also produce a numpy array in which the `gii`'s from the left and right hemisphere (for both `fsnative` and `fsaverage`) are stacked onto one another (*left* first). This numpy array can be directly used in conjunction with [the dataset class](https://github.com/gjheij/linescanning/blob/main/linescanning/dataset.py#L1657)
-
-## Brain extract 3D-EPI with brain-mask from T1w
-The whole reason we do this exercise is because fMRIPrep fails on the brain mask. Technically we have all the ingredients to brainmask the 3D-EPI data: a warp mapping bold to T1w, and a good brainmask in T1w-space. We can therefore apply the warp to the mask to create a bold mask.
+---
+### project stats to surface through transformation files
 
 ```bash
-# set the output to something fMRIPreppy
-bold_mask=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-pRF_acq-3DEPI_run-1_desc-brain_mask.nii.gz
+subject="sub-008"
+gft_dir="${DIR_DATA_DERIV}/feat/level2/${subject}_desc-level1_confs.gfeat"
+for z in `seq 1 2`; do
+    cpe=${gft_dir}/cope${z}.feat/stats/zstat1.nii.gz
+    t1=${DIR_DATA_DERIV}/pycortex/${subject}/transforms/${subject}_from-ses1_to-ses2_rec-motion1_desc-genaff.mat
+    t2=${DIR_DATA_DERIV}/fmriprep/${subject}/ses-1/anat/${subject}_ses-1_acq-MP2RAGE_from-T1w_to-fsnative_mode-image_xfm.txt
+    call_vol2fsaverage --verbose -o ${gft_dir} -t ${t2},${t1} -i 0,1 -p ${subject}_ses-2_task-SRF ${subject} ${cpe} desc-cope${z}
+done
 
-# mask
-t1_mask=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-1/anat/sub-${subID}_ses-1_acq-MP2RAGE_desc-brain_mask.nii.gz
-
-# apply
-call_antsapplytransforms -v -i "0 1" -t gen ${boldref1} ${t1_mask} ${bold_mask} "${matrix1} ${matrix2}"
-
-# dilate slightly
-call_dilate ${bold_mask} ${bold_mask} 2
-
-# apply mask
-bold=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-pRF_acq-3DEPI_run-1_desc-preproc_bold.nii.gz
-out=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-pRF_acq-3DEPI_run-1_desc-masked_bold.nii.gz
-
-fslmaths ${bold} -mas ${bold_mask} ${out}
-
-# json file
-json=$(dirname ${out})/$(basename ${out} .nii.gz).json
-if [ -f ${json} ]; then
-    rm ${json}
-fi
-
-(
-echo "{"
-echo "  \"RepetitionTime\": 1.11149,"
-echo "  \"SkullStripped\": true,"
-echo "  \"SliceTimingCorrected\": false,"
-echo "  \"MaskSource\": \"${bold_mask}\","
-echo "  \"SourceFile\": \"${bold}\","
-echo "  \"Description\": \"motion/distortion correct + brain extraction\""
-echo "}" 
-) >> ${json}
-
-# boldref
-boldref3=$(dirname ${out})/$(basename ${out} .nii.gz)ref.nii.gz
-fslmaths ${out} -Tmean ${boldref3}
+cpe="${DIR_DATA_HOME}/${subject}/ses-2/func/${subject}_ses-2_task-SRFa_run-1_bold.nii.gz"
+t1=${DIR_DATA_DERIV}/pycortex/${subject}/transforms/${subject}_from-ses1_to-ses2_rec-motion1_desc-genaff.mat
+t2=${DIR_DATA_DERIV}/fmriprep/${subject}/ses-1/anat/${subject}_ses-1_acq-MP2RAGE_from-T1w_to-fsnative_mode-image_xfm.txt
+call_vol2fsaverage --gen --verbose -o ${gft_dir} -t ${t2},${t1} -i 0,1 -p ${subject}_ses-2_task-SRF ${subject} ${cpe} desc-beam
 ```
