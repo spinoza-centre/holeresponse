@@ -208,13 +208,31 @@ cd ${DIR_DATA_HOME}/code
 
 ```bash
 # inject identity matrix into Feat
-call_injectmatrices -n "2" -l level1 -r "1,2"
+call_injectmatrices -s ${subID} -n ${sesID} -l level1 -r "1,2"
 ```
 
 ```bash
 # run Feat
 cd $DIR_DATA_HOME/code
 ./call_feat2 -s sub-${subID} -g level2 -l level1 -j 10 --ow
+```
+
+### Project stats to line
+```bash
+subID=002
+sesID=2
+runID=1
+beam_ref=${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/anat/sub-${subID}_ses-${sesID}_task-SRFa_run-${runID}_acq-1slice_T1w.nii.gz
+
+# project tstat1
+img1=${DIR_DATA_DERIV}/feat/level2/sub-${subID}_desc-level1.gfeat/cope1.feat/stats/tstat1.nii.gz
+out=$(dirname ${img1})/tstat1_space-line.nii.gz
+call_antsapplytransforms --verbose ${beam_ref} ${img1} ${out} identity
+
+# project brain mask
+img2=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
+out=$(dirname ${img1})/mask_space-line.nii.gz
+call_antsapplytransforms --gen --verbose ${beam_ref} ${img2} ${out} identity
 ```
 
 ---
