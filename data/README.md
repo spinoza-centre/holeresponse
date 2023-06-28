@@ -38,9 +38,10 @@ First, create a reference image with ANTs
 ```bash
 subID=002
 nr_runs=2
+sesID=2
 
 for runID in `seq 1 ${nr_runs}`; do
-    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
+    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
     ref_file=$(dirname ${orig_file})/$(basename ${orig_file} .nii.gz)ref.nii.gz
 
     call_antsreference ${orig_file} ${ref_file}
@@ -61,20 +62,22 @@ tfm_inv=${DIR_DATA_DERIV}/pycortex/sub-${subID}/transforms/sub-${subID}_from-ses
 and apply this to the brainmask and white-matter segmentation
 ```bash
 nr_runs=2
+sesID=2
+
 for runID in `seq 1 ${nr_runs}`; do
 
     # set orig file and reference file previously created
-    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
+    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
     ref_file=$(dirname ${orig_file})/$(basename ${orig_file} .nii.gz)ref.nii.gz
 
     # warp brainmask to func-space
     mov=${DIR_DATA_DERIV}/manual_masks/sub-${subID}/ses-1/sub-${subID}_ses-1_acq-MP2RAGE_desc-spm_mask.nii.gz
-    mask=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
+    mask=${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
     call_antsapplytransforms --gen ${ref_file} ${mov} ${mask} ${tfm_inv}
 
     # warp white matter segmentation to func-space
     mov=${DIR_DATA_DERIV}/manual_masks/sub-${subID}/ses-1/sub-${subID}_ses-1_acq-MP2RAGE_label-WM_probseg.nii.gz
-    wm=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_label-WM_probseg.nii.gz
+    wm=${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_label-WM_probseg.nii.gz
     call_antsapplytransforms --gen ${ref_file} ${mov} ${wm} ${tfm_inv}
 
     # enforce 3D images
@@ -92,10 +95,11 @@ run motion correction; before doing so, we'll back up the original files with an
 
 ```bash
 nr_runs=2
+sesID=2
 for runID in `seq 1 ${nr_runs}`; do
 
     # set orig file
-    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
+    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
     
     # set reference
     ref_file=$(dirname ${orig_file})/$(basename ${orig_file} .nii.gz)ref.nii.gz
@@ -108,7 +112,7 @@ for runID in `seq 1 ${nr_runs}`; do
     mv ${orig_file} ${new_orig}
 
     # get mask
-    mask=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
+    mask=${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
     
     # run; the output will now be named exactly like the original file
     job="call_antsmotioncorr"
@@ -121,13 +125,15 @@ done
 `call_topup` takes these files as input, but it can also look for them in the ``workdir`` as if McFlirt module was run. For this, we need to create additional directories and rename the files.
 
 ```bash
-wf_folder=${DIR_DATA_SOURCE}/sub-${subID}/ses-2
+subID=002
+sesID=2
+wf_folder=${DIR_DATA_SOURCE}/sub-${subID}/ses-${sesID}
 nr_runs=2
 
 for runID in `seq 1 ${nr_runs}`; do
 
     # set orig file
-    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
+    orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
 
     # set output
     out_base=$(dirname ${orig_file})/$(basename ${orig_file} _bold.nii.gz)
@@ -186,7 +192,7 @@ subID=002
 sesID=2
 nr_runs=2
 for runID in `seq 1 ${nr_runs}`; do
-    in_file=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_acq-3DEPI_run-${runID}_desc-preproc_bold.nii.gz
+    in_file=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_acq-3DEPI_run-${runID}_desc-preproc_bold.nii.gz
 
     # tfm_inv describes ses1-to-ses2job="call_topup"
     job="call_confounds"
@@ -202,14 +208,14 @@ subID=002
 sesID=2
 nr_runs=2
 
-# create transformation mapping ses-2 to ses-1
+# create transformation mapping ses-${sesID} to ses-1
 matrix1=${DIR_DATA_DERIV}/pycortex/sub-${subID}/transforms/sub-${subID}_from-ses${sesID}_to-ses1_desc-genaff.mat
 
 # register
 for runID in `seq 1 ${nr_runs}`; do
 
     # define BOLD timeseries
-    ref_file=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_acq-3DEPI_run-${runID}_boldref.nii.gz
+    ref_file=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_acq-3DEPI_run-${runID}_boldref.nii.gz
 
     # t1w-space as reference
     ref_anat=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-1/anat/sub-${subID}_ses-1_acq-MP2RAGE_desc-preproc_T1w.nii.gz
@@ -271,7 +277,7 @@ out=$(dirname ${img1})/tstat1_space-line.nii.gz
 call_antsapplytransforms --verbose ${beam_ref} ${img1} ${out} identity
 
 # project brain mask
-img2=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
+img2=${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
 out=$(dirname ${img1})/mask_space-line.nii.gz
 call_antsapplytransforms --gen --verbose ${beam_ref} ${img2} ${out} identity
 ```
@@ -286,11 +292,11 @@ for z in `seq 1 2`; do
     cpe=${gft_dir}/cope${z}.feat/stats/zstat1.nii.gz
     t1=${DIR_DATA_DERIV}/pycortex/${subject}/transforms/${subject}_from-ses1_to-ses2_rec-motion1_desc-genaff.mat
     t2=${DIR_DATA_DERIV}/fmriprep/${subject}/ses-1/anat/${subject}_ses-1_acq-MP2RAGE_from-T1w_to-fsnative_mode-image_xfm.txt
-    call_vol2fsaverage --verbose -o ${gft_dir} -t ${t2},${t1} -i 0,1 -p ${subject}_ses-2_task-SRF ${subject} ${cpe} desc-cope${z}
+    call_vol2fsaverage --verbose -o ${gft_dir} -t ${t2},${t1} -i 0,1 -p ${subject}_ses-${sesID}_task-SRF ${subject} ${cpe} desc-cope${z}
 done
 
-cpe="${DIR_DATA_HOME}/${subject}/ses-2/func/${subject}_ses-2_task-SRFa_run-1_bold.nii.gz"
+cpe="${DIR_DATA_HOME}/${subject}/ses-${sesID}/func/${subject}_ses-${sesID}_task-SRFa_run-1_bold.nii.gz"
 t1=${DIR_DATA_DERIV}/pycortex/${subject}/transforms/${subject}_from-ses1_to-ses2_rec-motion1_desc-genaff.mat
 t2=${DIR_DATA_DERIV}/fmriprep/${subject}/ses-1/anat/${subject}_ses-1_acq-MP2RAGE_from-T1w_to-fsnative_mode-image_xfm.txt
-call_vol2fsaverage --gen --verbose -o ${gft_dir} -t ${t2},${t1} -i 0,1 -p ${subject}_ses-2_task-SRF ${subject} ${cpe} desc-beam
+call_vol2fsaverage --gen --verbose -o ${gft_dir} -t ${t2},${t1} -i 0,1 -p ${subject}_ses-${sesID}_task-SRF ${subject} ${cpe} desc-beam
 ```
