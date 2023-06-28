@@ -139,7 +139,8 @@ for runID in `seq 1 ${nr_runs}`; do
     out_base=$(dirname ${orig_file})/$(basename ${orig_file} _bold.nii.gz)
 
     # set full working directory
-    full_wf=${wf_folder}/single_subject_${subID}_wf/func_preproc_ses_2_task_SRFi_run_${runID}_acq_3DEPI_wf
+    wf=func_preproc_ses_${sesID}_task_SRFi_run_${runID}_acq_3DEPI_wf
+    full_wf=${wf_folder}/single_subject_${subID}_wf/${wf}
 
     # make bold_hmc_wf folder
     mkdir -p ${full_wf}/bold_hmc_wf
