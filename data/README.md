@@ -13,7 +13,7 @@ master -m 02a -s ${subID} -n 2 --lines --sge
 
 ```bash
 subID=002
-master -m 03 -s ${subID} - n2 -e 5 --sge
+master -m 03 -s ${subID} -n 2 -e 5 --sge
 ```
 
 ### Preprocess lines
@@ -37,8 +37,9 @@ First, create a reference image with ANTs
 
 ```bash
 subID=002
+nr_runs=2
 
-for runID in `seq 1 2`; do
+for runID in `seq 1 ${nr_runs}`; do
     orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
     ref_file=$(dirname ${orig_file})/$(basename ${orig_file} .nii.gz)ref.nii.gz
 
@@ -59,14 +60,14 @@ tfm_inv=${DIR_DATA_DERIV}/pycortex/sub-${subID}/transforms/sub-${subID}_from-ses
 
 and apply this to the brainmask and white-matter segmentation
 ```bash
-for runID in `seq 1 2`; do
+nr_runs=2
+for runID in `seq 1 ${nr_runs}`; do
 
     # set orig file and reference file previously created
     orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
     ref_file=$(dirname ${orig_file})/$(basename ${orig_file} .nii.gz)ref.nii.gz
 
     # warp brainmask to func-space
-    inv=1
     mov=${DIR_DATA_DERIV}/manual_masks/sub-${subID}/ses-1/sub-${subID}_ses-1_acq-MP2RAGE_desc-spm_mask.nii.gz
     mask=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
     call_antsapplytransforms --gen ${ref_file} ${mov} ${mask} ${tfm_inv}
@@ -90,7 +91,8 @@ done
 run motion correction; before doing so, we'll back up the original files with an extra ``rec``-tag and name the motion corrected files exactly like the original files. That way, the FMAP still has the correct ``IntendedFor``-field.
 
 ```bash
-for runID in `seq 1 2`; do
+nr_runs=2
+for runID in `seq 1 ${nr_runs}`; do
 
     # set orig file
     orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
@@ -109,7 +111,10 @@ for runID in `seq 1 2`; do
     mask=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz
     
     # run; the output will now be named exactly like the original file
-    call_antsmotioncorr --in ${new_orig} --mask ${mask} --out ${out_base} --ref ${ref_file} --verbose
+    job="call_antsmotioncorr"
+    job="qsub -q short.q -N $(basename ${orig_file} _bold.nii.gz)_desc-moco -wd ${DIR_LOGS} ${DIR_SCRIPTS}/bin/call_antsmotioncorr"
+
+    ${job} --in ${new_orig} --mask ${mask} --out ${out_base} --ref ${ref_file} --verbose
 done
 ```
 
@@ -117,7 +122,9 @@ done
 
 ```bash
 wf_folder=${DIR_DATA_SOURCE}/sub-${subID}/ses-2
-for runID in `seq 1 2`; do
+nr_runs=2
+
+for runID in `seq 1 ${nr_runs}`; do
 
     # set orig file
     orig_file=${DIR_DATA_HOME}/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_run-${runID}_acq-3DEPI_bold.nii.gz
@@ -143,18 +150,49 @@ done
 
 ### Distortion correction (topup)
 ```bash
-call_topup --sub ${subID} --ses 2 --acq 3DEPI --mask ${mask} --wm ${wm}
+subID=002
+sesID=2
+nr_runs=2
+
+wms=()
+masks=()
+# read white matter/brain mask into comma-separated string so we can pass it as list to fmriprep
+for runID in `seq 1 ${nr_runs}`; do
+    
+    # get wm segmentation
+    wms+=(${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_label-WM_probseg.nii.gz)
+
+    # get brain mask
+    masks+=(${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}/func/sub-${subID}_ses-${sesID}_task-SRFi_run-${runID}_acq-3DEPI_desc-brain_mask.nii.gz)
+done
+
+# join with comma
+wms=$(printf ",%s" "${wms[@]}")
+wms=${wms:1}
+
+masks=$(printf ",%s" "${masks[@]}")
+masks=${masks:1}
+
+# define job
+job="call_topup"
+n_jobs=10
+job="qsub -q short.q -pe smp ${n_jobs} -N sub-${subID}_ses-${sesID}_task-SRFi_acq-3DEPI_desc-topup -wd ${DIR_LOGS} ${DIR_SCRIPTS}/bin/call_topup"
+${job} --sub ${subID} --ses ${sesID} --acq 3DEPI --mask ${masks} --wm ${wms} -j ${n_jobs}
 ```
 
 ### Confounds
 ```bash
 subID=002
 sesID=2
-for runID in `seq 1 2`; do
+nr_runs=2
+for runID in `seq 1 ${nr_runs}`; do
     in_file=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_acq-3DEPI_run-${runID}_desc-preproc_bold.nii.gz
 
-    # tfm_inv describes ses1-to-ses2
-    call_confounds -s sub-${subID} -n ${sesID} --in ${in_file} --tfm ${tfm_inv}
+    # tfm_inv describes ses1-to-ses2job="call_topup"
+    job="call_confounds"
+    n_jobs=1
+    job="qsub -q short.q -pe smp ${n_jobs} -N $(basename ${in_file} preproc_bold.nii.gz)confounds -wd ${DIR_LOGS} ${DIR_SCRIPTS}/bin/call_confounds"
+    ${job} -s sub-${subID} -n ${sesID} --in ${in_file} --tfm ${tfm_inv}
 done
 ```
 
@@ -162,12 +200,13 @@ done
 ```bash
 subID=002
 sesID=2
+nr_runs=2
 
 # create transformation mapping ses-2 to ses-1
 matrix1=${DIR_DATA_DERIV}/pycortex/sub-${subID}/transforms/sub-${subID}_from-ses${sesID}_to-ses1_desc-genaff.mat
 
 # register
-for runID in `seq 1 2`; do
+for runID in `seq 1 ${nr_runs}`; do
 
     # define BOLD timeseries
     ref_file=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-2/func/sub-${subID}_ses-2_task-SRFi_acq-3DEPI_run-${runID}_boldref.nii.gz
@@ -176,7 +215,10 @@ for runID in `seq 1 2`; do
     ref_anat=${DIR_DATA_DERIV}/fmriprep/sub-${subID}/ses-1/anat/sub-${subID}_ses-1_acq-MP2RAGE_desc-preproc_T1w.nii.gz
 
     # run bbregister
-    call_bbregwf --in ${ref_file} --tfm ${matrix1} --ref ${ref_anat} --verbose
+    job="call_bbregwf"
+    n_jobs=5
+    job="qsub -q short.q -pe smp ${n_jobs} -N $(basename ${ref_file} _boldref.nii.gz)_desc-bbregwf -wd ${DIR_LOGS} ${DIR_SCRIPTS}/bin/call_bbregwf"
+    ${job} --in ${ref_file} --tfm ${matrix1} --ref ${ref_anat} --verbose
 
 done
 ```
@@ -187,7 +229,6 @@ From here, we can use the ``master`` command again to run pybest. Make sure to s
 
 ```bash
 master -m 16 -s ${subID} -n ${sesID} --func -t SRFi
-
 ```
 
 ---
@@ -197,7 +238,7 @@ master -m 16 -s ${subID} -n ${sesID} --func -t SRFi
 
 ```bash
 # first convert all *tsv-files to 3-column format files
-call_onsets2fsl --in ${DIR_DATA_HOME}/${subID}/ses-${sesID}
+call_onsets2fsl --in ${DIR_DATA_HOME}/sub-${subID}/ses-${sesID}
 ```
 
 ```bash
