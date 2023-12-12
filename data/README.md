@@ -6,27 +6,28 @@
 
 ```bash
 subID=002
-master -m 02a -s ${subID} -n 2 --lines --sge
+sesID=2
+master -m 02a -s ${subID} -n ${sesID} --lines --sge
 ```
 
 ### Reconstruct lines
 
 ```bash
 subID=002
-master -m 03 -s ${subID} -n 2 -e 5 --sge
+master -m 03a -s ${subID} -n ${sesID} --sge
 ```
 
 ### Preprocess lines
 ```bash
 subID=002
-call_lsprep -s sub-${subID} -n 2 --verbose --filter_pca 0.18 --no_button --ica
+master -m 03b -s ${subID} -n ${sesID} -x --filter_pca=0.18,--verbose,--no_button,--ow,--ica --sge
 ```
 
 ### Run NORDIC
 
 ```bash
 subID=002
-master -m 10 -s ${subID} -n 2 --sge
+master -m 10 -s ${subID} -n ${sesID} --sge
 ```
 
 ---
