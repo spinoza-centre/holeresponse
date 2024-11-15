@@ -1,0 +1,461 @@
+#!/usr/bin/env python
+#$ -cwd
+#$ -q verylong.q@jupiter
+#$ -j Y
+#$ -V
+#$ -o /data1/projects/MicroFunc/Jurjen/programs/project_repos/holeresponse/logs
+
+from linescanning import (
+    prf,
+    utils,
+    plotting,
+    simulate
+)
+import getopt
+import sys
+import yaml
+import pickle
+import pandas as pd
+import pathlib
+import os
+from joblib import Parallel, delayed
+import numpy as np
+import matplotlib.pyplot as plt
+opj = os.path.join
+
+def main(argv):
+
+    """
+---------------------------------------------------------------------------------------------------
+simulate_isi
+
+Calculate size-response functions for a superficial/deep pRF, fetch the stimuli that maximize the 
+difference between the two. Then, optimize the stimulus order (5 stims) and use that order to opti-
+mize the interstimulus interval to maximize the variance of the prediction
+
+Parameters
+----------
+    -s|--subject    subject ID used throughout the pipeline
+    -j|--n_jobs     number of jobs to parallellize over. Default = 1
+    -i|--n_iters    number of iterations for the simulation (default = 500)
+    --lh|--rh       which hemisphere to process (default = "lh")
+    --sim           retrieve stimulus sizes from size-response function. Default stimulus sizes are
+                    [0.7,1,2] degrees
+
+Returns
+----------
+    a *csv-file containing a  dataframe indexed on subject, stimulus type, stimulus size by nr of 
+    vertices
+
+Example
+----------
+    ./simulate_isi -s sub-003
+    ./simulate_isi -s sub-003 -i 1000
+    ./simulate_isi --subject sub-003 -n_iters 1000
+    n_jobs=10; qsub -pe smp ${n_jobs} -N sub-003_desc-simulate simulate_isi -s sub-003 -j ${n_jobs}
+    n_jobs=10; qsub -pe smp ${n_jobs} -N sub-003_desc-simulate simulate_isi -s sub-003 -i 1000 -j ${n_jobs}
+
+---------------------------------------------------------------------------------------------------
+    """
+
+    subject = None
+    path_base = "/data1/projects/MicroFunc/Jurjen"
+    proj_base = opj(path_base, "projects")
+    prog_base = opj(path_base, "programs")
+    proj_dir = opj(proj_base, "VE-SRF")
+    TR = 0.105
+    n_iters = 500
+    n_jobs = 1
+    hemi = ["lh","rh"]
+    hemi_tag = ["hemi-L","hemi-R"]
+    stim_sizes = [0.7,1,2]
+    sim_sizes = False
+
+    try:
+        opts = getopt.getopt(argv,"hi:o:s:j:r:",["lh","rh","help", "subject=","n_jobs=","rep=","n_iters=", "sim"])[0]
+    except getopt.GetoptError:
+        print("ERROR IN ARGUMENT HANDLING!")
+        print(main.__doc__)
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt in ('-h', "--help"):
+            print(main.__doc__)
+            sys.exit()
+        elif opt in ('-s', "--subject"):
+            subject = arg
+        elif opt in ('-j', "--n_jobs"):
+            n_jobs = int(arg)
+        elif opt in ('-i', "--n_iters"):
+            n_iters = int(arg)
+        elif opt in ("--lh"):
+            hemi = ["lh"]    
+            hemi_tag = ["hemi-L"]
+        elif opt in ("--rh"):
+            hemi = ["rh"]        
+            hemi_tag = ["hemi-R"]      
+        elif opt in ("--sim"):
+            sim_sizes = True              
+
+    if len(argv) < 1:
+        print("\nNEED AT LEAST A SUBJECT ID")
+        print(main.__doc__)
+        sys.exit()
+
+    print("\nsimulate_isi.py - optimize for stimulus sequence and interstimulus intervals\n")
+    #---------------------------------------------------------------------------------------------------
+    # SUBJECT SPECIFIC VERTEX SETTINGS
+    
+    print("STAGE 0 - INITIATIZE PRF-OBJECT FROM TARGET VERTEX")
+    vert_file = opj(
+        proj_dir,
+        "derivatives",
+        "pycortex",
+        subject,
+        f"{subject}_model-norm_desc-best_vertices.csv"
+    )
+
+    # read original design matrix
+    dm_file = opj(
+        proj_dir,
+        "derivatives",
+        "prf",
+        subject,
+        "ses-1",
+        "design_task-2R.mat"
+    )
+
+    # read target vertex
+    vert_obj = utils.VertexInfo(vert_file, subject=subject)
+
+    # loop through hemispheres
+    hemi_order = []
+    hemi_itis = []
+    hemi_sizes = []
+    for hh,tag in zip(hemi,hemi_tag):
+        print("\n---------------------------------------------------------------------------------------------------")
+        print(f"Dealing with {tag}")
+        
+        target_ix = vert_obj.get("index")[hh]
+
+        # initialize prf object
+        obj_ = prf.pRFmodelFitting(
+            None,
+            design_matrix=dm_file,
+            TR=1.5,
+            model="norm",
+            verbose=False
+        )
+
+        pars_file = opj(os.path.dirname(dm_file), f"{subject}_ses-1_task-2R_model-norm_stage-iter_desc-prf_params.pkl")
+        obj_.load_params(pars_file, model="norm")
+
+        # original timecourse/prf etc
+        pars,prf_,_,_ = obj_.plot_vox(vox_nr=target_ix, model="norm", title="pars")
+        
+        #---------------------------------------------------------------------------------------------------
+        # MAKE SIZE-RESPONSE FUNCTIONS 
+        insert_pars = pars.copy()
+        insert_pars[0] = insert_pars[1] = 0
+
+        SR_ = prf.SizeResponse(prf_, pars, model="norm")
+        stims,sizes = SR_.make_stimuli(factor=1)
+        
+        if sim_sizes:
+            srf_1 = SR_.make_sr_function(insert_pars, stims=stims, normalize=True).squeeze()
+
+            pars_scaled = insert_pars.copy()
+            pars_scaled[2] *= 0.8
+            srf_2 = SR_.make_sr_function(pars_scaled, stims=stims, normalize=True).squeeze()
+            diff = srf_1-srf_2
+
+            # find optimal stimuli
+            use_stim_sizes = SR_.find_stim_sizes(srf_1,curve2=srf_2,sizes=sizes)
+            print(f" Using simulation-derived sizes: {use_stim_sizes}")
+        else:
+            use_stim_sizes = stim_sizes
+            print(f" Using default sizes: {use_stim_sizes}")
+        
+        # append
+        hemi_sizes.append(use_stim_sizes)
+
+        # find corresponding stimulus given stimulus size
+        selected_stims = []
+        for x,ss in enumerate(use_stim_sizes):
+            ix = utils.find_nearest(sizes, ss)[0]
+            img = stims[...,ix]
+            selected_stims.append(img)
+
+        #---------------------------------------------------------------------------------------------------
+        # EXPERIMENT SETTINGS
+        settings_path = opj(prog_base, "project_repos", "LineExps", "sizeresponse", "settings.yml")
+        with open(settings_path, 'r', encoding='utf8') as f_in:
+            settings = yaml.safe_load(f_in)
+
+        events = [f"stim_{i+1}" for i in range(len(use_stim_sizes))]
+        n_events = len(use_stim_sizes)
+        stim_repetitions = settings['design'].get('stim_repetitions')
+        n_trials = int(n_events*stim_repetitions)
+
+        presented_stims = np.hstack([np.full(stim_repetitions, ii, dtype=int) for ii in range(n_events)])
+
+        #---------------------------------------------------------------------------------------------------
+        # STAGE 1 - optimize order
+        print(" STAGE 1 - OPTIMIZATION FOR STIMULUS SEQUENCE")
+        stage1 = Parallel(n_jobs, verbose=False)(
+            delayed(simulate.optimize_stimulus_order)(
+                insert_pars,
+                model="norm",
+                TR=TR,
+                tmin=settings['design'].get('minimal_iti_duration'),
+                tmax=settings['design'].get('maximal_iti_duration'),
+                tmean=settings['design'].get('mean_iti_duration'),
+                n_trials=n_trials,
+                leeway=settings['design'].get('total_iti_duration_leeway'),
+                stim_duration=settings['design'].get('stim_duration'),
+                total_duration=settings['design'].get('intended_duration'),
+                start_duration=settings['design'].get('start_duration'),
+                end_duration=settings['design'].get('end_duration'),
+                verbose=False,
+                events=events,
+                order=presented_stims,
+                stims=selected_stims
+            ) for it in range(n_iters)
+        )
+
+        # concatenate variance dataframe
+        df_var = pd.DataFrame(np.array([stage1[i][0] for i in range(n_iters)]), columns=["variance"])
+        df_var["it"] = np.arange(0,n_iters)
+        df_var["it"] = df_var["it"].astype(int)
+
+        # pull out list with used orders
+        obj_list = [stage1[i][1] for i in range(n_iters)]
+        order_list = [i.seq for i in obj_list]    
+
+        # store object in dataframe
+        df_var["obj"] = obj_list
+        df_var["hemi"] = hh
+        hemi_order.append(df_var)
+
+        # get stim order for max variance
+        max_order = df_var.loc[df_var["variance"].idxmax()]
+        max_order_ix = max_order.it.astype(int)
+
+        print(f" Iteration {max_order_ix} maximizes variance for stimulus order (var = {round(max_order.variance,2)})")
+        final_order = order_list[max_order_ix]
+
+        #---------------------------------------------------------------------------------------------------
+        # STAGE 2 - optimize ISI with optimized order    
+        print(" STAGE 2 - OPTIMIZATION FOR INTERSTIMULUS INTERVAL")
+        stage2 = Parallel(n_jobs, verbose=False)(
+            delayed(simulate.optimize_stimulus_isi)(
+                insert_pars,
+                model="norm",
+                stims=selected_stims,
+                TR=TR,
+                tmin=settings['design'].get('minimal_iti_duration'),
+                tmax=settings['design'].get('maximal_iti_duration'),
+                tmean=settings['design'].get('mean_iti_duration'),
+                n_trials=n_trials,
+                leeway=settings['design'].get('total_iti_duration_leeway'),
+                stim_duration=settings['design'].get('stim_duration'),
+                total_duration=settings['design'].get('intended_duration'),
+                start_duration=settings['design'].get('start_duration'),
+                end_duration=settings['design'].get('end_duration'),
+                verbose=False,
+                events=events,
+                seq=final_order # insert previously established order
+            ) for _ in range(n_iters)
+        )
+
+        # concatenate variance dataframe
+        df_var_isi = pd.DataFrame(np.array([stage2[i][0] for i in range(n_iters)]), columns=["variance"])
+        df_var_isi["it"] = np.arange(0,n_iters)
+        df_var_isi["it"] = df_var_isi["it"].astype(int)
+
+        # pull out objects
+        obj_list = [stage2[i][1] for i in range(n_iters)]    
+
+        # store object in dataframe
+        df_var_isi["obj"] = obj_list
+        df_var_isi["hemi"] = hh
+        hemi_itis.append(df_var_isi)
+
+        # get stim order for max variance
+        max_isi = df_var_isi.loc[df_var_isi["variance"].idxmax()]
+        max_isi_ix = max_order.it.astype(int)
+
+        print(f" Iteration {max_isi_ix} maximizes variance for ISIs (var = {round(max_isi.variance,2)})")
+        final_obj = obj_list[max_order_ix]
+        final_isis = final_obj.itis
+
+        #---------------------------------------------------------------------------------------------------
+        # STAGE 3 - plot and save
+
+        fig = plt.figure(figsize=(16,10), constrained_layout=True)
+        sf = fig.subfigures(nrows=3, hspace=0)
+
+        if sim_sizes:
+            row1_cols = 3
+            row1_ratios = [0.15,0.5,0.15]
+        else:
+            row1_cols = 2
+            row1_ratios = [0.2,0.8]
+
+            sf0 = sf[0].subplots(ncols=row1_cols, gridspec_kw={"width_ratios": row1_ratios, "wspace": 0})
+            sf1 = sf[1].subplots(ncols=len(use_stim_sizes))
+            sf2 = sf[2].subplots(ncols=2, gridspec_kw={"width_ratios": [0.2,0.8]})
+
+        # plot target prf and prediction
+        _ = obj_.plot_vox(
+            vox_nr=target_ix, 
+            axs=[sf0[0],sf0[1]],
+            model="norm")
+
+        # plot SRFs
+        if sim_sizes:
+            plotting.LazyPlot(
+                [srf_1,srf_2,diff],
+                xx=sizes,
+                axs=sf0[-1],
+                line_width=2,
+                color=["r","b","#cccccc"],
+                labels=["superficial","deep","diff"],
+                x_label="stimulus size (dva)",
+                y_label="response",
+                x_lim=[0,5],
+                y_ticks=[0,1],
+                x_ticks=[0,2.5,5]
+            )
+
+        # plot distribution first so we can steal fontsizes from it
+        pl = plotting.LazyHist(
+            final_isis,
+            axs=sf2[0],
+            kde=True,
+            hist=True,
+            fill=False,
+            title="ISI distribution",
+            y_label="density",
+            x_label="ITI (s)",
+            color="#1B9E77",
+            hist_kwargs={"alpha": 0.4},
+            kde_kwargs={"linewidth": 4}
+        )
+
+        # get localized stimulus representations
+        rf_stims,_ = SR_.make_stimuli(
+            factor=1, 
+            dt="fill", 
+            loc=(pars[0],pars[1]))
+
+        cols = ["#1B9E77","#D95F02"]
+        for x,ss in enumerate(use_stim_sizes):
+            
+            if sim_sizes:
+                sf0[-1].axvline(ss, color=cols[0], lw=2, ymax=0.1)
+
+            # find corresponding stimulus given stimulus size
+            ix = utils.find_nearest(sizes, ss)[0]
+            img = rf_stims[...,ix]
+
+            SR_.plot_stim_size( 
+                img, 
+                ax=sf1[x], 
+                clip=False, 
+                cmap=cols[0],
+                vf_extent=SR_.vf_extent,
+                axis=True)
+            
+            plotting.conform_ax_to_obj(sf1[x], title=f"{round(ss,2)}°", font_size=pl.label_size)
+
+        # get prediction given optimized ISIs
+        tc_def = simulate.prediction_from_obj(
+            insert_pars,
+            final_obj,
+            stims=selected_stims,
+            TR=TR,
+            model="norm")
+
+        plotting.LazyPlot(
+            tc_def,
+            axs=sf2[1],
+            line_width=2,
+            add_hline=0,
+            color="#1B9E77",
+            y_label="magnitude (au)",
+            title="prediction of highest variance ISI distribution",
+            x_label="volumes")
+
+        if sim_sizes:
+            ax_list = list(sf0)+[sf1[0],sf2[0],sf2[1]]
+            y_list = [1.1,1.1,1.1,1.3,1.2,1.2]
+        else:
+            ax_list = list(sf0)[:2]+[sf1[0],sf2[0],sf2[1]]
+            y_list = [1.1,1.1,1.3,1.2,1.2]
+
+        plotting.fig_annot(
+            fig,
+            axs=ax_list,
+            x0_corr=-0.75,
+            x_corr=-0.75,
+            y=y_list
+        )
+
+        fname = opj(
+            prog_base,
+            "project_repos",
+            "holeresponse",
+            "images",
+            subject,
+            f"{subject}_task-SRFa_{tag}_desc-simulation.pdf"
+        )
+
+        if not os.path.exists(os.path.dirname(fname)):
+            pathlib.Path(os.path.dirname(fname)).mkdir(parents=True, exist_ok=True)
+
+        fig.savefig(
+            fname,
+            bbox_inches="tight",
+            dpi=300,
+            facecolor="white"
+        )
+
+        print(f" Wrote '{fname}'")
+        print(f" Final order: {final_order}")
+        print(f" Final ISIs: {final_isis}")
+
+        out_dir = opj(os.path.dirname(settings_path), "data", subject)
+        if not os.path.exists(out_dir):
+            pathlib.Path(out_dir).mkdir(parents=True, exist_ok=True)
+
+        isi_fn = opj(out_dir, f"{subject}_task-SRFa_{tag}_desc-itis.txt")
+        ord_fn = opj(out_dir, f"{subject}_{tag}_desc-order.txt")
+        size_fn = opj(out_dir, f"{subject}_{tag}_desc-sizes.txt")
+        np.savetxt(isi_fn, final_isis)
+        np.savetxt(ord_fn, final_order)  
+        np.savetxt(size_fn, use_stim_sizes)  
+
+        print(f" Wrote ISIs:\t'{isi_fn}'")
+        print(f" Wrote order:\t'{ord_fn}'")
+        print(f" Wrote sizes:\t'{size_fn}'")
+
+    hemi_order = pd.concat(hemi_order).set_index(["hemi"])
+    hemi_itis = pd.concat(hemi_itis).set_index(["hemi"])
+    
+    ddict = {
+        "df_order": hemi_order,
+        "df_isi": hemi_itis}
+
+    pkl_file = opj(out_dir, f"{subject}_desc-simulations.pkl")
+    with open(pkl_file, "wb") as handle:
+        pickle.dump(
+            ddict, 
+            handle, 
+            protocol=pickle.HIGHEST_PROTOCOL) 
+      
+    print(f"Wrote objs:\t'{pkl_file}'")
+    print("Done")
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

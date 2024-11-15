@@ -1,0 +1,41 @@
+#!/usr/bin/env python
+
+import sys
+import holeresponse as hr
+
+def main(argv):
+
+    """
+---------------------------------------------------------------------------------------------------
+srf_get
+
+Retrieve data for a given subject in SubjectsDict()
+
+Parameters
+----------
+    <element>   key to retrieve from the subjects dictionary
+    <subject>   subject to retrieve data for
+
+Returns
+----------
+    the value for `key` from `subject` in :class:`holeresponse.utils.SubjectsDict()`
+
+Example
+----------
+    srf_get ribbon sub-001
+
+---------------------------------------------------------------------------------------------------
+    """
+
+    if len(argv)==0:
+        print(main.__doc__)
+        sys.exit(1)
+
+    key = argv[0]
+    sub = argv[1]
+
+    obj = hr.utils.SubjectsDict()
+    print(obj.get(sub, key))
+
+if __name__ == "__main__":
+    main(sys.argv[1:])

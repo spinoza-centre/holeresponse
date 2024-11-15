@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+#$ -S /bin/bash
+#$ -cwd
+#$ -j Y
+#$ -V
+#$ -N test_sub
+
+edf2asc -t -ftime -y -z -v -s -miss 0.0001 -vel "/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sub-010/ses-4/func/sub-010_ses-4_task-SRFa_run-1_eye.edf"; mv "/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sub-010/ses-4/func/sub-010_ses-4_task-SRFa_run-1_eye.asc" "/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sub-010/ses-4/func/sub-010_ses-4_task-SRFa_run-1_eye.gaz"; edf2asc -t -ftime -y -z -v -e "/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sub-010/ses-4/func/sub-010_ses-4_task-SRFa_run-1_eye.edf"; mv "/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sub-010/ses-4/func/sub-010_ses-4_task-SRFa_run-1_eye.asc" "/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sub-010/ses-4/func/sub-010_ses-4_task-SRFa_run-1_eye.msg"

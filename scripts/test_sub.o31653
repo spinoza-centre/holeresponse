@@ -1,0 +1,4 @@
+/opt/sge/default/spool/jupiter/job_scripts/31653: line 8: edf2asc: command not found
+mv: cannot stat '/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sub-010/ses-4/func/sub-010_ses-4_task-SRFa_run-1_eye.asc': No such file or directory
+/opt/sge/default/spool/jupiter/job_scripts/31653: line 8: edf2asc: command not found
+mv: cannot stat '/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sub-010/ses-4/func/sub-010_ses-4_task-SRFa_run-1_eye.asc': No such file or directory

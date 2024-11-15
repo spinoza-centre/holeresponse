@@ -1,0 +1,254 @@
+#!/usr/bin/env python
+#$ -cwd
+#$ -j Y
+#$ -o ../logs
+#$ -V
+#$ -N dn_run_glms
+# 
+from linescanning import (
+    utils,
+    glm
+)
+import pickle
+import numpy as np
+import sys
+import getopt
+import os
+import holeresponse as hr
+import pandas as pd
+from joblib import Parallel, delayed
+opj = os.path.join
+opd = os.path.dirname
+subj_obj = hr.utils.SubjectsDict()
+
+def get_h5_files(deriv_dir, excl=[]):
+
+    subj_list = subj_obj.get_subjects()
+
+    h5_files = []
+    incl_subjs = []
+    for i in subj_list:
+        if not i in excl:
+            ses = subj_obj.get_session(i)
+            h5 = utils.FindFiles(opj(deriv_dir, "lsprep", i), extension="h5").files
+
+            if len(h5)>0:
+                h5_filt = utils.get_file_from_substring([f"ses-{ses}","desc-0p"], h5)
+                h5_files.append(h5_filt)
+
+            incl_subjs.append(i)
+
+    return h5_files, incl_subjs
+
+def read_pkl(
+    h5_pkl=None, 
+    h5_files=None,
+    n_comps=20,
+    overwrite=False,
+    save=True,
+    **kwargs
+    ):
+
+    # parse h5-files
+    import pickle
+
+    if not os.path.exists(h5_pkl) or overwrite:
+        h5_obj = hr.data.H5Parser(
+            h5_files,
+            verbose=True,
+            compartments=n_comps,
+            lp_kw={
+                "window_length": 31
+            },
+            lp=True,
+            unique_ribbon=True
+        )
+
+        if save:
+            utils.verbose(f"Writing object to '{h5_pkl}'", True)
+            with open(h5_pkl, 'wb') as handle:
+                pickle.dump(h5_obj, handle, protocol=pickle.HIGHEST_PROTOCOL)
+    else:
+        utils.verbose(f"Reading from '{h5_pkl}'", True)
+        with open(h5_pkl, 'rb') as handle:
+            h5_obj = pickle.load(handle)
+
+    return h5_obj
+
+def make_contrasts(df, intercept=True):
+
+    # without intercept
+    c_vec1 = [1,1,0,0,0,0]
+    c_vec2 = [0,0,1,1,0,0]
+    c_vec3 = [0,0,0,0,1,1]
+
+    c_vecs = [
+        c_vec1,
+        c_vec2,
+        c_vec3,
+    ]
+
+    if intercept:
+        c_vecs = [[0]+i for i in c_vecs]
+
+    c_vec = np.array(c_vecs)
+    return c_vec
+
+def run_single_glm(
+    subject, 
+    func=None, 
+    onsets=None,
+    intercept=True,
+    ):
+
+    utils.verbose(f"running GLM for {subject}", True)
+    expr = f"subject = {subject.split('-')[-1]}"
+    
+    # fetch subject specific data
+    df = utils.select_from_df(func, expression=expr).groupby(["subject","task","t"]).mean()
+    sub_onsets = utils.select_from_df(onsets, expression=expr)
+    taskID = utils.get_unique_ids(df, id="task")[0]
+
+    # define fit objects
+    fit_line = glm.GenericGLM(
+        utils.select_from_df(sub_onsets, expression=f"task = {taskID}"),
+        utils.select_from_df(df, expression=f"task = {taskID}"), 
+        hrf_pars="glover",
+        derivative=True,
+        TR=0.105, 
+        osf=100, 
+        add_intercept=intercept
+    )
+    
+    # create design matrix
+    fit_line.create_design()
+
+    # define contrasts
+    contrasts = make_contrasts(sub_onsets, intercept=intercept)
+    fit_line.fit(copes=contrasts)
+
+    return fit_line
+
+def main(argv):
+
+    """run_glms
+
+Run simple glms on all subject data.
+
+Parameters
+----------
+    -p|--proj_dir       BIDS project directory (default = "/data1/projects/MicroFunc/Jurjen/projects/VE-NORDIC")
+    -c|--comps          Number of components to divide the gray matter ribbon in (default = 20)
+    -o|--ow|--overwrite Overwrite existing data file (default = False)
+    -f|--pkl            Pickle file containing data to use, or to create (if it doesn't exist)
+    -b|--base           Basename of pickle file to use, or create (path points to ../data)
+    --no_intercept      Do NOT fit intercept (default is to fit intercept)
+    -j|--n_jobs         Number of jobs to parallellize over. Note that the number of jobs must coincide with the number of cores requested for this job. Default is to use the number of subjects present in the dataset (as of 25-06-2024, this is 17)
+    -e|--evs            Only include particular EVs, rather than everything in the dataframe. Must be comma-separated (e.g., "--evs stim1,stim2,stim3)
+
+Returns
+----------
+    A pickle file containing GLM objects
+
+Example
+----------
+>>> ./run_glms --evs act
+>>> ./run_glms -j 10
+    """
+
+    verbose = True
+    proj_dir = "/data1/projects/MicroFunc/Jurjen/projects/VE-NORDIC"
+    n_comps = 20
+    overwrite = False
+    pkl = None
+    pkl_base = "dn_full_sample"
+    icpt = True
+    n_jobs = None
+    evs = None
+    
+    try:
+        opts = getopt.getopt(argv,"hop:c:f:b:j:e:",["help", "proj=", "comps=", "pkl=", "ow", "base=", "no_intercept", "n_jobs=", "evs="])[0]
+    except getopt.GetoptError:
+        print("ERROR while handling arguments.. Did you specify an 'illegal' argument..?", flush=True)
+        print(main.__doc__, flush=True)
+        sys.exit(2)
+
+    for opt, arg in opts: 
+        if opt in ("-h", "--help"):
+            print(main.__doc__)
+            sys.exit()
+        elif opt in ("-p", "--proj"):
+            proj_dir = arg            
+        elif opt in ("-c", "--comps"):
+            n_comps = int(arg)
+        elif opt in ("-p", "--pkl"):
+            pkl = arg         
+        elif opt in ("-b", "--base"):
+            pkl_base = arg
+        elif opt in ("-j", "--n_jobs"):
+            n_jobs = int(arg)            
+        elif opt in ("--no_intercept"):
+            icpt = False   
+        elif opt in ("-e", "--evs"):
+            evs = arg
+            if "," in evs:
+                evs = utils.string2list(evs)
+            else:
+                evs = [evs]
+        elif opt in ("--overwrite", "-o", "--ow"):
+            overwrite = True
+        
+    utils.verbose("\nLaminar DN: run_glms", verbose)
+
+    # retrieve h5-files
+    deriv = opj(proj_dir, "deriv")
+    repo_dir = opd(opd(hr.data.__file__))
+    h5_files, incl_subjs = get_h5_files(deriv)
+
+    # read pkl file or create it
+    if not isinstance(pkl, str):
+        data_dir = opj(os.path.dirname(hr.viz._save_figure(None, return_figdir=True)), "data")
+        pkl = opj(data_dir, f"{pkl_base}.pkl")
+
+    h5_obj = read_pkl(
+        h5_pkl=pkl,
+        h5_files=h5_files,
+        n_comps=n_comps,
+        overwrite=overwrite
+    )
+
+    # average onsets
+    df_stim = hr.data.average_tasks(h5_obj.df_onsets)
+    
+    if isinstance(evs, list):
+        utils.verbose(f"Including events: {evs}", verbose)
+        tmp = pd.concat([utils.select_from_df(df_stim, expression=f"event_type = {ev}") for ev in evs])
+        df_stim = tmp.copy()
+
+    # run models
+    sub_glms = {}
+
+    if not isinstance(n_jobs, int):
+        n_jobs = len(incl_subjs)
+
+    dd = Parallel(n_jobs=n_jobs,verbose=False)(
+        delayed(run_single_glm)(
+            subject,
+            func=h5_obj.df_func,
+            onsets=df_stim,
+            intercept=icpt,
+        )
+        for subject in incl_subjs
+    )
+
+    for ix,subject in enumerate(incl_subjs):
+        sub_glms[subject] = dd[ix]
+
+    glm_pkl = opj(opd(pkl), "dn_glms.pkl")
+    utils.verbose(f"Writing object to '{glm_pkl}'", True)
+    with open(glm_pkl, 'wb') as handle:
+        pickle.dump(sub_glms, handle, protocol=pickle.HIGHEST_PROTOCOL)
+
+    utils.verbose(f"Done", True)
+if __name__ == "__main__":
+    main(sys.argv[1:])
