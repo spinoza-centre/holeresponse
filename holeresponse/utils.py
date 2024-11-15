@@ -51,22 +51,66 @@ class SubjectsDict():
         # set derivatives
         self.deriv_dir = opj(self.proj_dir, "derivatives")
 
+        
+        # default fig dir
+        self.repo_dir = opd(opd(hr.__file__))
+        if not isinstance(self.fig_dir, str):
+            self.fig_dir = opj(self.repo_dir, "images")
+        
+        self.bijanzadeh_figures = {}
+        for key,val in zip(
+            self.ev_names,
+            ["a","c","d"]
+            ):
+
+            self.bijanzadeh_figures[key] = opj(self.fig_dir, f"Fig3{val}_bijanzadeh_2018.pdf")
+
         # set ribbon voxels for each subject
         self.dict_data = {
+            # "sub-001": {
+            #     "ribbon": (360,367),
+            #     "wm": (367,372),
+            #     "hemi": "L",
+            #     "line_ses": 3,
+            #     "invert": False,
+            #     "excl_runs": {
+            #         "SRFa": [], # [1,2,3],
+            #         "SRFb": [], #[1,3],
+            #     },
+            #     "stim_sizes": [1.64,3.57,5.1],
+            #     "bottom_pixels": 160,
+            #     "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-001_ses-3_task-SRFa_run-demo/sub-001_ses-3_task-SRFa_run-demo_Screenshots",
+            #     "ref_slc": ["task-SRFa","run-1"]
+            # },
             "sub-001": {
-                "ribbon": (360,367),
+                "ribbon": (358,366),
+                "rib_dict": {
+                    "SRFa": {
+                        "run-1": (358,366),
+                        "run-2": (357,365),
+                        "run-3": (359,367),
+                        "run-4": (358,366),
+                    },
+                    "SRFb": {
+                        "run-1": (358,366),
+                        "run-2": (358,366),
+                        "run-3": (358,366),
+                    }
+                },
+                "ribbon_correction": 7,
                 "wm": (367,372),
                 "hemi": "L",
-                "line_ses": 3,
+                "line_ses": 4,
                 "invert": False,
                 "excl_runs": {
-                    "SRFa": [], # [1,2,3],
+                    "SRFa": [1], # [1,2,3],
                     "SRFb": [], #[1,3],
                 },
                 "stim_sizes": [1.64,3.57,5.1],
-                "bottom_pixels": 160,
-                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-001_ses-3_task-SRFa_run-demo/sub-001_ses-3_task-SRFa_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-1"]
+                "bottom_pixels": 45,
+                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-001_ses-4_task-SRFa_run-demo/sub-001_ses-4_task-SRFa_run-demo_Screenshots",
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
             },
             "sub-002": {
                 "rib_dict": {
@@ -82,50 +126,71 @@ class SubjectsDict():
                         "run-4": (363,371) # maybe remove?
                     }
                 },
+                "ribbon_correction": -8,
                 "ribbon": (358,366),
                 "wm": (366,372),
                 "hemi": "L",
                 "line_ses": 3,
                 "invert": False,
                 "excl_runs": {
-                    "SRFa": [],
-                    "SRFb": [],
+                    "SRFa": [3],
+                    "SRFb": [4],
                 },
                 "stim_sizes": [2.64,4.47,6.69],
                 "bottom_pixels": 165,
                 "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-002_ses-3_task-SRFa_run-demo/sub-002_ses-3_task-SRFa_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-1"]
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
             },
             "sub-003": {
+                # "rib_dict": {
+                #     "SRFa": {
+                #         "run-1": (354,362),
+                #         "run-2": (353,361),
+                #         "run-3": (354,362),
+                #         "run-4": (353,361),
+                #         "run-5": (353,361),
+                #     },
+                #     "SRFb": {
+                #         "run-1": (354,362),
+                #         "run-2": (354,362),
+                #         "run-3": (353,361),
+                #         "run-4": (352,360),
+                #         "run-5": (352,360),
+                #     }
+                # },
+                # "ribbon": (354,363),
+                # "wm": (349,355),
+                # "hemi": "L",
+                # "line_ses": 5,
                 "rib_dict": {
                     "SRFa": {
-                        "run-1": (354,362),
-                        "run-2": (353,361),
-                        "run-3": (354,362),
-                        "run-4": (353,361),
-                        "run-5": (353,361),
+                        "run-1": (357,364),
+                        "run-2": (357,364),
+                        "run-3": (357,364),
+                        "run-4": (357,364),
                     },
                     "SRFb": {
-                        "run-1": (354,362),
-                        "run-2": (354,362),
-                        "run-3": (353,361),
-                        "run-4": (352,360),
-                        "run-5": (352,360),
-                    }
-                },
-                "ribbon": (354,363),
+                        "run-1": (357,364),
+                        "run-2": (357,364),
+                        "run-3": (357,364),
+                    },
+                },              
+                "ribbon": (357,364),
+                "ribbon_correction": 1,
                 "wm": (349,355),
-                "hemi": "L",
-                "line_ses": 5,
+                "hemi": "R",
+                "line_ses": 7,                
                 "invert": False,
                 "excl_runs": {
-                    "SRFa": [], #[3,4,5],
+                    "SRFa": [1], #[3,4,5],
                     "SRFb": [], #[1,2,3,4,5],
                 },
                 "bottom_pixels": 105,
                 "stim_sizes": [1.89,5.36,8.84],
-                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-003_ses-6_task-SRFa_run-demo/sub-003_ses-6_task-SRFa_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-1"]
+                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-003_ses-7_task-SRFa_run-demo/sub-003_ses-7_task-SRFa_run-demo_Screenshots",
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
             },           
             "sub-005": {
                 "rib_dict": {
@@ -151,12 +216,13 @@ class SubjectsDict():
                 },
                 # "ribbon": (363,371),
                 # "ribbon": (356,362),
-                "ribbon": (356,362),
+                "ribbon": (353,361),
+                "ribbon_correction": 9,
                 "wm": (350,356),
                 # "wm": (371,376),
                 "hemi": "L",
                 "line_ses": 2,
-                "invert": True,
+                "invert": False,
                 "excl_runs": {
                     "SRFa": [1,2,3],# wrong location due to geom
                     "SRFb": [1,2],  # wrong location due to geom
@@ -164,7 +230,8 @@ class SubjectsDict():
                 "bottom_pixels": 105,
                 "stim_sizes": [2.39,5.28,8.17],
                 "scr_dir": "/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sourcedata/sub-005/ses-2/task/sub-005_ses-2_task-SRFa_run-demo/sub-005_ses-2_task-SRFa_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-4"]
+                "ref_slc": ["task-SRFa","run-4"],
+                "foldover": "FH"
             },                 
             "sub-006": {
                 "rib_dict": {
@@ -181,19 +248,21 @@ class SubjectsDict():
                         "run-4": (361,368)
                     }
                 },
+                "ribbon_correction": 4,
                 "ribbon": (360,367),
                 "wm": (367,375),
                 "hemi": "L",
                 "line_ses": 3,
                 "invert": False,
-                "excl_runs": {
-                    "SRFa": [],
-                    "SRFb": [1],
+                "excl_runs": { 
+                    "SRFa": [2,3],
+                    "SRFb": [1,4],
                 },
                 "bottom_pixels": 195,
                 "stim_sizes": [3.4,4.66,5.91],
                 "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-006_ses-3_task-SRFa_run-demo/sub-006_ses-3_task-SRFa_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-1"]
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
             },
             "sub-008": {
                 "ribbon": (357,368),
@@ -202,13 +271,15 @@ class SubjectsDict():
                 "line_ses": 3,
                 "invert": False,
                 "excl_runs": {
-                    "SRFa": [2,4],
-                    "SRFb": [1],
+                    "SRFa": [2,3,4],
+                    "SRFb": [1,2],
                 },
+                "ribbon_correction": 1,
                 "bottom_pixels": 0,
-                "stim_sizes": [3.4,4.66,5.91],
+                "stim_sizes": [1.89,5.56,9.23],
                 "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-008_ses-3_task-SR_run-demo20231110090124/sub-008_ses-3_task-SR_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-1"]                
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"         
             },
             "sub-010": {
                 # "ribbon": (357,368), # no motion; so no rib_dict
@@ -221,13 +292,15 @@ class SubjectsDict():
                 "line_ses": 4,
                 "invert": True,
                 "excl_runs": {
-                    "SRFa": [4],
-                    "SRFb": [],
+                    "SRFa": [2],
+                    "SRFb": [1,2],
                 },
+                "ribbon_correction": -2,
                 "bottom_pixels": 0,
                 "stim_sizes": [1.76,5.84,9.92],
                 "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-010_ses-4_task-SRFa_run-demo/sub-010_ses-4_task-SRFa_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-1"]
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
             },            
             "sub-011": {
                 "rib_dict": {
@@ -235,7 +308,7 @@ class SubjectsDict():
                         "run-1": (360,368),
                         "run-2": (358,366),
                         "run-3": (355,363),
-                        "run-4": (356,362),
+                        "run-4": (356,364),
                     },
                     "SRFb": {
                         "run-1": (356,364),
@@ -245,18 +318,20 @@ class SubjectsDict():
                     }
                 },
                 "ribbon": (360,368),
+                "ribbon_correction": -1,
                 "wm": (356,360),
                 "hemi": "L",
                 "line_ses": 2,
                 "invert": True,
                 "excl_runs": {
-                    "SRFa": [],
+                    "SRFa": [3], # positive response for large annulus..
                     "SRFb": [],
                 },
                 "bottom_pixels": 190,
-                "stim_sizes": [1.76,5.84,9.92],
+                "stim_sizes": [2.52,5.23,7.94],
                 "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-011_ses-2_task-SRFa_run-demo/sub-011_ses-2_task-SRFa_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-1"]
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
             },
             "sub-013": {
                 "rib_dict": {
@@ -275,6 +350,7 @@ class SubjectsDict():
                     }
                 },                
                 "ribbon": (354,363),
+                "ribbon_correction": 2,
                 "wm": (348,354),
                 "hemi": "L",
                 "line_ses": 2,
@@ -286,34 +362,226 @@ class SubjectsDict():
                 "bottom_pixels": 105,
                 "stim_sizes": [1.64,5.13,8.63],
                 "scr_dir": "/data1/projects/MicroFunc/Jurjen/projects/VE-SRF/sourcedata/sub-013/ses-2/task/sub-013_ses-2_task-SRFa_run-demo/sub-013_ses-2_task-SRFa_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-1"]
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
             },
             "sub-014": {          
                 "ribbon": (356,361), # no motion; so no rib_dict
+                "ribbon_correction": 0, #4,
                 "wm": (351,356),
                 "hemi": "L",
                 "line_ses": 2,
                 "invert": True,
                 "excl_runs": {
-                    "SRFa": [],
+                    "SRFa": [1,4],
                     "SRFb": [1],
                 },
                 "bottom_pixels": 140,
                 "stim_sizes": [2.39,4.55,6.71],
                 "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-014_ses-2_task-SRFa_run-demo/sub-014_ses-2_task-SRFa_run-demo_Screenshots",
-                "ref_slc": ["task-SRFa","run-3"]
-            }  
-        }
-        
-        # default fig dir
-        self.repo_dir = opd(opd(hr.__file__))
-        if not isinstance(self.fig_dir, str):
-            self.fig_dir = opj(self.repo_dir, "images")
-
-        self.bijanzadeh_figures = {
-            "center": opj(self.fig_dir, "Fig3a_bijanzadeh_2018.pdf"),
-            "near": opj(self.fig_dir, "Fig3c_bijanzadeh_2018.pdf"),
-            "far": opj(self.fig_dir, "Fig3d_bijanzadeh_2018.pdf"),
+                "ref_slc": ["task-SRFa","run-3"],
+                "foldover": "FH"
+            },
+            "sub-015": {
+                "rib_dict": {
+                    "SRFa": {
+                        "run-1": (359,367),
+                        "run-2": (359,367),
+                        "run-3": (360,368),
+                        "run-4": (360,368),
+                    },
+                    "SRFb": {
+                        "run-1": (360,368),
+                        "run-2": (360,368),
+                        "run-3": (361,369),
+                    }
+                },
+                "ribbon_correction": 5,
+                "wm": (367,375),
+                "hemi": "L",
+                "line_ses": 2,
+                "invert": False,
+                "excl_runs": {
+                    "SRFa": [1],
+                    "SRFb": [],
+                },
+                "bottom_pixels": 195,
+                "stim_sizes": [3.4,4.66,5.91],
+                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-015_ses-2_task-SRFa_run-demo/sub-015_ses-2_task-SRFa_run-demo_Screenshots",
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
+            },
+            "sub-016": {
+                "rib_dict": {
+                    "SRFa": {
+                        "run-1": (355,361),
+                        "run-2": (349,355),
+                        "run-3": (344,350),
+                    },
+                    "SRFb": {
+                        "run-1": (350,356),
+                        "run-2": (344,350),
+                    }
+                },
+                "ribbon_correction": 9,
+                "wm": (367,375),
+                "hemi": "L",
+                "line_ses": 2,
+                "invert": True,
+                "excl_runs": {
+                    "SRFa": [2],
+                    "SRFb": [],
+                },
+                "bottom_pixels": 100,
+                "stim_sizes": [3.4,4.66,5.91],
+                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-016_ses-2_task-SRFa_run-demo/sub-016_ses-2_task-SRFa_run-demo_Screenshots",
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "LR"
+            },
+            "sub-017": {
+                "rib_dict": {
+                    "SRFa": {
+                        "run-1": (352,359),
+                        "run-2": (355,362),
+                        "run-3": (355,362),
+                    },
+                    "SRFb": {
+                        "run-1": (355,362),
+                        "run-2": (355,362),
+                        "run-3": (355,362),
+                    }
+                },
+                "ribbon_correction": 3,
+                "wm": (367,375),
+                "hemi": "L",
+                "line_ses": 2,
+                "invert": True,
+                "excl_runs": {
+                    "SRFa": [2],
+                    "SRFb": [1,2,3],
+                },
+                "bottom_pixels": 75,
+                "stim_sizes": [3.4,4.66,5.91],
+                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-017_ses-2_task-SRFa_run-demo/sub-017_ses-2_task-SRFa_run-demo_Screenshots",
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
+            },            
+            "sub-018": {
+                "rib_dict": {
+                    "SRFa": {
+                        "run-1": (359,366),
+                        "run-2": (358,365),
+                        "run-3": (353,360),
+                        "run-4": (355,362),
+                    },
+                    "SRFb": {
+                        "run-1": (357,364),
+                        "run-2": (355,362),
+                        "run-3": (354,361),
+                    }
+                },
+                "ribbon": (359,366),
+                "ribbon_correction": 0,
+                "wm": (367,375),
+                "hemi": "L",
+                "line_ses": 3,
+                "invert": True,
+                "excl_runs": {
+                    "SRFa": [3,4],
+                    "SRFb": [3],
+                },
+                "bottom_pixels": 90,
+                "stim_sizes": [3.4,4.66,5.91],
+                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-018_ses-3_task-SRFa_run-demo/sub-018_ses-3_task-SRFa_run-demo_Screenshots",
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
+            },
+            "sub-019": {
+                "rib_dict": {
+                    "SRFa": {
+                        "run-1": (359,367),
+                        "run-2": (358,366),
+                        "run-3": (358,366),
+                        "run-4": (358,366),
+                    },
+                    "SRFb": {
+                        "run-1": (358,366),
+                        "run-2": (359,367),
+                        "run-3": (358,366),
+                        "run-4": (358,366),
+                    }
+                },
+                "ribbon_correction": 3,
+                "wm": (367,375),
+                "hemi": "R",
+                "line_ses": 2,
+                "invert": True,
+                "excl_runs": {
+                    "SRFa": [],
+                    "SRFb": [1,2,3],
+                },
+                "bottom_pixels": 90,
+                "stim_sizes": [3.4,4.66,5.91],
+                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-019_ses-2_task-SRFa_run-demo/sub-019_ses-2_task-SRFa_run-demo_Screenshots",
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
+            },      
+            "sub-020": {
+                "rib_dict": {
+                    "SRFa": {
+                        "run-1": (357,365),
+                        "run-2": (357,365),
+                        "run-3": (359,367),
+                    },
+                    "SRFb": {
+                        "run-1": (357,365),
+                        "run-2": (358,366),
+                        "run-3": (359,367),
+                    }
+                },
+                "ribbon_correction": 3,
+                "wm": (367,375),
+                "hemi": "R",
+                "line_ses": 2,
+                "invert": False,
+                "excl_runs": {
+                    "SRFa": [2],
+                    "SRFb": [1],
+                },
+                "bottom_pixels": 120,
+                "stim_sizes": [3.4,4.66,5.91],
+                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-020_ses-2_task-SRFa_run-demo/sub-020_ses-2_task-SRFa_run-demo_Screenshots",
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
+            },  
+            "sub-022": {
+                "rib_dict": {
+                    "SRFa": {
+                        "run-1": (358,363),
+                        "run-2": (358,363),
+                        "run-3": (357,362),
+                    },
+                    "SRFb": {
+                        "run-1": (358,363),
+                        "run-2": (358,363),
+                        "run-3": (358,363),
+                    }
+                },
+                "ribbon_correction": 0, #4,
+                "wm": (367,375),
+                "hemi": "R",
+                "line_ses": 2,
+                "invert": True,
+                "excl_runs": {
+                    "SRFa": [],
+                    "SRFb": [],
+                },
+                "bottom_pixels": 90,
+                "stim_sizes": [3.4,4.66,5.91],
+                "scr_dir": "/data1/projects/MicroFunc/Jurjen/programs/project_repos/LineExps/ActNorm3/logs/sub-022_ses-2_task-SRFa_run-demo/sub-022_ses-2_task-SRFa_run-demo_Screenshots",
+                "ref_slc": ["task-SRFa","run-1"],
+                "foldover": "FH"
+            },                       
         }
 
     def has_ribdict(self, subject):
@@ -323,10 +591,14 @@ class SubjectsDict():
 
         return has_dict
 
+    def get_pars(self, subject):
+        return self.get_coord_obj(subject).data
+    
     def get_srf(self, subject, normalize=False):
 
         # get size response function
-        SR_ = prf.SizeResponse(params=self.get_coord_obj(subject).data.reset_index(), model="norm")
+        pars = self.get_pars(subject)
+        SR_ = prf.SizeResponse(params=pars.reset_index(), model="norm")
 
         # size response
         fill_cent, fill_cent_sizes = SR_.make_stimuli(
@@ -445,8 +717,22 @@ class SubjectsDict():
         
         return vv.get("index", hemi=ls_hemi)
     
-    def get_ribbon(self, subject):
-        return self.get(subject, "ribbon")
+    def get_ribbon(self, subject, from_unique=True):
+
+        if from_unique:
+            if self.has_ribdict(subject):
+                ref = self.get(subject, "ref_slc")
+                taskID = ref[0].split('-')[-1]
+                runID = ref[1]
+
+                rib_dict = self.get(subject, "rib_dict")
+                ribbon = rib_dict[taskID][runID]
+            else:
+                ribbon = self.get(subject, "ribbon")
+        else:
+            ribbon = self.get(subject, "ribbon")
+
+        return ribbon
 
     def get_wm(self, subject):
         return self.get(subject, "wm")
@@ -480,15 +766,6 @@ class SubjectsDict():
         df = pd.concat(df)
         df.set_index(["subject","event_type"], inplace=True)
         return df
-
-def correct_baseline(d_, bsl=20):
-    m_ = d_[:bsl].mean()
-    if m_ < 0:
-        d_shift = d_+abs(m_)
-    else:
-        d_shift = d_-m_
-
-    return d_shift
 
 def read_pdf_image(img):
     if isinstance(img, str):

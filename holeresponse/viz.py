@@ -1,15 +1,18 @@
+import copy
 import numpy as np
 from linescanning import (
     utils,
     plotting,
     fitting,
-    prf
+    prf,
+    glm
 )
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import matplotlib.image as mpimg
 import seaborn as sns
-from scipy import stats,ndimage
+from scipy import stats
+import nibabel as nb
 import pandas as pd
 import os 
 from .utils import *
@@ -240,7 +243,7 @@ class PlotEpochProfiles():
         time_col="t",
         correct=True,
         force_title=False,
-        *args,
+        skip_plot=False,
         **kwargs
         ):
 
@@ -252,15 +255,10 @@ class PlotEpochProfiles():
         self.ev_names = ev_names
         self.bsl = bsl
         self.correct = correct
+        self.skip_plot = skip_plot
 
         # read EVs
         self.evs = utils.get_unique_ids(self.df, id="event_type")
-
-        # initialize axes
-        can_I_add_title = False
-        if not isinstance(axs, mpl.axes._axes.Axes):
-            self.fig,self.axs = plt.subplots(figsize=self.figsize)
-            can_I_add_title = True
 
         # loop over evs and average over epochs
         self.m_data = []
@@ -279,8 +277,11 @@ class PlotEpochProfiles():
 
             t_ = utils.get_unique_ids(ddf, id=time_col)
 
-        if not isinstance(self.ev_names, list):
+        if not isinstance(self.ev_names, (list,str)):
             self.ev_names = self.evs
+        else:
+            if isinstance(self.ev_names, str):
+                self.ev_names = [self.ev_names]
 
         # plot data in list format
         defs = {
@@ -302,37 +303,52 @@ class PlotEpochProfiles():
             self.ev_names
         )
 
-        self.pl = plotting.LazyPlot(
-            self.m_data,
-            xx=t_,
-            error=self.e_data,
-            axs=self.axs,
-            cmap=self.cm,
-            add_hline=0,
-            **kwargs
-        )
+        self.final_data = {}
+        self.final_data["func"] = self.m_data
+        self.final_data["error"] = self.e_data
+        self.final_data["t"] = t_
 
-        add_axvspan(self.axs, ymax=0.1, alpha=0.5)
-        if isinstance(title, (str,dict)):
-            if can_I_add_title:
-                self.fig.suptitle(
-                    self.title, 
-                    fontsize=self.pl.title_size, 
-                    fontweight="bold"
-                )
+        if not self.skip_plot:
 
-            if force_title:
-                if isinstance(self.title, str):
-                    self.title = {
-                        "title": self.title,
-                        "fontsize": self.pl.title_size,
-                        "fontweight": "bold"
-                    }
+            can_I_add_title = False
+            if not isinstance(axs, (mpl.axes._axes.Axes,mpl.figure.SubFigure)):
+                self.fig,self.axs = plt.subplots(figsize=self.figsize)
+                can_I_add_title = True
+            else:
+                if isinstance(axs, mpl.figure.SubFigure):
+                    self.axs = axs.subplots()
 
-                self.pl._set_title(
-                    self.axs,
-                    self.title,
-                )
+            self.pl = plotting.LazyPlot(
+                self.final_data["func"],
+                xx=t_,
+                error=self.final_data["error"],
+                axs=self.axs,
+                cmap=self.cm,
+                add_hline=0,
+                **kwargs
+            )
+
+            add_axvspan(self.axs, ymax=0.1, alpha=0.5)
+            if isinstance(title, (str,dict)):
+                if can_I_add_title:
+                    self.fig.suptitle(
+                        self.title, 
+                        fontsize=self.pl.title_size, 
+                        fontweight="bold"
+                    )
+
+                if force_title:
+                    if isinstance(self.title, str):
+                        self.title = {
+                            "title": self.title,
+                            "fontsize": self.pl.title_size,
+                            "fontweight": "bold"
+                        }
+
+                    self.pl._set_title(
+                        self.axs,
+                        self.title,
+                    )
 
     @staticmethod
     def get_avg_and_sem(df, correct=True, **kwargs):
@@ -584,11 +600,10 @@ class XinYuPlot(plotting.Defaults):
         cont_lines=[0.25,0.5,0.75],
         bsl=None,
         annot_onset=False,
+        skip_plot=False,
+        figsize=(5,5),
         **kwargs
         ):
-
-        if not isinstance(axs, mpl.axes._axes.Axes):
-            _,axs = plt.subplots(figsize=(5,5))
 
         # correct baseline
         if isinstance(bsl, int):
@@ -628,204 +643,228 @@ class XinYuPlot(plotting.Defaults):
         pop_levels = False
         lvls = None
         cntr = None
-        if contours:
-        
-            # add the levels based on percentages
-            if not "levels" in list(cont_kws.keys()):
-                
-                # get min-max range of data
-                mmin,mmax = use_data.min().min(), use_data.max().max()
 
-                # force into list
-                if isinstance(cont_lines, (float, int)):
-                    cont_lines = [cont_lines]
+        if not skip_plot:
 
-                # multiple data range with levels
-                lvls = tuple([i*(mmax+abs(mmin)) for i in cont_lines])
-                
-                # update kwargs
+            if not isinstance(axs, (mpl.axes._axes.Axes,mpl.figure.SubFigure)):
+                _,axs = plt.subplots(figsize=figsize)
+            else:
+                if isinstance(axs, mpl.figure.SubFigure):
+                    axs = axs.subplots()
+
+            if contours:
+            
+                # add the levels based on percentages
+                if not "levels" in list(cont_kws.keys()):
+                    
+                    # get min-max range of data
+                    mmin,mmax = use_data.min().min(), use_data.max().max()
+
+                    # force into list
+                    if isinstance(cont_lines, (float, int)):
+                        cont_lines = [cont_lines]
+
+                    # multiple data range with levels
+                    lvls = tuple([i*(mmax+abs(mmin)) for i in cont_lines])
+                    
+                    # update kwargs
+                    cont_kws = utils.update_kwargs(
+                        cont_kws, 
+                        "levels", 
+                        lvls
+                    )
+                    
+                    # later remove from kwargs
+                    pop_levels = True
+
+                # draw contours based on existing single_xinyu_plot-object
+                if isinstance(contours_relative, dict):
+                    lvls = fetch_level_values(
+                        contours_relative,
+                        data
+                    )
+
+                    # update kwargs
+                    cont_kws = utils.update_kwargs(
+                        cont_kws, 
+                        "levels", 
+                        lvls,
+                        force=True
+                    )
+                    
+                    # later remove from kwargs
+                    pop_levels = True
+
+                # set default colors
                 cont_kws = utils.update_kwargs(
                     cont_kws, 
-                    "levels", 
-                    lvls
+                    "colors", 
+                    "black"
+                )
+
+                # remove colors from kwargs if cmap is specified
+                if "cmap" in list(cont_kws.keys()):
+                    cont_kws.pop("colors")
+
+                # add the contours
+                cntr = axs.contour(
+                    np.linspace(0,use_data.shape[1], num=use_data.shape[1]),
+                    np.linspace(0,use_data.shape[0], num=use_data.shape[0]),
+                    use_data, 
+                    **cont_kws
                 )
                 
-                # later remove from kwargs
-                pop_levels = True
+            else:
+                use_data = data.copy()
 
-            # draw contours based on existing single_xinyu_plot-object
-            if isinstance(contours_relative, dict):
-                lvls = fetch_level_values(
-                    contours_relative,
-                    data
-                )
 
-                # update kwargs
-                cont_kws = utils.update_kwargs(
-                    cont_kws, 
-                    "levels", 
-                    lvls,
+            # decide what to do with colorbar (stems from sharey-arg in XinYuPlot-class)
+            fix_cbar = True
+            if "cbar" in list(sns_kws):
+                if not sns_kws["cbar"]:
+                    fix_cbar = False
+
+                sns_kws = utils.update_kwargs(
+                    sns_kws,
+                    "cbar",
+                    False,
                     force=True
                 )
-                
-                # later remove from kwargs
-                pop_levels = True
 
-            # set default colors
-            cont_kws = utils.update_kwargs(
-                cont_kws, 
-                "colors", 
-                "black"
+            # make heat map
+            print(sns_kws)
+            sns.heatmap(
+                use_data,
+                cmap=cm,
+                ax=axs,
+                rasterized=True,
+                **sns_kws
             )
 
-            # remove colors from kwargs if cmap is specified
-            if "cmap" in list(cont_kws.keys()):
-                cont_kws.pop("colors")
+            # set time ticks
+            if isinstance(time_ticks, int):
+                new_ticks = np.linspace(0.5,data.shape[-1], num=time_ticks)
+                t_min,t_max = list(data.columns)[0],list(data.columns)[-1]
+                new_lbls = np.linspace(t_min,t_max, num=time_ticks).round(time_dec)
 
-            # add the contours
-            cntr = axs.contour(
-                np.linspace(0,use_data.shape[1], num=use_data.shape[1]),
-                np.linspace(0,use_data.shape[0], num=use_data.shape[0]),
-                use_data, 
-                **cont_kws
-            )
-            
-        else:
-            use_data = data.copy()
+                if time_dec == 0:
+                    new_lbls = [int(i) for i in new_lbls]
+                    
+                axs.set_xticks(new_ticks, rotation=0, labels=new_lbls)
 
+            # set y-ticks
+            axs.set_yticks(axs.get_yticks(), rotation=0, labels=axs.get_yticklabels())
+            if isinstance(depth_ticks, int):
 
-        # decide what to do with colorbar (stems from sharey-arg in XinYuPlot-class)
-        fix_cbar = True
-        if "cbar" in list(sns_kws):
-            if not sns_kws["cbar"]:
-                fix_cbar = False
-
-            sns_kws = utils.update_kwargs(
-                sns_kws,
-                "cbar",
-                False,
-                force=True
-            )
-
-        # make heat map
-        sns.heatmap(
-            use_data,
-            cmap=cm,
-            ax=axs,
-            **sns_kws
-        )
-
-        # set time ticks
-        if isinstance(time_ticks, int):
-            new_ticks = np.linspace(0.5,data.shape[-1], num=time_ticks)
-            t_min,t_max = list(data.columns)[0],list(data.columns)[-1]
-            new_lbls = np.linspace(t_min,t_max, num=time_ticks).round(time_dec)
-
-            if time_dec == 0:
-                new_lbls = [int(i) for i in new_lbls]
-                
-            axs.set_xticks(new_ticks, rotation=0, labels=new_lbls)
-
-        # set y-ticks
-        axs.set_yticks(axs.get_yticks(), rotation=0, labels=axs.get_yticklabels())
-        if isinstance(depth_ticks, int):
-
-            new_ticks = np.linspace(0.5,data.shape[0], num=depth_ticks)
-            if as_depth:
-                max_val = 100
-            else:
-                max_val = data.shape[0]
-
-            new_lbls = np.linspace(0,max_val, num=depth_ticks)
-            
-            if isinstance(depth_dec, int):
-                if depth_dec>0:
-                    new_lbls = new_lbls.round(depth_dec)
+                new_ticks = np.linspace(0.5,data.shape[0], num=depth_ticks)
+                if as_depth:
+                    max_val = 100
                 else:
-                    new_lbls = new_lbls.astype(int)
-            
-            axs.set_yticks(new_ticks, rotation=0, labels=new_lbls)            
+                    max_val = data.shape[0]
 
-        if annot_onset:
-            # find at which index t=0
-            t_onset = utils.find_nearest(utils.get_unique_ids(orig_data, id="t"),0)[0]
+                new_lbls = np.linspace(0,max_val, num=depth_ticks)
+                
+                if isinstance(depth_dec, int):
+                    if depth_dec>0:
+                        new_lbls = new_lbls.round(depth_dec)
+                    else:
+                        new_lbls = new_lbls.astype(int)
+                
+                axs.set_yticks(new_ticks, rotation=0, labels=new_lbls)            
+
+            if annot_onset:
+                # find at which index t=0
+                t_onset = utils.find_nearest(utils.get_unique_ids(orig_data, id=time_col),0)[0]
+
+                kwargs = utils.update_kwargs(
+                    kwargs,
+                    "add_vline",
+                    {
+                        "pos": int(t_onset)
+                    },
+                )
 
             kwargs = utils.update_kwargs(
                 kwargs,
-                "add_vline",
+                "title",
                 {
-                    "pos": int(t_onset)
-                },
+                    "title": ev,
+                    "fontweight": "bold",
+                    "color": ev_col
+                }
             )
-            
-        pl,obj = plotting.conform_ax_to_obj(
-            ax=axs,
-            title={
-                "title": ev,
-                "fontweight": "bold",
-                "color": ev_col
-            },
-            x_label=x_lbl,
-            y_label=y_lbl,
-            **kwargs
-        )
-
-        if fix_cbar:
-            for tag,ffunc in zip(["vmin","vmax"],[np.amin,np.amax]):
-                if tag in list(sns_kws.keys()):
-                    if not tag in list(cb_kws.keys()):
-                        cb_kws = utils.update_kwargs(
-                            cb_kws,
-                            tag,
-                            sns_kws[tag]
-                        )
-                else:
-                    if not tag in list(cb_kws.keys()):
-                        cb_kws = utils.update_kwargs(
-                            cb_kws,
-                            tag,
-                            ffunc(use_data),
-                            force=True
-                        )
-
-            if not "ax" in list(cb_kws.keys()):
-                if axs.collections[-1].colorbar != None:
-                    if isinstance(axs.collections[-1].colorbar.ax, mpl.axes._axes.Axes):
-                        cb_ax = axs.collections[-1].colorbar.ax
-                        cb_kws = utils.update_kwargs(
-                            cb_kws,
-                            "axs",
-                            cb_ax,
-                            force=True
-                        )
-
-            plotting.LazyColorbar(
-                cmap=cm,
-                # ori="horizontal",
-                **cb_kws
+                
+            pl,obj = plotting.conform_ax_to_obj(
+                ax=axs,
+                x_label=x_lbl,
+                y_label=y_lbl,
+                **kwargs
             )
 
-        if annot:
-            annotate_cortical_ribbon(
-                axs,
-                fontsize=obj.font_size,
-                fontweight="bold",
-                xycoords="axes fraction",
-                color=annot_color
-            )   
+            if fix_cbar:
+                for tag,ffunc in zip(["vmin","vmax"],[np.amin,np.amax]):
+                    if tag in list(sns_kws.keys()):
+                        if not tag in list(cb_kws.keys()):
+                            cb_kws = utils.update_kwargs(
+                                cb_kws,
+                                tag,
+                                sns_kws[tag]
+                            )
+                    else:
+                        if not tag in list(cb_kws.keys()):
+                            cb_kws = utils.update_kwargs(
+                                cb_kws,
+                                tag,
+                                ffunc(use_data),
+                                force=True
+                            )
 
-        # pop levels so contour values are updated
-        if pop_levels:
-            cont_kws.pop("levels")
+                if not "ax" in list(cb_kws.keys()):
+                    if axs.collections[-1].colorbar != None:
+                        if isinstance(axs.collections[-1].colorbar.ax, mpl.axes._axes.Axes):
+                            cb_ax = axs.collections[-1].colorbar.ax
+                            cb_kws = utils.update_kwargs(
+                                cb_kws,
+                                "axs",
+                                cb_ax,
+                                force=True
+                            )
 
-        return {
-            "axs": axs,
-            "obj": obj,
-            "data": use_data,
-            "orig": orig_data,
-            "levels": lvls,
-            "contours": cntr
-        }
+                print(cb_kws)
+                plotting.LazyColorbar(
+                    cmap=cm,
+                    # ori="horizontal",
+                    **cb_kws
+                )
+
+            if annot:
+                annotate_cortical_ribbon(
+                    axs,
+                    fontsize=obj.font_size,
+                    fontweight="bold",
+                    xycoords="axes fraction",
+                    color=annot_color
+                )   
+
+            # pop levels so contour values are updated
+            if pop_levels:
+                cont_kws.pop("levels")
+
+            return {
+                "axs": axs,
+                "obj": obj,
+                "data": use_data,
+                "orig": orig_data,
+                "levels": lvls,
+                "contours": cntr,
+                "bsl": bsl
+            }
+        else:
+            return {
+                "data": use_data,
+                "orig": orig_data,
+                "bsl": bsl
+            }
 
 class PlotDeconvProfiles():
 
@@ -899,7 +938,7 @@ class PlotDeconvProfiles():
                 ncols=len(self.ev_ids), 
                 figsize=figsize, 
                 gridspec_kw={"wspace": 0.1}, 
-                sharey=True, 
+                # sharey=True, 
                 sharex=True,
                 constrained_layout=True
             )
@@ -969,7 +1008,7 @@ class PlotDeconvProfiles():
                 ev_err = list(err.values.T)
 
             if isinstance(self.bsl, int):
-                ev_prof = [correct_baseline(i, bsl=self.bsl) for i in ev_prof]
+                ev_prof = [fitting.Epoch.correct_baseline(i, bsl=self.bsl) for i in ev_prof]
 
             # plot
             kwargs = utils.update_kwargs(kwargs, "line_width", 2)
@@ -1064,7 +1103,7 @@ def _save_figure(
     fname=None,
     fig_dir=None,
     subject=None,
-    exts=["pdf","png"],
+    exts=["pdf","png","svg"],
     overwrite=False,
     return_figdir=False,
     **kwargs):
@@ -1113,10 +1152,22 @@ def _save_figure(
 
 class StimPNGs(SubjectsDict):
 
-    def __init__(self, subject, **kwargs):
+    def __init__(
+        self, 
+        subject, 
+        n_pix=270,
+        img_pix=None,
+        **kwargs
+        ):
 
         super().__init__(**kwargs)
         self.subject = subject
+        self.pars = self.get_pars(self.subject)
+        self.hemi = self.get_hemi(self.subject)
+        self.n_pix = n_pix
+        self.h_pars = utils.select_from_df(self.pars, expression=f"hemi = {self.hemi}")
+        self.img_pix = img_pix
+
         self.png_files = self.fetch_files()
         self.cms = [utils.make_binary_cm(i) for i in self.get_colors()]
 
@@ -1126,7 +1177,7 @@ class StimPNGs(SubjectsDict):
     
     def load_png(self, file):
         img = (255*mpimg.imread(file)).astype('int')
-        img_bin = np.zeros_like(img[...,0])
+        img_bin = np.full_like(img[...,0], 0)
         img_bin[np.where(((img[..., 0] < 40) & (img[..., 1] < 40)) | ((img[..., 0] > 200) & (img[..., 1] > 200)))] = 1
 
         return {
@@ -1205,41 +1256,185 @@ class StimPNGs(SubjectsDict):
 
         return axs
 
+    @staticmethod
+    def get_1d_profile(pars, **kwargs):
+        
+        # set some defaults
+        for key,val in zip(
+            ["model", "verbose", "screen_distance_cm"],
+            ["norm", False, 196]
+            ):
+
+            kwargs = utils.update_kwargs(
+                kwargs,
+                key,
+                val
+            )
+
+        profile = prf.Profile1D(
+            pars,
+            **kwargs
+        )
+
+        return profile
+
+    def transform_img(self, img, img_type="bin"):
+        from scipy import ndimage
+        pars = utils.select_from_df(self.pars, expression=f"hemi = {self.hemi}")
+        x,y = pars.x.values[0],pars.y.values[0]
+        tfm = np.eye(2)
+        off = [
+            utils.reverse_sign(prf.deg2pix(y, scrSizePix=[1080,1920],scrWidthCm=39.8)),
+            prf.deg2pix(x, scrSizePix=[1920,1080],scrWidthCm=70)
+        ]
+
+        if isinstance(img, str):
+            img = self.load_png(img)[img_type]
+
+        png = ndimage.affine_transform(img, tfm, offset=off)
+        return png
+    
+    def resample_img(self, img, n_pix, img_type="bin"):
+
+        if isinstance(img, str):
+            img = self.load_png(img)[img_type]
+
+        # make square
+        offset = int((img.shape[1]-img.shape[0])/2)
+        img = img[:, offset:(offset+img.shape[0])]
+
+        # resample
+        return utils.resample2d(img, n_pix)
+
+    
+    def get_response_df(
+        self,
+        scr_size=1080,
+        n_pix=270,
+        srf_kws={},
+        center=True,
+        **kwargs
+         ):
+
+        # load the files, transform them to center, and resample to self.n_pix
+        self.loaded_files = []
+        for i in self.png_files:
+            if center:
+                i = self.transform_img(i, **kwargs)
+
+            self.loaded_files.append(self.resample_img(i, n_pix))
+            
+        for key,val in zip(["screen_size_cm","screen_size_px"],[[39.3,39.3],[scr_size,scr_size]]):
+            srf_kws = utils.update_kwargs(
+                srf_kws,
+                key,
+                val
+            )
+
+        # initiate SRF class with square screen to match pRF dimensions
+        self.SR_ = prf.SizeResponse(
+            params=utils.select_from_df(self.pars, expression=f"hemi = {self.hemi}"),
+            n_pix=n_pix,
+            downsample_factor=int(scr_size/n_pix),
+            **srf_kws
+        )
+
+        # feed loaded_files into make_sr_function
+        stims = np.concatenate([i[...,np.newaxis] for i in self.loaded_files], axis=-1)
+        resp = self.SR_.make_sr_function(
+            self.SR_.params_df, 
+            stims=stims,
+            center_prf=center
+        ).squeeze()
+
+        df = pd.DataFrame(resp, columns=["response"])
+        df["subject"] = self.subject
+        df["event_type"] = self.ev_names
+        df.set_index(["subject","event_type"], inplace=True)
+        return df
+        
     def generate_composite(
         self, 
         axs=None, 
         figsize=(4*(1920/1080),4), 
         add_srf=False,
+        add_prf=False,
         srf_inset=[0.0,0.7,0.3,0.4],
         srf_kw={},
+        center=False,
         **kwargs
         ):
 
         if not isinstance(axs, mpl.axes._axes.Axes):
-            fig,axs = plt.subplots(figsize=figsize)
+            fig,self.axs = plt.subplots(figsize=figsize)
+        else:
+            self.axs = axs
 
+        self.composite_imgs = []
         for ix,png in enumerate(self.png_files[::-1]):
             cm = self.cms[::-1][ix]
+
+            # transform images to center
+            if center:
+                png = self.transform_img(
+                    png, 
+                    img_type="bin"
+                )
+
+            if isinstance(self.img_pix, int):
+                png = self.resample_img(
+                    png, 
+                    self.img_pix,
+                    img_type="bin"
+                )
+
             self.plot_image(
                 png,
-                axs=axs,
+                axs=self.axs,
                 cm=cm,
                 **kwargs
             )
 
+            self.composite_imgs.append(png)
+
         # # add SRF inset
         if add_srf:
-            ax2 = axs.inset_axes(srf_inset)
+            ax2 = self.axs.inset_axes(srf_inset)
             self.plot_srf(
                 axs=ax2,
                 **srf_kw
             )
 
+        if add_prf:
+            self.x,self.y = [self.h_pars[i].values[0] for i in ["x","y"]]
+
+            if center:
+                self.x = self.y = 0
+
+            prf_cm = sns.color_palette("Greys_r", 2)
+            self.prof1d = self.get_1d_profile(
+                self.h_pars, 
+                n_pix=self.n_pix
+            )
+
+            # print(self.prof1d.fwhm_deg,self.prof1d.zero_deg)
+            for ix,el in enumerate([self.prof1d.fwhm_deg,self.prof1d.zero_deg]):
+                circ = mpl.patches.Circle(
+                    (self.x,self.y),
+                    radius=el/2,
+                    fc="none",
+                    ec=prf_cm[ix],
+                    lw=3,
+                    # zorder=50
+                )
+                self.axs.add_artist(circ)
+            
     def generate_screen_images(
         self, 
         axs=None, 
         figsize=(12,3),
         colors=None,
+        center=False,
         **kwargs
         ):
 
@@ -1258,6 +1453,7 @@ class StimPNGs(SubjectsDict):
         pop_title = False
         colors = self.get_colors()
         evs = self.get_evs()
+        self.screen_imgs = []
         for ix,png in enumerate(self.png_files):
 
             # set title
@@ -1274,6 +1470,10 @@ class StimPNGs(SubjectsDict):
 
                 pop_title = True
 
+            # transform images to center
+            if center:
+                png = self.transform_img(png, img_type="rgb")
+
             self.plot_image(
                 png,
                 axs=use_axes[ix],
@@ -1281,18 +1481,28 @@ class StimPNGs(SubjectsDict):
                 **kwargs
             )
 
+            self.screen_imgs.append(png)
+
             if pop_title:
                 kwargs.pop("title")
-
+    
     def plot_image(
         self, 
         img,
         figsize=(6,4), 
         cm=None, 
         rm_axs=True,
+        screen=False,
         annotate=True,
         axs=None, 
         img_type="bin",
+        left=(0,0.51),
+        right=(0.96,0.51),
+        top=(0.51,0.96),
+        bottom=(0.51,0),
+        crosshair=True,
+        annot=["-10","10","-5","5"],
+        srf_kws={},
         **kwargs
         ):
 
@@ -1303,8 +1513,7 @@ class StimPNGs(SubjectsDict):
             fig,axs = plt.subplots(figsize=figsize)
         
         # get visual field 
-        SR_ = prf.SizeResponse()
-        SR_.vf_extent
+        SR_ = prf.SizeResponse(**srf_kws)
 
         # imshow
         axs.imshow(
@@ -1320,8 +1529,8 @@ class StimPNGs(SubjectsDict):
         # annotate
         if annotate:
             for ii,val in zip(
-                ["-10°","10°","-5°","5°"], 
-                [(0,0.51),(0.96,0.51),(0.51,0),(0.51,0.96)]):
+                [f"{i}°" for i in annot], 
+                [left,right,bottom,top]):
 
                 axs.annotate(
                     ii,
@@ -1330,13 +1539,30 @@ class StimPNGs(SubjectsDict):
                     xycoords="axes fraction"
                 )
 
+        if screen:
+            axs.axis("on")
+
+            for key,val in zip(["sns_despine", "x_ticks", "y_ticks"],[False, [], []]):
+                kwargs = utils.update_kwargs(
+                    kwargs,
+                    key,
+                    val
+                )
+
         # format
+        if crosshair:
+            for i in ["add_hline","add_vline"]:
+                kwargs = utils.update_kwargs(
+                    kwargs,
+                    i,
+                    0
+                )
+                
         plotting.conform_ax_to_obj(
             ax=axs,
-            add_hline=0,
-            add_vline=0,
             **kwargs
         )
+
 
 class BijanzadehFigures(SubjectsDict):
 
@@ -1497,10 +1723,22 @@ def annotate_cortical_ribbon(
             **kwargs
         )
 
-def make_wm_pial_ticks(data):
+def make_wm_pial_ticks(
+    data, 
+    start=0, 
+    end=100, 
+    step=25,
+    force_int=True
+    ):
     x_ticks = [0,data.shape[0]//4, data.shape[0]//2,(data.shape[0]//2+data.shape[0]//4),data.shape[0]]
-    x_labels = list(np.arange(0,120, step=25))
+    x_labels = list(np.arange(start,end*1.1, step=step))
 
+    if len(x_ticks) != len(x_labels):
+        raise ValueError(f"Length of ticks ({len(x_ticks)}) {x_ticks} != length of labels ({len(x_labels)}) {x_labels}")
+    
+    if force_int:
+        x_labels = [int(round(i,0)) for i in x_labels]
+        
     return {
         "ticks": x_ticks,
         "labels": x_labels
@@ -1536,6 +1774,7 @@ class EpochMethod(SubjectsDict):
         figsize=(14,4),
         data_kws={},
         plot_kws={},
+        add_titles=True,
         **kwargs
         ):
 
@@ -1543,6 +1782,7 @@ class EpochMethod(SubjectsDict):
         self.subject = subject
         self.figsize = figsize
         self.wratios = wratios
+        self.add_titles = add_titles
         self.axs = axs
 
         # initialize SubjectsDict
@@ -1624,7 +1864,7 @@ class EpochMethod(SubjectsDict):
         ):
 
         ncols = 2
-        if not isinstance(self.axs, list):
+        if not isinstance(self.axs, (list,np.ndarray)):
             if isinstance(self.axs, mpl.figure.SubFigure):
                 self.fig = self.axs
                 axs = self.axs.subplots(
@@ -1681,6 +1921,14 @@ class EpochMethod(SubjectsDict):
             **kwargs
         )
 
+        if self.add_titles:
+            title1 = {
+                "title": "profiles",
+                "fontweight": "normal"
+            }
+        else:
+            title1 = None
+
         # plot profiles first so that the labels are placed appropriately
         ep_sample = sample_ep.df_epoch.copy()
         obj_gm = PlotEpochProfiles(
@@ -1688,10 +1936,7 @@ class EpochMethod(SubjectsDict):
             axs=axs[1],
             ev_names=self.get_evs(),
             cm=self.get_colors(),
-            title={
-                "title": "profiles",
-                "fontweight": "normal"
-            },
+            title=title1,
             force_title=True,
             line_width=3,
             bsl=20,
@@ -1706,6 +1951,14 @@ class EpochMethod(SubjectsDict):
         if "labels" in list(plot_kws.keys()):
             plot_kws.pop("labels")
 
+        if self.add_titles:
+            title2 = {
+                "title": "timecourse",
+                "fontweight": "normal"
+            }
+        else:
+            title2 = None
+
         plotting.LazyPlot(
             [sample_df[i].values for i in list(sample_df.columns)],
             axs=axs[0],
@@ -1713,7 +1966,7 @@ class EpochMethod(SubjectsDict):
             add_hline=0,
             line_width=[0.5,2],
             color=["#cccccc", "k"],
-            title="timecourse",
+            title=title2,
             **plot_kws
         )
 
@@ -1742,3 +1995,664 @@ class EpochMethod(SubjectsDict):
                 color=ev_color,
                 lw=3
             )        
+
+class MagnitudePerEvent():
+
+    def __init__(
+        self,
+        df,
+        axs=None,
+        interval=[5,7],
+        window_size=2,
+        add_title=True,
+        as_index=False,
+        ref_stim="act",
+        **kwargs
+        ):
+
+        self.df = df
+        self.interval = interval
+        self.add_title = add_title
+        self.as_index = as_index
+        self.ref_stim = ref_stim
+        self.window_size = window_size
+
+        self.gm_df = utils.select_from_df(
+            self.df, 
+            expression="ribbon",
+            indices=[0]
+        )
+
+        # take range around peak of "ref_stim", rather than fixed window
+        if self.interval == "custom":
+            sub_ids = utils.get_unique_ids(self.gm_df, id="subject")
+            sub_max = []
+            self.t_max = []
+            for sub in sub_ids:
+
+                sub_df = utils.select_from_df(self.gm_df, expression=f"subject = {sub}")
+                ref_df = utils.select_from_df(sub_df, expression=f"event_type = {ref_stim}").groupby(["subject","t"]).mean()
+
+                t_max = ref_df.idxmax().iloc[0][1]
+                self.t_max.append(t_max)
+                fc = window_size//2
+                interval = [t_max-fc,t_max+fc]
+                t_df = utils.select_from_df(
+                    sub_df, 
+                    expression=(
+                        f"t > {interval[0]}",
+                        "&",
+                        f"t < {interval[1]}"
+                    )
+                )
+
+                sub_max.append(t_df)
+                
+            sub_max = pd.concat(sub_max)
+            self.max_df = sub_max.groupby(["subject","event_type","epoch"]).mean()
+            self.t_max = pd.DataFrame(self.t_max, columns=["t_max"])
+            self.t_max["subject"] = sub_ids
+        else:
+            self.time_df = utils.select_from_df(
+                self.gm_df, 
+                expression=(
+                    f"t > {self.interval[0]}",
+                    "&",
+                    f"t < {self.interval[1]}"
+                )
+            )
+
+            self.max_df = self.time_df.groupby(["subject","event_type","epoch"]).mean()
+        self.sub_ids = utils.get_unique_ids(self.max_df, id="subject")
+        self.figsize = (2*len(self.sub_ids),4)
+
+        if not isinstance(axs, (dict,np.ndarray,list,mpl.figure.SubFigure)):
+            fig,self.axs = plt.subplots(
+                ncols=len(self.sub_ids), 
+                figsize=self.figsize,
+                constrained_layout=True
+            )
+        else:
+            if isinstance(axs, mpl.figure.SubFigure):
+                self.axs = axs.subplots(
+                    ncols=len(self.sub_ids),
+                    constrained_layout=True
+                )
+            else:
+                self.axs = axs
+
+        self.plot_subjects(**kwargs)
+
+    
+    def plot_subjects(self, **kwargs):
+
+        self.sub_plots = {}
+        for ix,sub in enumerate(self.sub_ids):
+            self.max_sub = utils.select_from_df(self.max_df, expression=f"subject = {sub}")
+
+            if self.add_title:
+                if self.as_index:
+                    self.sub = f"sub-{str(ix+1).zfill(2)}"
+                else:
+                    self.sub = f"sub-{sub}"
+
+                print(f"Plotting {self.sub}")
+                kwargs = utils.update_kwargs(
+                    kwargs,
+                    "title",
+                    {
+                        "title": self.sub,
+                        "fontweight": "bold"
+                    },
+                    force=True
+                )
+
+            # deal with dictionary collecing sub IDs as key and axes instances as values
+            if isinstance(self.axs, dict):
+                ax = self.axs[sub]
+            else:
+                ax = self.axs[ix]
+                
+            self.sub_plots[sub] = self.plot_bar(
+                self.max_sub.reset_index(),
+                axs=ax,
+                **kwargs
+            )
+
+    def plot_bar(
+        self,
+        df,
+        posth=True,
+        key="gm",
+        bt="event_type",
+        posthoc_kws={},
+        **kwargs
+        ):
+
+        bar_plot = plotting.LazyBar(
+            df,
+            x=bt,
+            y=key,
+            **kwargs
+        ) 
+        
+        ddict = {
+            "axs": bar_plot
+        }
+
+        if posth:
+            posth = glm.Posthoc()
+            posth.run_posthoc(
+                data=df,
+                dv=bar_plot.y,
+                between=bar_plot.x,
+            )
+
+            for key,val in zip(
+                ["y_pos", "line_separate_factor"],
+                [1.08,-0.08]
+                ):
+
+                posthoc_kws = utils.update_kwargs(
+                    posthoc_kws,
+                    key,
+                    val
+                )
+
+            posth.plot_bars(
+                axs=bar_plot.axs,
+                **posthoc_kws
+            )
+
+            ddict["posthoc"] = posth
+
+        bar_plot.ff.set_facecolor('none')
+        return ddict
+    
+class ExampleStims(SubjectsDict):
+
+    def __init__(
+        self, 
+        axs=None, 
+        figsize=(5,5), 
+        fc=1,
+        radii=[1,2.5,4.45],
+        radii2=[1.9,3.9],
+        **kwargs
+        ):
+
+        self.axs = axs
+        self.fc = fc
+        self.figsize = figsize
+        self.radii = radii
+        self.radii2 = radii2
+        self.orig = [1.9,3.9]
+        if not isinstance(self.axs, mpl.axes._axes.Axes):
+            self.fig,self.axs = plt.subplots(figsize=self.figsize)
+
+        super().__init__()
+        cols = self.get_colors()
+
+        self.axs.imshow(np.full((100,100), np.nan), extent=[-5,5]+[-5,5])
+        circ = mpl.patches.Circle(
+            (0,0),
+            radius=self.radii[0]*self.fc,
+            fc=cols[0],
+            alpha=0.5
+        )
+
+        arts = [circ]
+
+        circ = mpl.patches.Circle(
+            (0,0),
+            radius=self.radii[1]*self.fc,
+            fc="none",
+            ec=cols[1],
+            lw=30,
+            alpha=0.5
+        )
+        arts.append(circ)
+
+        circ = mpl.patches.Circle(
+            (0,0),
+            radius=self.radii[2]*self.fc,
+            fc="none",
+            ec=cols[2],
+            lw=30,
+            alpha=0.5
+        )
+        arts.append(circ)
+
+        circ = mpl.patches.Circle(
+            (0,0),
+            radius=self.radii2[1]*self.fc,
+            fc="none",
+            ec=cols[2],
+            lw=3,
+            zorder=3
+        )
+        arts.append(circ)
+
+        circ = mpl.patches.Circle(
+            (0,0),
+            radius=self.radii2[0]*self.fc,
+            fc="none",
+            ec=cols[1],
+            lw=3,
+            zorder=3
+        )
+        arts.append(circ)
+
+        g_cm = sns.color_palette("Greys_r", 2)
+        circ = mpl.patches.Circle(
+            (0,0),
+            radius=1.1,
+            fc="none",
+            ec=g_cm[0],
+            lw=3,
+        )
+        arts.append(circ)
+
+        circ = mpl.patches.Circle(
+            (0,0),
+            radius=3,
+            fc="none",
+            ec=g_cm[1],
+            lw=3,
+        )
+        arts.append(circ)
+
+        for i in arts:
+            self.axs.add_artist(i)
+
+        plotting.conform_ax_to_obj(
+            ax=self.axs,
+            sns_despine=False,
+            x_ticks=[-5,0,5],
+            y_ticks=[-5,0,5],
+        )
+
+        if self.fc<1:
+            self.fc_ = 1+(1-self.fc)
+        elif self.fc>1:
+            self.fc_ = 1-(self.fc-1)
+        else:
+            self.fc_ = 1
+            
+        self.axs.axvline(0, ymin=0.11*self.fc_, ymax=0.5, color=cols[-1], lw=2)
+        self.axs.axvline(0, ymin=0.32*self.fc_, ymax=0.5, color=cols[1], lw=2)
+        self.axs.axvline(0, ymin=0, ymax=0.11*self.fc_, color="k", lw=2)
+
+def plot_r2_glm(
+    sub, 
+    sub_glms, 
+    x_lim=[310,410],
+    y_lim=[340,380],
+    hratio=[0.8,0.2],
+    figsize=(4,5),
+    axs=None,
+    settings={},
+    plot_kws={},
+    subj_dict=None,
+    **kwargs
+    ):
+
+    if subj_dict == None:
+        subj_obj = SubjectsDict(**settings)
+    else:
+        subj_obj = subj_dict
+
+    select_sub = sub_glms[sub]
+    r2_vals = select_sub.results["r2"]
+    r2_ref = np.zeros_like(r2_vals)
+    r2_ref[x_lim[0]:x_lim[1]] = r2_vals[x_lim[0]:x_lim[1]]
+
+    # correct ribbon voxels
+    corr = subj_obj.get(sub, "ribbon_correction")
+
+    try:
+        old_rib = subj_obj.get_ribbon(sub, from_unique=True)
+    except:
+        old_rib = subj_obj.get_ribbon(sub)
+
+    rib = [i+corr for i in old_rib]
+
+    max_r2 = np.where(r2_ref == r2_ref.max())[0][0]        
+    if subj_obj.get_invert(sub):
+        idx = 1
+    else:
+        idx = 0
+
+    csf_vox = rib[idx]
+    dist_vox = csf_vox-max_r2
+
+    imgs = {}
+    ref_slc = subj_obj.get_slc(sub)
+    ref_beam = subj_obj.get_beam(sub)
+    for img,ff in zip(["slice","beam"],[ref_slc,ref_beam]):
+
+        if isinstance(ff, str):
+            imgs[img] = nb.load(ff).get_fdata().squeeze()
+        else:
+            raise TypeError(f"{ff} is of type {type(ff)}. Must be a string pointing to a path")
+    # imgs
+    
+    nrows = 2
+    if isinstance(axs, mpl.figure.SubFigure):
+        fig = axs
+        ax = axs.subplots(
+            nrows=2,
+            sharex=True,
+            height_ratios=hratio,
+            gridspec_kw={
+                "hspace": -0.4
+            }
+        )
+    else:
+        fig,ax = plt.subplots(
+            nrows=2,
+            sharex=True,
+            height_ratios=hratio,
+            gridspec_kw={
+                "hspace": -0.4
+            },
+            figsize=figsize,
+            constrained_layout=True
+        )
+
+    for r,c in zip([old_rib, rib],["r","b"]):
+        ax[0].axvline(
+            r[idx]-x_lim[0], 
+            lw=2,
+            color=c,
+            alpha=0.65
+        )
+
+    r2_in = r2_vals[x_lim[0]:x_lim[1]]
+    kwargs = utils.update_kwargs(
+        kwargs,
+        "y_ticks",
+        [0,round(r2_in.max(),2)]
+    )
+
+    defs = {
+        "line_width": 2,
+        "color": "#cccccc",
+        "y_label": "R$^2$",
+        "add_line": 0,
+        "alpha": [0.3,0.8,1]
+    }
+
+    for key,val in defs.items():
+        kwargs = utils.update_kwargs(
+            kwargs,
+            key,
+            val
+        )
+
+    pl = plotting.LazyPlot(
+        r2_in,
+        axs=ax[0],
+        **kwargs
+    )
+
+    for cm,cr,key,alpha in zip(
+        ["Greys_r","r"],
+        [False,True],
+        list(imgs.keys()),
+        [None,0.3]
+        ):
+        
+        if cr:
+            cm = utils.make_binary_cm(cm)
+
+        # rotate image to deal with Left-right saturation slabs
+        if key == "slice":
+            fo = subj_obj.get(sub, "foldover")
+            if fo != "FH":
+                imgs[key] = np.rot90(imgs[key])
+
+        cut_img = np.rot90(imgs[key])[y_lim[0]:y_lim[1],x_lim[0]:x_lim[1]]
+        im = ax[1].imshow(
+            cut_img,
+            cmap=cm,
+            alpha=alpha,
+            aspect="auto"
+        )
+
+    plotting.conform_ax_to_obj(
+        ax=ax[1],
+        **plot_kws
+    )
+
+    ax[1].axvspan(
+        *[i-x_lim[0] for i in rib], 
+        alpha=0.2, 
+        color="#cccccc"
+    )
+
+    return ax
+
+def plot_draining_vein(
+    dfs,
+    sub,
+    interval=[5,7],
+    axs=None,
+    figsize=(5,5),
+    ev="act",
+    **kwargs
+    ):
+
+    if not isinstance(dfs, list):
+        dfs = [dfs]
+
+    # initialize axes
+    if not isinstance(axs, (mpl.axes._axes.Axes,mpl.figure.SubFigure)):
+        _,ax = plt.subplots(figsize=figsize)
+    else:
+        if isinstance(axs, mpl.figure.SubFigure):
+            ax = axs.subplots()
+        else:
+            ax = axs
+
+    plot_data = []
+    plot_err = []
+    for df in dfs:
+        
+        task_list = None
+        try:
+            task_list = utils.get_unique_ids(df, id="task")
+        except:
+            pass
+
+        if isinstance(task_list, list):
+            ref_data = hr.data.make_single_df(
+                utils.multiselect_from_df(
+                    df, 
+                    expression=[f"subject = {sub}", f"event_type = {ev}"]
+                ), 
+                idx=["subject", "run", "event_type", "epoch", "t"]
+            )
+        else:
+            ref_data = utils.multiselect_from_df(
+                df, 
+                expression=[f"subject = {sub}", f"event_type = {ev}"]
+            )
+
+        time_df = utils.select_from_df(
+            ref_data, 
+            expression=(
+                f"t > {interval[0]}",
+                "&",
+                f"t < {interval[1]}"
+            )
+        )
+
+        grouper = time_df.groupby(["subject","event_type"])
+        plot_data.append(grouper.mean().values.squeeze())
+        plot_err.append(grouper.sem().values.squeeze())
+    
+    for key,val in zip(["line_width", "x_ticks"],[3,[]]):
+        kwargs = utils.update_kwargs(
+            kwargs,
+            key,
+            val
+        )
+
+    pl = plotting.LazyPlot(
+        plot_data,
+        axs=ax,
+        error=plot_err,
+        **kwargs
+    )
+
+    hr.viz.annotate_cortical_ribbon(
+        ax,
+        pial_pos=(0.02,0.025),
+        wm_pos=(0.7,0.025),
+        fontsize=pl.font_size,
+        fontweight="bold"
+    )
+
+    return ax
+
+def plot_single_response(
+    dfs,
+    sub,
+    axs=None,
+    figsize=(5,5),
+    ev="act",
+    **kwargs
+    ):
+
+    if not isinstance(dfs, list):
+        dfs = [dfs]
+
+    # initialize axes
+    if not isinstance(axs, (mpl.axes._axes.Axes,mpl.figure.SubFigure)):
+        _,ax = plt.subplots(figsize=figsize)
+    else:
+        if isinstance(axs, mpl.figure.SubFigure):
+            ax = axs.subplots()
+        else:
+            ax = axs
+
+    plot_data = []
+    plot_err = []
+    for df in dfs:
+
+        # actual data used
+        tmp_df = utils.multiselect_from_df(
+            df, 
+            expression=[
+                f"subject = {sub.split('-')[-1]}",
+                f"event_type = {ev}"
+            ]
+        )
+        
+        t_ = utils.get_unique_ids(tmp_df, id="t")
+        sub_gm = utils.select_from_df(tmp_df, expression="ribbon", indices=[0])
+
+        sub_avg = sub_gm.groupby(["subject","event_type", "epoch","t"]).mean()
+        run_epoch = PlotEpochProfiles(
+            sub_avg,
+            bsl=20,
+            skip_plot=True
+        )
+
+        plot_data += run_epoch.final_data["func"]
+        plot_err += run_epoch.final_data["error"]
+
+    for key,val in zip(["line_width","x_ticks"],[3,[]]):
+        kwargs = utils.update_kwargs(
+            kwargs,
+            key,
+            val
+        )
+
+    pl = plotting.LazyPlot(
+        plot_data,
+        xx=t_,
+        axs=ax,
+        error=plot_err,
+        **kwargs
+    )
+
+    return ax
+
+def plot_weighted_depth_hrf(
+    ddict,
+    cms=["#cccccc","r"],
+    lws=[1,3],
+    figsize=(5,5),
+    axs=None,
+    ci=1,
+    zscore=False,
+    norm=False,
+    skip_plot=False,
+    subjects=True,
+    **kwargs
+    ):
+
+    if not isinstance(axs, (mpl.axes._axes.Axes,mpl.figure.SubFigure)):
+        fig,axs = plt.subplots(figsize=figsize)
+    else:
+        if isinstance(axs, mpl.figure.SubFigure):
+            axs = axs.subplots()
+    
+    kwargs = utils.update_kwargs(
+        kwargs,
+        "axs",
+        axs
+    )
+
+    # check if we should use z-score/norm
+    elems = ["subjs","avg","sem"]
+    if norm or zscore:
+        
+        elems = [f"{i}_z" for i in elems]
+        sub_arr = np.array(ddict["subjs"])
+        fc = sub_arr.mean(axis=0)
+        sd = sub_arr.std(axis=0)
+
+        # zscore also incorporates the SD (subject variation), norm maintains amplitude but reduces variance
+        m_ = np.array(ddict[elems[0]])
+        s_ = ddict[elems[1]]
+        if zscore:
+            ddict[elems[0]] = list((m_*sd)+fc)
+            ddict[elems[1]] = (s_*sd)+fc
+        else:
+            ddict[elems[0]] = list(m_+fc)
+            ddict[elems[1]] = s_+fc
+    
+    data_list = {
+        "subjects": ddict[elems[0]],
+        "average": ddict[elems[1]]
+    }
+
+    out_dict = {}
+    out_dict["data"] = copy.deepcopy(data_list)
+
+    if not subjects:
+        data_list["subjects"] = None
+
+    if not skip_plot:
+        for (df,col,lw,err) in zip(
+            [data_list["subjects"],data_list["average"]],
+            cms,
+            lws,
+            [None,ddict[elems[2]]*ci]
+            ):
+
+            if isinstance(df, (list,np.ndarray)):
+                plotting.LazyPlot(
+                    df,
+                    color=col,
+                    line_width=lw,
+                    error=err,
+                    **kwargs
+                )
+
+        out_dict["axs"] = axs
+
+    return out_dict

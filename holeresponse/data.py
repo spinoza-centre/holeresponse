@@ -2,7 +2,8 @@ from linescanning import (
     utils,
     plotting,
     dataset,
-    preproc
+    preproc,
+    fitting
 )
 import nibabel as nb
 import numpy as np
@@ -11,9 +12,12 @@ import matplotlib.pyplot as plt
 import os
 import pandas as pd
 from skimage import transform
+from scipy import signal
 from .utils import SubjectsDict
+from joblib import Parallel, delayed
+import holeresponse as hr
+
 opj = os.path.join
-subj_dict = SubjectsDict()
 
 class H5Parser(preproc.DataFilter):
 
@@ -21,197 +25,304 @@ class H5Parser(preproc.DataFilter):
         self,
         h5_files,
         filter_evs=True,
-        compartments=3,
-        wm_comps=None,
-        excl_runs=True,
-        resample_kws={},
-        ribbon=None,
-        wm=None,
-        lp=False,
-        lp_kw={},
-        unique_ribbon=False,
-        use_raw=False,
+        n_jobs=None,
+        subj_dict=None,
         *args,
         **kwargs
         ):
 
         self.h5_files = h5_files
         self.filter_evs = filter_evs
-        self.excl_runs = excl_runs
-        self.compartments = compartments
-        self.resample_kws = resample_kws
-        self.wm_comps = wm_comps
-        self.lp = lp
-        self.lp_kw = lp_kw
-        self.unique_ribbon = unique_ribbon
-        self.ribbon = ribbon
-        self.use_raw = use_raw
-
-        self.verbose = False
-        if "verbose" in list(kwargs.keys()):
-            self.verbose = kwargs["verbose"]
+        self.n_jobs = n_jobs
+        
+        if subj_dict == None:
+            self.subj_dict = SubjectsDict()
+        else:
+            self.subj_dict = subj_dict
 
         if isinstance(self.h5_files, str):
             self.h5_files = [self.h5_files]
 
+        if not isinstance(self.n_jobs, int):
+            self.n_jobs = len(self.h5_files)
+
         if len(self.h5_files)>0:
             self.df_func = []
             self.df_avg = []
+            self.df_avg_full = []
             self.dict_ribbon = {}
+            self.dict_ribbon_full = {}
             self.dict_wm = {}
             self.df_onsets = []
+            self.df_onsets_full = []
             self.df_comps = []
             self.df_wm = []
             self.df_filt = []
             self.df_orig = []
             self.df_raw = []
             self.h5_objs = {}
-            for h5 in self.h5_files:
+            self.dict_list = []
 
-                # read bids properties
-                comps = utils.split_bids_components(h5)
-                sub_id = f"sub-{comps['sub']}"
-
-                # parse h5-file
-                ddict = self.read_single_h5(h5, *args, **kwargs)
-                self.h5_objs[sub_id] = ddict["obj"]
-                self.df_raw.append(ddict["obj"].df_func_raw)
-                
-                # excl runs (defined in utils.py)
-                if self.excl_runs:
-                    filt_ddict = {}
-                    for tag in ["func","onsets"]:
-                        filt_ddict[tag] = self.exclude_runs(ddict[tag], subject=sub_id)
-                else:
-                    filt_ddict = ddict
-
-                # basic format
-                if self.use_raw:
-                    self.func = ddict["obj"].df_func_raw.copy()
-                else:
-                    self.func = filt_ddict["func"]
-
-                # apply filtering
-                if len(self.lp_kw)>0:
-                    add_txt = f" with options: {self.lp_kw}"
-                else:
-                    add_txt = ""
-
-                utils.verbose(f"Low-pass filtering data{add_txt}", self.verbose)
-                super().__init__(
-                    self.func,
-                    filter_strategy="lp",
-                    lp_kw=self.lp_kw
+            self.dict_list = Parallel(n_jobs=self.n_jobs,verbose=True)(
+                delayed(self.format_data)(
+                    h5,
+                    *args,
+                    **kwargs
                 )
-                self.df_filt = self.get_result()
+                for h5 in self.h5_files
+            )
 
-                # use low-passed data or not
-                if self.lp:
-                    self.active_func = self.df_filt.copy()
-                else:
-                    self.active_func = self.func.copy()
+            # read in subject specific data
+            for data_dict in self.dict_list:
+                sub_id = list(data_dict.keys())[0]
 
-                self.df_func.append(self.active_func)
-                self.df_onsets.append(filt_ddict["onsets"])
-                self.df_orig.append(self.func)
+                self.dict_ribbon[sub_id] = data_dict[sub_id]["ribbon"]
+                self.dict_ribbon_full[sub_id] = data_dict[sub_id]["ribbon_full"]
+                self.dict_wm[sub_id] = data_dict[sub_id]["wm_ribbon"]
+                self.h5_objs[sub_id] = data_dict[sub_id]["obj"]
+                self.df_func.append(data_dict[sub_id]["func"])
+                self.df_onsets.append(data_dict[sub_id]["onsets"])
+                self.df_onsets_full.append(data_dict[sub_id]["onsets_full"])
+                self.df_orig.append(data_dict[sub_id]["orig_func"])
+                self.df_comps.append(data_dict[sub_id]["comps"])
+                self.df_wm.append(data_dict[sub_id]["wm_comps"])
+                self.df_avg.append(data_dict[sub_id]["avg"])
+                self.df_raw.append(data_dict[sub_id]["raw"])
+                self.df_avg_full.append(data_dict[sub_id]["avg_full"])
 
-                # ribbon format - nr of voxels differs per subject, so store in dictionary (Marco would be proud)
-                has_dict = False
-                if not isinstance(self.ribbon, (list,tuple)):
-                    has_dict = subj_dict.has_ribdict(sub_id)
-                    # check if we have run-specific ribon values   
-                    if not has_dict:
-                        ribbon = subj_dict.get_ribbon(sub_id)
-
-                # print(has_dict)
-                if not has_dict or not self.unique_ribbon:
-                    df_ribbon = utils.select_from_df(
-                        self.active_func, 
-                        expression="ribbon", 
-                        indices=ribbon
-                    )
-                else:
-                    df_ribbon = self.fetch_unique_ribbon(
-                        self.active_func,
-                        subject=sub_id
-                    )
-
-                # get white matter voxels
-                if not isinstance(wm, (list,tuple)):
-                    wm = subj_dict.get_wm(sub_id)
-
-                wm_tmp = utils.select_from_df(
-                    self.active_func, 
-                    expression="ribbon", 
-                    indices=wm
-                )
-
-                self.dict_wm[sub_id] = wm_tmp.copy()
-
-                # invert if necessary
-                inv_rib = subj_dict.get_invert(sub_id)
-                if inv_rib:
-                    utils.verbose(f"Inverting ribbon order", self.verbose)
-                    df_ribbon = df_ribbon[df_ribbon.columns[::-1]]
-
-                self.dict_ribbon[sub_id] = df_ribbon.copy()
-
-                # average over ribbon/wm
-                df_tmp = []
-                for df,tag in zip([df_ribbon, wm_tmp],["gm","wm"]):
-                    df_avg = pd.DataFrame(df.mean(axis=1))
-                    df_avg.rename(columns={0: tag}, inplace=True)
-                    df_tmp.append(df_avg)
-                
-                df_tmp = pd.concat(df_tmp, axis=1)
-                self.df_avg.append(df_tmp)
-
-                # make 3-compartment model so we can average depths across subjects
-                utils.verbose(f"Making {self.compartments} GM-compartments", self.verbose)
-                df_comp = self.make_compartment_model(
-                    df_ribbon, 
-                    compartments=self.compartments,
-                    **self.resample_kws
-                )
-
-                # take 25% of GM for WM
-                if not isinstance(self.wm_comps, int):
-                    self.wm_comps = int(round((self.compartments*0.25),0)) 
-                
-                utils.verbose(f"Making {self.wm_comps} WM-compartments", self.verbose)
-                wm_comp = self.make_compartment_model(
-                    wm_tmp, 
-                    compartments=self.wm_comps,
-                    **self.resample_kws
-                )
-
-                self.df_comps.append(df_comp)
-                self.df_wm.append(wm_comp)
-
-                utils.verbose(f"Done with '{sub_id}'\n", self.verbose)
-
+            # concatenate
             self.df_func = pd.concat(self.df_func)
             self.df_onsets = pd.concat(self.df_onsets)
             self.df_avg = pd.concat(self.df_avg)
+            self.df_avg_full = pd.concat(self.df_avg_full)
             self.df_comps = pd.concat(self.df_comps)
             self.df_wm = pd.concat(self.df_wm)
             self.df_raw = pd.concat(self.df_raw)
             self.df_orig = pd.concat(self.df_orig)
+            self.df_onsets_full = pd.concat(self.df_onsets_full)
             
             if self.filter_evs:
-                self.df_onsets = utils.select_from_df(self.df_onsets, expression=("event_type != response","&","event_type != blink"))
+                expr = ("event_type != response","&","event_type != blink")
+                self.df_onsets = utils.select_from_df(self.df_onsets, expression=expr)
+                self.df_onsets_full = utils.select_from_df(self.df_onsets_full, expression=expr)
     
+    def format_data(
+        self, 
+        h5, 
+        resample_kws={},
+        verbose=False,
+        compartments=3,
+        wm_comps=None,
+        excl_runs=True,
+        ribbon=None,
+        wm=None,
+        lp=False,
+        lp_kw={},
+        unique_ribbon=False,
+        use_raw=False,
+        task_id=None,
+        ribbon_correction=False,        
+        *args, 
+        **kwargs
+        ):
+
+        # initiate output
+        data_dict = {}
+
+        # read bids properties
+        comps = utils.split_bids_components(h5)
+        sub_id = f"sub-{comps['sub']}"
+        data_dict[sub_id] = {}
+
+        # parse h5-file
+        kwargs= utils.update_kwargs(
+            kwargs,
+            "verbose",
+            verbose
+        )
+        ddict = self.read_single_h5(h5, *args, **kwargs)
+
+        # basic format
+        if use_raw:
+            func = ddict["obj"].df_func_raw.copy()
+        else:
+            func = ddict["func"]
+
+        onsets = ddict["onsets"]
+        if isinstance(task_id, str):
+            for tmp_df in [func,onsets]:
+                
+                idx = list(tmp_df.index.names)
+                add_task = tmp_df.reset_index()
+                add_task["task"] = task_id
+                idx.insert(1, "task")
+                tmp_df = add_task.set_index(idx)
+
+        # apply filtering
+        if len(lp_kw)>0:
+            add_txt = f" with options: {lp_kw}"
+        else:
+            add_txt = ""
+
+        utils.verbose(f"Low-pass filtering data{add_txt}", verbose)
+        super().__init__(
+            func,
+            filter_strategy="lp",
+            lp_kw=lp_kw
+        )
+        df_filt = self.get_result()
+
+        # use low-passed data or not
+        if lp:
+            active_func = df_filt.copy()
+        else:
+            active_func = func.copy()
+
+        # excl runs (defined in utils.py)
+        if excl_runs:
+            filt_ddict = {}
+            for tag,df in zip(["func","onsets"],[active_func, onsets]):
+                filt_ddict[tag] = self.exclude_runs(
+                    df, 
+                    subject=sub_id,
+                    subj_dict=self.subj_dict
+                )
+        else:
+            filt_ddict = {
+                "func": active_func.copy(),
+                "onsets": onsets
+            }            
+
+        # ribbon format - nr of voxels differs per subject, so store in dictionary (Marco would be proud)
+        has_dict = False
+        if not isinstance(ribbon, (list,tuple)):
+            has_dict = self.subj_dict.has_ribdict(sub_id)
+            # check if we have run-specific ribon values   
+            if not has_dict:
+                ribbon = self.subj_dict.get_ribbon(sub_id)
+
+                if ribbon_correction:
+                    ribbon = self.correct_ribbon(
+                        sub_id, 
+                        ribbon,
+                        verbose=verbose,
+                        subj_dict=self.subj_dict
+                    )
+        
+        # print(has_dict)
+        ddict_rib = {}
+        for tag,df in zip(["ribbon", "ribbon_full"], [filt_ddict["func"], active_func]):
+            if not has_dict or not unique_ribbon:
+                ddict_rib[tag] = utils.select_from_df(
+                    df, 
+                    expression="ribbon", 
+                    indices=ribbon
+                )
+            else:
+                ddict_rib[tag] = self.fetch_unique_ribbon(
+                    df,
+                    subject=sub_id,
+                    correct=ribbon_correction,
+                    verbose=verbose,
+                    subj_dict=self.subj_dict
+                )
+
+        # get white matter voxels
+        if not isinstance(wm, (list,tuple)):
+            wm = self.subj_dict.get_wm(sub_id)
+
+        wm_tmp = utils.select_from_df(
+            filt_ddict["func"], 
+            expression="ribbon", 
+            indices=wm
+        )
+
+        # invert if necessary
+        inv_rib = self.subj_dict.get_invert(sub_id)
+        if inv_rib:
+            utils.verbose(f"Inverting ribbon order", verbose)
+            for key,val in ddict_rib.items():
+                ddict_rib[key] = val[val.columns[::-1]]
+
+        df_tmp = []
+        for df,tag in zip([ddict_rib["ribbon"], wm_tmp],["gm","wm"]):
+            df_avg = pd.DataFrame(df.mean(axis=1))
+            df_avg.rename(columns={0: tag}, inplace=True)
+            df_tmp.append(df_avg)
+        
+        df_tmp = pd.concat(df_tmp, axis=1)
+        df_avg_full = pd.DataFrame(ddict_rib["ribbon_full"].mean(axis=1))
+        df_avg_full.rename(columns={0: "avg"}, inplace=True)
+
+        # make 3-compartment model so we can average depths across subjects
+        utils.verbose(f"Making {compartments} GM-compartments", verbose)
+        df_comp = self.make_compartment_model(
+            ddict_rib["ribbon"], 
+            compartments=compartments,
+            **resample_kws
+        )
+
+        # take 25% of GM for WM
+        if not isinstance(wm_comps, int):
+            wm_comps = int(round((compartments*0.25),0)) 
+        
+        utils.verbose(f"Making {wm_comps} WM-compartments", verbose)
+        wm_comp = self.make_compartment_model(
+            wm_tmp, 
+            compartments=wm_comps,
+            **resample_kws
+        )
+
+        data_dict[sub_id]["ribbon"] = ddict_rib["ribbon"].copy()
+        data_dict[sub_id]["ribbon_full"] = ddict_rib["ribbon_full"].copy()
+        data_dict[sub_id]["func"] = filt_ddict["func"]
+        data_dict[sub_id]["onsets_full"] = onsets
+        data_dict[sub_id]["onsets"] = filt_ddict["onsets"]
+        data_dict[sub_id]["orig_func"] = active_func
+        data_dict[sub_id]["comps"] = df_comp
+        data_dict[sub_id]["wm_comps"] = wm_comp
+        data_dict[sub_id]["obj"] = ddict["obj"]
+        data_dict[sub_id]["raw"] = ddict["obj"].df_func_raw
+        data_dict[sub_id]["avg"] = df_tmp
+        data_dict[sub_id]["avg_full"] = df_avg_full
+        data_dict[sub_id]["wm_ribbon"] = wm_tmp.copy()
+        utils.verbose(f"Done with '{sub_id}'\n", verbose)
+
+        return data_dict
+
+    @classmethod
+    def correct_ribbon(
+        self, 
+        subject, 
+        ribbon, 
+        verbose=False,
+        subj_dict=None):
+
+        if subj_dict == None:
+            subj_dict = SubjectsDict()
+
+        corr = subj_dict.get(subject, "ribbon_correction")
+        utils.verbose(f"Correcting voxel selection with {corr} voxels (positive = right | negative = left)", verbose)
+        ribbon = tuple([i+corr for i in ribbon])
+
+        return ribbon
+
     @classmethod
     def fetch_unique_ribbon(
         self, 
         func,
         rib_dict=None,
         subject=None,
+        correct=False,
+        subj_dict=None,
+        **kwargs
         ):
+
+        if subj_dict == None:
+            subj_dict = SubjectsDict()
                     
         # get ribbon dict | organized in dictionaries collecting task and runs as keys and values, respectively
         if not isinstance(rib_dict, dict):
-            subj_dict = SubjectsDict()
             rib_dict = subj_dict.get(subject, "rib_dict")
 
         # loop over tasks in self.df_func
@@ -226,6 +337,16 @@ class H5Parser(preproc.DataFilter):
             for run in run_ids:
                 run_df = utils.select_from_df(task_df, expression=f"run = {run}")
                 ribbon = rib_dict[task][f"run-{run}"]
+
+                    # correct ribbon location based on functional outcomes
+                if correct:
+                    ribbon = self.correct_ribbon(
+                        subject, 
+                        ribbon, 
+                        subj_dict=subj_dict,
+                        **kwargs
+                    )
+
                 # print(f" Specific ribbon for task-{task} & run-{run}: {ribbon}")
                 rib_df = utils.select_from_df(
                     run_df,
@@ -247,22 +368,66 @@ class H5Parser(preproc.DataFilter):
         return df_ribbon
     
     @classmethod
-    def exclude_runs(self, df, subject=None):
+    def exclude_per_task(self, df, subject=None):
 
-        new = []
-        task_ids = utils.get_unique_ids(df, id="task")
-        for task in task_ids:
-            
-            # get task df
-            task_df = utils.select_from_df(df, expression=f"task = {task}")
+        try:
+            task_ids = utils.get_unique_ids(df, id="task")
+        except:
+            task_ids = None
 
-            # get task-specific runs to exclude
-            all_runs = utils.get_unique_ids(task_df, id="run", as_int=True)
+        if isinstance(task_ids, list):
+
+            new = []
+            task_ids = utils.get_unique_ids(df, id="task")
+            for task in task_ids:
+                
+                # get task df
+                task_df = utils.select_from_df(df, expression=f"task = {task}")
+                new.append(
+                    self.exclude_runs(
+                        task_df,
+                        subject=subject,
+                        task=task,
+                        subj_dict=self.subj_dict
+                    )
+                    
+                )
+
+            new = pd.concat(new)
+        else:
+            new = self.exclude_runs(
+                df,
+                subject=subject,
+                subj_dict=self.subj_dict
+            )
+
+        return new
+
+    @classmethod
+    def exclude_runs(
+        self, 
+        df, 
+        subject=None, 
+        task=None,
+        subj_dict=None
+        ):
+
+        if subj_dict == None:
+            subj_dict = SubjectsDict()
+
+        # get task-specific runs to exclude
+        all_runs = utils.get_unique_ids(df, id="run", as_int=True)
+
+        if isinstance(task, str):
             excl_runs = subj_dict.get_excl_runs(subject, task=task)
-            keep_runs = [i for i in all_runs if i not in excl_runs]
-            
-            for j in keep_runs:
-                new.append(utils.select_from_df(task_df, expression=f"run = {j}"))
+        else:
+            excl_runs = subj_dict.get_excl_runs(subject)
+
+        keep_runs = [i for i in all_runs if i not in excl_runs]
+        
+        new = []
+        for j in keep_runs:
+            new.append(utils.select_from_df(df, expression=f"run = {j}"))
 
         if len(new)>0:
             return pd.concat(new)
@@ -732,27 +897,305 @@ def average_tasks(df):
 
     return pd.concat(dfs)
 
+def melt_epochs(df):
+    sub_ids = utils.get_unique_ids(df, id="subject")
+    ev_ids = utils.get_unique_ids(df, id="event_type")
+
+    df_ev = []
+
+    for ev in ev_ids:
+        ev_df = utils.select_from_df(df, expression=f"event_type = {ev}")
+        for sub in sub_ids:
+            sub_df = utils.select_from_df(ev_df, expression=f"subject = {sub}")
+            task_ids = utils.get_unique_ids(sub_df, id="task")
+
+            ep_df = []
+            start = 0
+            for task in task_ids:
+                task_df = utils.select_from_df(sub_df, expression=f"task = {task}")
+                run_ids = utils.get_unique_ids(task_df, id="run")
+
+                for run in run_ids:
+                    run_df = utils.select_from_df(task_df, expression=f"run = {run}")
+
+                    tmp = run_df.reset_index()
+                    tmp.drop(["task","run"], axis=1, inplace=True)
+
+                    epoch_ids = utils.get_unique_ids(run_df, id="epoch")
+                    epoch_col = tmp["epoch"].values
+
+                    new_ids = []
+                    new_epochs = np.arange(start,start+len(epoch_ids))
+                    # print(f"task-{task} | run-{run} | {new_epochs}")
+                    for i in epoch_col:
+                        for ix,ii in enumerate(epoch_ids):
+                            if i == ii:
+                                new_ids.append(new_epochs[ix])
+                    
+                    tmp["epoch"] = np.array(new_ids)
+
+                    tmp["subject"],tmp["event_type"] = sub, ev
+                    tmp.set_index(["subject","event_type","epoch","t"], inplace=True)
+                    ep_df.append(tmp)
+
+                    start += len(epoch_ids)
+
+            df_ev.append(pd.concat(ep_df))
+
+    return pd.concat(df_ev)
+                
 def make_single_df(func, idx=["subject","run","t"]):
 
-    task_ids = utils.get_unique_ids(func, id="task")
-
     new_func = []
-    rr = 1
-    for task in task_ids:
 
-        expr = f"task = {task}"
-        t_func = utils.select_from_df(func, expression=expr)
+    subj_ids = utils.get_unique_ids(func, id="subject")
+    for sub in subj_ids:
+        
+        sub_df = utils.select_from_df(func, expression=f"subject = {sub}")
+        task_ids = utils.get_unique_ids(sub_df, id="task")
+        rr = 1
+        for task in task_ids:
 
-        run_ids = utils.get_unique_ids(t_func, id="run")
-        for run in run_ids:
+            expr = f"task = {task}"
+            t_func = utils.select_from_df(sub_df, expression=expr)
 
-            expr = f"run = {run}"
-            r_func = utils.select_from_df(t_func, expression=expr).reset_index().drop(["task"], axis=1)
-            r_func["run"] = rr
-            new_func.append(r_func)
+            run_ids = utils.get_unique_ids(t_func, id="run")
+            for run in run_ids:
 
-            rr += 1
+                expr = f"run = {run}"
+                r_func = utils.select_from_df(t_func, expression=expr).reset_index().drop(["task"], axis=1)
+                r_func["run"] = rr
+                new_func.append(r_func)
+
+                rr += 1
 
     df_func = pd.concat(new_func).set_index(idx)
     
     return df_func
+
+def single_weights(df, ref):
+
+    if isinstance(df, pd.DataFrame):
+        df = df.values
+
+    if ref.ndim>1:
+        ref = ref.squeeze()
+
+    weights = []
+    for d in range(df.shape[1]):
+        depth_hrf = df[:,d]
+        # corr_coeff = np.corrcoef(avg_hrf,d_vals)[0,1]
+        w_depth = sum(depth_hrf*ref)/sum(ref)
+        weights.append(w_depth)
+
+    weights = np.array(weights)
+    return weights
+
+
+def weighted_hrf_depth(
+    avg,
+    subjs,
+    hrf=None,
+    ev="act",
+    bsl=20,
+    zscore=False,
+    detrend=False,
+    norm=False,
+    ):
+
+    # get average HRF profile
+    if not isinstance(hrf, (np.ndarray,pd.DataFrame)):
+        avg_hrf = avg.mean(axis=1).values
+    else:
+        if isinstance(hrf, np.ndarray):
+            avg_hrf = hrf.copy()
+        elif isinstance(hrf, pd.DataFrame):
+            avg_hrf = hrf.values
+
+    # get subject-specific profiles over depth & correct baseline because we did the same in the plots above
+    ev1 = utils.select_from_df(subjs, expression=f"event_type = {ev}")
+
+    # loop through subjects
+    sub_ids = utils.get_unique_ids(ev1, id="subject")
+    sub_weights = []
+    sub_zscore = []
+    for sub in sub_ids:
+        sub_vals = utils.select_from_df(ev1, expression=f"subject = {sub}")
+        sub_shift = fitting.Epoch.correct_baseline(sub_vals, bsl=bsl).values
+        sub_w = single_weights(sub_shift, avg_hrf)
+
+        if detrend:
+            sub_w = signal.detrend(sub_w)
+
+        sub_weights.append(sub_w)
+
+        # zscore?
+        if zscore:
+            m_ = sub_w.mean()
+            s_ = sub_w.std()
+            
+            sub_zscore.append((sub_w-m_)/s_)
+        elif norm:
+            m_ = sub_w.mean()
+            sub_zscore.append((sub_w-m_))
+
+    gr_ = np.concatenate([i[...,np.newaxis] for i in sub_weights], axis=1)
+
+    avg_corr = gr_.mean(axis=1)
+    avg_sem = pd.DataFrame(gr_).sem(axis=1).values
+    ddict = {
+        "subjs": sub_weights,
+        "avg": avg_corr,
+        "sem": avg_sem,
+        "hrf": avg_hrf.copy(),
+        "zscore": zscore,
+        "norm": norm
+    }
+
+    if len(sub_zscore)>0:
+        gr_z = np.concatenate([i[...,np.newaxis] for i in sub_zscore], axis=1)
+        avg_z = gr_z.mean(axis=1)
+        sem_z = pd.DataFrame(gr_z).sem(axis=1).values
+
+        for key,val in zip(["subjs_z","avg_z","sem_z"],[sub_zscore,avg_z,sem_z]):
+            ddict[key] = val
+        
+    return ddict
+
+class MediumAnnulusGLM(SubjectsDict):
+
+    def __init__(
+        self, 
+        hr_kws={},
+        *args,
+        **kwargs
+        ):
+
+        # init class
+        super().__init__(**hr_kws)
+
+        # run
+        self.glms,self.ratios = self.run_subjects_glms(*args, **kwargs)
+
+    @classmethod
+    def run_subjects_glms(self, df, **kwargs):
+        
+        sub_ids = utils.get_unique_ids(df, id="subject")
+        sub_glms = {}
+        for sub in sub_ids:
+            sub_df = utils.select_from_df(df, expression=f"subject = {sub}")
+            sub_glms[sub] = self.run_single_glm(sub_df, **kwargs)
+
+        sub_ratios = []
+        for key,val in sub_glms.items():
+            sub_ratios.append(val["ratio"])
+
+        sub_ratios = pd.DataFrame(sub_ratios, columns=["ratio"])
+        sub_ratios["subject"] = sub_ids
+        sub_ratios.set_index(["subject"], inplace=True)
+
+        return sub_glms,sub_ratios
+    
+    @classmethod
+    def get_predictions(self, glm_obj):
+        dm,betas,data = glm_obj["dm"],glm_obj["betas"],glm_obj["data"]
+        pred1 = dm[:,:2]@betas[:2]
+        pred2 = dm[:,::2]@betas[::2]
+
+        return [data,pred1,pred2],glm_obj["t"]
+    
+    def plot_predictions(
+        self, 
+        subject, 
+        axs=None,
+        figsize=(5,5),
+        **kwargs
+        ):
+
+        if not hasattr(self, "glms"):
+            raise AttributeError(f"{self} does not have 'glms' attribute.. Make sure to run 'run_subjects_glms()'")
+        
+        # initialize axes
+        if not isinstance(axs, (mpl.axes._axes.Axes,mpl.figure.SubFigure)):
+            _,ax = plt.subplots(figsize=figsize)
+        else:
+            if isinstance(axs, mpl.figure.SubFigure):
+                ax = axs.subplots()
+            else:
+                ax = axs
+
+        data_list,t_ = self.get_predictions(self.glms[subject])
+        def_dict = {
+            "line_width": [1,3,3],
+            "color": ["#cccccc"]+self.ev_colors[::2],
+            "markers": [".",None,None],
+            "add_hline": 0,
+            "labels": ["medium","y_center","y_large"],
+            "y_label": "magnitude (%)",
+            "x_label": "time (s)"
+        }
+
+        for key,val in def_dict.items():
+            kwargs = utils.update_kwargs(
+                kwargs,
+                key,
+                val
+            )
+
+        pl = plotting.LazyPlot(
+            data_list,
+            xx=t_,
+            axs=ax,
+            **kwargs
+        )
+
+        return pl
+        
+    @staticmethod
+    def run_single_glm(
+        df,
+        order=[1,2],
+        time_col="t",
+        **kwargs
+        ):
+
+        # use plotepochprofiles class to format profiles exactly the same as the plots
+        ev_epoch = hr.viz.PlotEpochProfiles(
+            utils.select_from_df(df, expression="ribbon", indices=[0]).groupby(["subject","event_type", "epoch","t"]).mean(),
+            skip_plot=True,
+            **kwargs         
+        )
+
+        # select center/large annulus timecourses; make 2d array (rows = time, columns = events)
+        func_data = ev_epoch.final_data["func"]
+        dm = np.concatenate([i[...,np.newaxis] for i in func_data], axis=1)[:,::2]
+
+        # get mean & std to zscore
+        m_ = dm.mean(axis=0)
+        s_ = dm.std(axis=0)
+
+        dm = (dm-m_)/s_
+
+        # add intercept
+        icpt = np.ones((dm.shape[0],1))
+
+        # concatenate design matrix into (time,3)
+        dm = np.concatenate([icpt, dm], axis=1)
+
+        # select medium annulus profile
+        data = func_data[1]
+
+        # run glm
+        betas, sse, rank, s = np.linalg.lstsq(dm, data)
+        
+        # get ratios
+        return {
+            "betas": betas,
+            "sse": sse,
+            "rank": rank,
+            "s": s,
+            "dm": dm.copy(),
+            "data": data.squeeze(),
+            "ratio": abs(betas[order[0]])/abs(betas[order[1]]),
+            "t": utils.get_unique_ids(df, id=time_col)
+        }
