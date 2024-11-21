@@ -419,8 +419,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1"
-     inkscape:cx="99.5"
-     inkscape:cy="320.5"
+     inkscape:cx="70.5"
+     inkscape:cy="208.5"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      inkscape:document-rotation="0"
@@ -580,43 +580,6 @@
        inkscape:export-filename="/home/heij/Downloads/draft11.png"
        inkscape:export-xdpi="96"
        inkscape:export-ydpi="96" />
-    <g
-       aria-label="loading"
-       transform="rotate(-90)"
-       id="text7438-73-9-5-4"
-       style="font-size:4.23333px;font-family:Montserrat;-inkscape-font-specification:Montserrat;text-align:center;text-anchor:middle;fill:#000000;fill-opacity:0.983957;stroke:none;stroke-width:2;stroke-linecap:square;stroke-linejoin:bevel;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-       inkscape:export-filename="/home/heij/Downloads/draft11.png"
-       inkscape:export-xdpi="96"
-       inkscape:export-ydpi="96">
-      <path
-         d="m -47.864545,15.619111 h 0.300566 V 12.47798 h -0.300566 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:2"
-         id="path1945" />
-      <path
-         d="m -45.813365,15.640278 c 0.651933,0 1.130299,-0.474133 1.130299,-1.134533 0,-0.660399 -0.478366,-1.130299 -1.130299,-1.130299 -0.651933,0 -1.134532,0.4699 -1.134532,1.130299 0,0.6604 0.482599,1.134533 1.134532,1.134533 z m 0,-0.2667 c -0.474133,0 -0.829732,-0.347133 -0.829732,-0.867833 0,-0.520699 0.355599,-0.867832 0.829732,-0.867832 0.474133,0 0.8255,0.347133 0.8255,0.867832 0,0.5207 -0.351367,0.867833 -0.8255,0.867833 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:2"
-         id="path1947" />
-      <path
-         d="m -43.307035,13.375446 c -0.351366,0 -0.681566,0.110067 -0.905932,0.300567 l 0.135466,0.224366 c 0.182033,-0.160866 0.452966,-0.262466 0.740833,-0.262466 0.414866,0 0.630766,0.207433 0.630766,0.588433 v 0.135466 h -0.706966 c -0.639233,0 -0.859366,0.287867 -0.859366,0.630766 0,0.385233 0.309033,0.6477 0.812799,0.6477 0.3683,0 0.630766,-0.1397 0.766233,-0.3683 v 0.347133 h 0.287866 v -1.380065 c 0,-0.575733 -0.325966,-0.8636 -0.901699,-0.8636 z m -0.105833,2.027765 c -0.3556,0 -0.563033,-0.160866 -0.563033,-0.419099 0,-0.2286 0.1397,-0.397933 0.5715,-0.397933 h 0.698499 v 0.364066 c -0.118533,0.2921 -0.3683,0.452966 -0.706966,0.452966 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:2"
-         id="path1949" />
-      <path
-         d="m -39.849264,12.47798 v 1.337733 c -0.186267,-0.287867 -0.491066,-0.440267 -0.846666,-0.440267 -0.635,0 -1.109133,0.4572 -1.109133,1.130299 0,0.6731 0.474133,1.134533 1.109133,1.134533 0.3683,0 0.677333,-0.160867 0.859366,-0.461433 v 0.440266 h 0.287866 V 12.47798 Z m -0.821266,2.895598 c -0.474133,0 -0.829733,-0.347133 -0.829733,-0.867833 0,-0.520699 0.3556,-0.867832 0.829733,-0.867832 0.469899,0 0.825499,0.347133 0.825499,0.867832 0,0.5207 -0.3556,0.867833 -0.825499,0.867833 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:2"
-         id="path1951" />
-      <path
-         d="m -38.559223,12.905547 c 0.127,0 0.220133,-0.09737 0.220133,-0.220133 0,-0.1143 -0.09737,-0.207434 -0.220133,-0.207434 -0.122766,0 -0.220133,0.09737 -0.220133,0.211667 0,0.118533 0.09737,0.2159 0.220133,0.2159 z m -0.1524,2.713564 h 0.300567 V 13.39238 h -0.300567 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:2"
-         id="path1953" />
-      <path
-         d="m -36.436076,13.375446 c -0.385233,0 -0.6858,0.156633 -0.846666,0.427567 V 13.39238 h -0.287867 v 2.226731 h 0.300567 v -1.168399 c 0,-0.508 0.300566,-0.804333 0.778932,-0.804333 0.423333,0 0.668867,0.2413 0.668867,0.7112 v 1.261532 h 0.300566 v -1.291166 c 0,-0.639232 -0.372533,-0.952499 -0.914399,-0.952499 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:2"
-         id="path1955" />
-      <path
-         d="m -32.919502,13.39238 v 0.427566 c -0.186267,-0.2921 -0.508,-0.4445 -0.880533,-0.4445 -0.634999,0 -1.117599,0.436033 -1.117599,1.075266 0,0.639233 0.4826,1.083732 1.117599,1.083732 0.364067,0 0.681566,-0.148166 0.867833,-0.431799 v 0.283633 c 0,0.550333 -0.258233,0.808566 -0.821266,0.808566 -0.3429,0 -0.664633,-0.1143 -0.876299,-0.3048 l -0.1524,0.2286 c 0.232833,0.220133 0.630766,0.3429 1.037166,0.3429 0.736599,0 1.113365,-0.347133 1.113365,-1.113366 V 13.39238 Z m -0.850899,1.875365 c -0.491067,0 -0.842433,-0.334433 -0.842433,-0.817033 0,-0.4826 0.351366,-0.812799 0.842433,-0.812799 0.491066,0 0.846666,0.330199 0.846666,0.812799 0,0.4826 -0.3556,0.817033 -0.846666,0.817033 z"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:2"
-         id="path1957" />
-    </g>
     <g
        id="g2233-0-4"
        transform="translate(-2.92702,-17.983435)">
@@ -1369,5 +1332,17 @@
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:0.171938"
          x="-33.762871"
          y="26.998602">contribution</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:4.23333px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;stroke-width:0.264583"
+       x="-40.397751"
+       y="15.619211"
+       id="text5809"
+       transform="rotate(-90)"><tspan
+         sodipodi:role="line"
+         id="tspan5807"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:0.264583"
+         x="-40.397751"
+         y="15.619211">bias</tspan></text>
   </g>
 </svg>
