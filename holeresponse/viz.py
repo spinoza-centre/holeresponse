@@ -2125,9 +2125,15 @@ class MagnitudePerEvent():
         posth=True,
         key="gm",
         bt="event_type",
-        posthoc_kws={},
+        plot_kws={},
+        parametric=True,
         **kwargs
         ):
+
+        posthoc_kws = None
+        if "posthoc_kw" in list(kwargs.keys()):
+            posthoc_kws = kwargs["posthoc_kw"]
+            kwargs.pop("posthoc_kw")
 
         bar_plot = plotting.LazyBar(
             df,
@@ -2141,11 +2147,13 @@ class MagnitudePerEvent():
         }
 
         if posth:
-            posth = glm.Posthoc()
-            posth.run_posthoc(
-                data=df,
-                dv=bar_plot.y,
-                between=bar_plot.x,
+            posth = glm.ANOVA(
+                data=df, 
+                dv=bar_plot.y, 
+                within=bar_plot.x, 
+                parametric=parametric,
+                subject="epoch",
+                posthoc_kw=posthoc_kws
             )
 
             for key,val in zip(
@@ -2153,15 +2161,15 @@ class MagnitudePerEvent():
                 [1.08,-0.08]
                 ):
 
-                posthoc_kws = utils.update_kwargs(
-                    posthoc_kws,
+                plot_kws = utils.update_kwargs(
+                    plot_kws,
                     key,
                     val
                 )
 
             posth.plot_bars(
                 axs=bar_plot.axs,
-                **posthoc_kws
+                **plot_kws
             )
 
             ddict["posthoc"] = posth
