@@ -4,6 +4,8 @@ import holeresponse as hr
 import pandas as pd
 import PIL
 import numpy as np
+import cv2
+from scipy import stats
 opj = os.path.join
 opd = os.path.dirname
 
@@ -796,3 +798,352 @@ def fetch_level_values(ddict, df):
     total_contours = sum(n_segments)
     lvl_vals = [df[i].mean() for i in avg_t]
     return lvl_vals
+
+def get_vascular_weights(factor=None, **kwargs):
+
+    # Original matrix as inferred from the table
+    matrix = np.array([
+        [1.00, 0.41, 0.59, 0.20, 0.26],
+        [0.00, 1.00, 0.59, 0.20, 0.26],
+        [0.00, 0.00, 1.00, 0.20, 0.32],
+        [0.00, 0.00, 0.00, 1.00, 0.32],
+        [0.00, 0.00, 0.00, 0.00, 1.00]
+    ])
+
+    if isinstance(factor, int):
+        matrix_float = matrix.astype(np.float32)
+
+        # set default interpolation method
+        kwargs = utils.update_kwargs(
+            kwargs,
+            "interpolation",
+            cv2.INTER_LANCZOS4
+        )
+
+        # resample
+        resampled_matrix = cv2.resize(
+            matrix_float, 
+            (factor, factor),
+            **kwargs
+        )
+
+        return resampled_matrix
+    else:
+        return matrix
+
+def normalize_density(density):
+    """Normalize vascular density to integrate to 1."""
+    return density / np.sum(density)
+
+def generate_microvascular_comp(n, offset=None, normalize=True):
+    cortical_depth = np.linspace(0, 1, n)
+    if not isinstance(offset, (int,float)):
+        offset = n//2
+
+    micro = np.exp(-offset * (cortical_depth - 0.5) ** 2)
+    
+    if normalize:
+        # micro = normalize_density(micro)
+        micro = micro/micro.max()
+
+    return micro
+
+def generate_macrovascular_comp(n, offset=None, normalize=True, fliplr=True):
+    cortical_depth = np.linspace(0, 1, n)
+
+    if not isinstance(offset, (int,float)):
+        offset = n//4
+
+    macro = 1 - np.exp(offset * cortical_depth)
+    macro = normalize_density(macro)
+    
+    if normalize:
+        macro = macro/macro.max()
+
+    if fliplr:
+        macro = macro[::-1]
+
+    return macro
+
+def generate_double_bump_model(n, fc=5, add_intercept=True, **kwargs):
+    
+    x = np.arange(0,n)
+    y = np.linspace(-n//2,n//2,num=n)
+    icpt = np.ones((n,1))
+
+    # linear component (reverse so its CSF > WM)
+    lin = x.copy()[::-1][...,np.newaxis]
+    lin = lin/lin.max()
+
+    # superficial bump
+    y_1 = stats.norm.pdf(y,-fc)
+    y_1 = (y_1/y_1.max())[...,np.newaxis]
+    y_1d = np.gradient(y_1.squeeze())[...,np.newaxis]
+    
+    # deep bump
+    y_2 = stats.norm.pdf(y,fc)
+    y_2 = (y_2/y_2.max())[...,np.newaxis]
+    y_2d = np.gradient(y_2.squeeze())[...,np.newaxis]
+
+    # vascular
+    micro = generate_microvascular_comp(n, **kwargs)[...,np.newaxis]
+    macro = generate_macrovascular_comp(n, **kwargs)[...,np.newaxis]
+
+    # construct dictionary
+    reg_dict = {
+        "linear": lin,
+        "double_bump": np.concatenate(
+            [
+                lin,
+                y_1,
+                y_2
+            ],
+            axis=1
+        ),
+        "double_bump_deriv": np.concatenate(
+            [
+                lin,
+                y_1,
+                y_2,
+                y_1d,
+                y_2d
+            ],
+            axis=1
+        ),
+        "double_bump_deriv_macro": np.concatenate(
+            [
+                macro,
+                y_1,
+                y_2,
+                y_1d,
+                y_2d
+            ],
+            axis=1
+        ),
+        "double_bump_deriv_micro": np.concatenate(
+            [
+                micro,
+                y_1,
+                y_2,
+                y_1d,
+                y_2d
+            ],
+            axis=1
+        ),
+        "double_bump_deriv_vascular": np.concatenate(
+            [
+                macro,
+                micro,
+                y_1,
+                y_2,
+                y_1d,
+                y_2d
+            ],
+            axis=1
+        )            
+
+    }
+
+    c_vecs = [
+        np.array([[1]]),
+        np.array([[0,1,1]]),
+        np.array([[0,1,1,1,1]]),
+        np.array([[0,1,1,1,1]]),
+        np.array([[0,1,1,1,1]]),
+        np.array([[0,0,1,1,1,1]]),
+    ]
+
+    skip_for_context = np.array([0,1,1,1,1,2])
+
+    if add_intercept:
+        for ix,(key,val) in enumerate(reg_dict.items()):
+            reg_dict[key] = np.concatenate([icpt, val], axis=-1)
+            c_vecs[ix] = np.insert(c_vecs[ix], 0, 0)[np.newaxis,...]
+
+        skip_for_context +=1
+    return reg_dict, c_vecs, skip_for_context
+
+def add_level_to_multiindex(
+    df, 
+    new_level_values, 
+    insert_position, 
+    new_level_name="new_level"):
+
+    """
+    Add a new level to the MultiIndex of a dataframe at a specified position.
+
+    Parameters:
+    - df: pandas DataFrame with a MultiIndex.
+    - new_level_values: List of values for the new level, or a single value to apply to all rows.
+    - insert_position: Integer specifying where to insert the new level in the MultiIndex.
+    - new_level_name: String specifying the name of the new level (default is "new_level").
+
+    Returns:
+    - df: DataFrame with updated MultiIndex including the new level.
+    """
+    if not isinstance(df.index, pd.MultiIndex):
+        raise ValueError("The dataframe must have a MultiIndex.")
+    
+    # Check if the new level name already exists in the MultiIndex
+    if new_level_name in df.index.names:
+        print(f"The level name '{new_level_name}' already exists in the MultiIndex. Skipping process.")
+        return df  # Return the original dataframe without modification
+
+    # If new_level_values is a single value, replicate it to match the length of the MultiIndex
+    if not isinstance(new_level_values, list):
+        new_level_values = [new_level_values] * len(df.index)
+    
+    # Ensure the new level values match the length of the index
+    if len(new_level_values) != len(df.index):
+        raise ValueError("The length of new_level_values must match the number of rows in the MultiIndex.")
+    
+    # Create new tuples by inserting the new level values
+    new_tuples = [
+        tuple(idx[:insert_position]) + (new_value,) + tuple(idx[insert_position:])
+        for idx, new_value in zip(df.index, new_level_values)
+    ]
+    
+    # Get the original index names and insert the new level name
+    new_index_names = list(df.index.names)
+    new_index_names.insert(insert_position, new_level_name)
+    
+    # Construct the new MultiIndex
+    new_multi_index = pd.MultiIndex.from_tuples(new_tuples, names=new_index_names)
+    
+    # Assign the updated MultiIndex to the dataframe
+    df.index = new_multi_index
+    
+    return df
+    
+def run_models(df, **kwargs):
+
+    reg_dict, c_vecs, skip_idx = generate_double_bump_model(df.shape[-1])
+    beta_full,beta_sum,preds = [],[],[]
+    for ix,(key,X) in enumerate(reg_dict.items()):
+
+        print(f"model #{ix+1} ('{key}'); skipping index: {skip_idx[ix]}")
+        res = run_model_for_events(
+            X,
+            df,
+            model_name=key,
+            n_skip_reg=skip_idx[ix],
+            **kwargs
+        )
+
+        beta_full.append(res["beta_full"])
+        beta_sum.append(res["beta_sum"])
+        preds.append(res["predictions"])
+
+    res = {}
+    for i,lbl in zip([beta_full,beta_sum,preds],["beta_full","beta_sum","predictions"]):
+        if len(i)>1:
+            i = pd.concat(i)
+        else:
+            i = i[0]
+
+        res[lbl] = i.copy()
+
+    return res
+
+def run_model_for_events(X,df,**kwargs):
+    evs = utils.get_unique_ids(df, id="event_type", sort=False)
+    beta_full,beta_sum,preds = [],[],[]
+    for ev in evs:
+        ev_df = utils.select_from_df(df, expression=f"event_type = {ev}")
+        res = run_model_glm(
+            X,
+            ev_df,
+            **kwargs
+        )
+
+        beta_full.append(res["model_full"])
+        beta_sum.append(res["model_sum"])
+        preds.append(res["predictions"])
+
+    res = {}
+    for i,lbl in zip([beta_full,beta_sum,preds],["beta_full","beta_sum","predictions"]):
+        if len(i)>1:
+            i = pd.concat(i)
+        else:
+            i = i[0]
+
+        res[lbl] = i.copy()
+
+    return res
+
+def run_model_glm(
+    X, 
+    df, 
+    transpose=True, 
+    n_skip_reg=1,
+    model_name=None,
+    **kwargs
+    ):
+
+    if transpose:
+        Y = df.values.T
+    else:
+        Y = df.values.copy()
+
+    beta,sse,rank,s = np.linalg.lstsq(X,Y)
+    reduced_model = beta[n_skip_reg:,:].sum(axis=0)
+
+    # format full model so that subjects become columns and regressors in rows
+    df_full = pd.DataFrame(beta, index=df.index[:X.shape[-1]])
+    idx = [i for i in list(df_full.index.names) if i !=  "subject"]
+    df_full.reset_index(inplace=True)
+    df_full.drop(["subject"], axis=1, inplace=True)
+    df_full.set_index(idx, inplace=True)
+    
+    # reduce model
+    df_reduced = pd.DataFrame(reduced_model, columns=["beta"], index=df.index)
+
+    # generate predictions
+    preds = np.dot(X,beta)
+    df_pred = pd.DataFrame(preds.T, index=df.index)
+    
+    if isinstance(model_name, (str,int)):
+        df_full = add_level_to_multiindex(df_full, model_name, -1, "model")
+        df_reduced = add_level_to_multiindex(df_reduced, model_name, -1, "model")
+        df_pred = add_level_to_multiindex(df_pred, model_name, -1, "model")
+
+    return {
+        "model_full": df_full, 
+        "model_sum": df_reduced,
+        "predictions": df_pred
+    }
+
+def generate_boxcar(x_shape=20, centers=[5, 15], width=5, y_max=0.2):
+    """
+    Generates a boxcar function with specified box widths and centers.
+
+    Parameters:
+    - x_shape (int): Total number of points in x-axis.
+    - centers (list): List of center positions for the boxcar peaks.
+    - width (int): Width of each box.
+    - y_max (float): Maximum y value of the boxcar function.
+
+    Returns:
+    - x (numpy array): X-axis values.
+    - y (numpy array): Corresponding Y-axis values (boxcar function).
+    """
+    x = np.arange(x_shape)
+    y = np.zeros_like(x, dtype=float)
+
+    for center in centers:
+        start = max(0, center - width // 2)
+        end = min(x_shape, center + width // 2 + 1)
+        y[start:end] = y_max
+
+    return x, y
+
+def generate_model_example(n=20, **kwargs):
+
+    reg_dict,_,_ = generate_double_bump_model(n)
+    x, box_car = generate_boxcar(x_shape=n, **kwargs)
+
+    return [
+        box_car.squeeze(),
+        reg_dict["double_bump_deriv"][:,2],
+        reg_dict["double_bump_deriv"][:,3],
+    ]
