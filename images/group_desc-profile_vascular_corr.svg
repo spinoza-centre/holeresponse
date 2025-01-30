@@ -1,0 +1,2966 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="1088.39951pt" height="584.39952pt" viewBox="0 0 1088.39951 584.39952" xmlns="http://www.w3.org/2000/svg" version="1.1">
+ <metadata>
+  <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+   <cc:Work>
+    <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
+    <dc:date>2025-01-29T10:52:19.084993</dc:date>
+    <dc:format>image/svg+xml</dc:format>
+    <dc:creator>
+     <cc:Agent>
+      <dc:title>Matplotlib v3.7.1, https://matplotlib.org/</dc:title>
+     </cc:Agent>
+    </dc:creator>
+   </cc:Work>
+  </rdf:RDF>
+ </metadata>
+ <defs>
+  <style type="text/css">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+ </defs>
+ <g id="figure_1">
+  <g id="patch_1">
+   <path d="M 0 584.39952 
+L 1088.39951 584.39952 
+L 1088.39951 0 
+L 0 0 
+z
+" style="fill: #ffffff"/>
+  </g>
+  <g id="text_1">
+   <!-- %depth -->
+   <g transform="translate(497.735385 572.54202) scale(0.24 -0.24)">
+    <defs>
+     <path id="Montserrat-Regular-25" d="M 1280 2080 
+C 1875 2080 2291 2560 2291 3296 
+C 2291 4032 1875 4512 1280 4512 
+C 678 4512 269 4026 269 3296 
+C 269 2566 678 2080 1280 2080 
+z
+M 934 0 
+L 1312 0 
+L 4371 4480 
+L 3994 4480 
+L 934 0 
+z
+M 1280 2368 
+C 858 2368 589 2720 589 3296 
+C 589 3872 858 4224 1280 4224 
+C 1696 4224 1971 3878 1971 3296 
+C 1971 2714 1696 2368 1280 2368 
+z
+M 4026 -32 
+C 4627 -32 5037 454 5037 1184 
+C 5037 1914 4627 2400 4026 2400 
+C 3430 2400 3014 1914 3014 1184 
+C 3014 454 3430 -32 4026 -32 
+z
+M 4026 256 
+C 3610 256 3334 602 3334 1184 
+C 3334 1766 3610 2112 4026 2112 
+C 4448 2112 4717 1760 4717 1184 
+C 4717 608 4448 256 4026 256 
+z
+" transform="scale(0.015625)"/>
+     <path id="Montserrat-Regular-64" d="M 3251 4749 
+L 3251 2726 
+C 2970 3162 2509 3392 1971 3392 
+C 1011 3392 294 2701 294 1683 
+C 294 666 1011 -32 1971 -32 
+C 2528 -32 2995 211 3270 666 
+L 3270 0 
+L 3706 0 
+L 3706 4749 
+L 3251 4749 
+z
+M 2010 371 
+C 1293 371 755 896 755 1683 
+C 755 2470 1293 2995 2010 2995 
+C 2720 2995 3258 2470 3258 1683 
+C 3258 896 2720 371 2010 371 
+z
+" transform="scale(0.015625)"/>
+     <path id="Montserrat-Regular-65" d="M 3571 1683 
+C 3571 2694 2886 3392 1939 3392 
+C 992 3392 294 2682 294 1683 
+C 294 685 1011 -32 2061 -32 
+C 2592 -32 3059 160 3360 518 
+L 3104 813 
+C 2848 518 2483 371 2074 371 
+C 1338 371 800 838 749 1542 
+L 3565 1542 
+C 3565 1594 3571 1645 3571 1683 
+z
+M 1939 3002 
+C 2598 3002 3078 2541 3136 1882 
+L 749 1882 
+C 806 2541 1286 3002 1939 3002 
+z
+" transform="scale(0.015625)"/>
+     <path id="Montserrat-Regular-70" d="M 2368 3392 
+C 1811 3392 1344 3149 1069 2701 
+L 1069 3366 
+L 634 3366 
+L 634 -1242 
+L 1088 -1242 
+L 1088 634 
+C 1370 198 1830 -32 2368 -32 
+C 3328 -32 4045 659 4045 1683 
+C 4045 2701 3328 3392 2368 3392 
+z
+M 2336 371 
+C 1619 371 1082 896 1082 1683 
+C 1082 2464 1619 2995 2336 2995 
+C 3046 2995 3590 2464 3590 1683 
+C 3590 896 3046 371 2336 371 
+z
+" transform="scale(0.015625)"/>
+     <path id="Montserrat-Regular-74" d="M 2246 531 
+C 2118 416 1933 358 1747 358 
+C 1370 358 1165 576 1165 973 
+L 1165 2982 
+L 2189 2982 
+L 2189 3366 
+L 1165 3366 
+L 1165 4102 
+L 710 4102 
+L 710 3366 
+L 109 3366 
+L 109 2982 
+L 710 2982 
+L 710 947 
+C 710 326 1062 -32 1696 -32 
+C 1958 -32 2227 45 2406 205 
+L 2246 531 
+z
+" transform="scale(0.015625)"/>
+     <path id="Montserrat-Regular-68" d="M 2349 3392 
+C 1779 3392 1338 3168 1088 2778 
+L 1088 4749 
+L 634 4749 
+L 634 0 
+L 1088 0 
+L 1088 1766 
+C 1088 2534 1542 2982 2266 2982 
+C 2906 2982 3277 2618 3277 1907 
+L 3277 0 
+L 3731 0 
+L 3731 1952 
+C 3731 2918 3168 3392 2349 3392 
+z
+" transform="scale(0.015625)"/>
+    </defs>
+    <use xlink:href="#Montserrat-Regular-25"/>
+    <use xlink:href="#Montserrat-Regular-64" x="82.899994"/>
+    <use xlink:href="#Montserrat-Regular-65" x="150.699982"/>
+    <use xlink:href="#Montserrat-Regular-70" x="211.099976"/>
+    <use xlink:href="#Montserrat-Regular-74" x="278.899963"/>
+    <use xlink:href="#Montserrat-Regular-68" x="319.499954"/>
+   </g>
+  </g>
+  <g id="text_2">
+   <!-- response -->
+   <g transform="translate(25.00875 347.030385) rotate(-90) scale(0.24 -0.24)">
+    <defs>
+     <path id="Montserrat-Regular-72" d="M 1069 2707 
+L 1069 3366 
+L 634 3366 
+L 634 0 
+L 1088 0 
+L 1088 1715 
+C 1088 2509 1517 2957 2221 2957 
+C 2253 2957 2291 2950 2330 2950 
+L 2330 3392 
+C 1709 3392 1280 3155 1069 2707 
+z
+" transform="scale(0.015625)"/>
+     <path id="Montserrat-Regular-73" d="M 1536 -32 
+C 2413 -32 2925 346 2925 928 
+C 2925 2221 742 1536 742 2445 
+C 742 2765 1011 3002 1619 3002 
+C 1965 3002 2317 2918 2611 2714 
+L 2810 3078 
+C 2528 3270 2054 3392 1619 3392 
+C 762 3392 288 2982 288 2432 
+C 288 1101 2470 1792 2470 915 
+C 2470 582 2208 365 1568 365 
+C 1094 365 640 531 371 742 
+L 166 384 
+C 442 147 979 -32 1536 -32 
+z
+" transform="scale(0.015625)"/>
+     <path id="Montserrat-Regular-6f" d="M 2010 -32 
+C 2995 -32 3718 685 3718 1683 
+C 3718 2682 2995 3392 2010 3392 
+C 1024 3392 294 2682 294 1683 
+C 294 685 1024 -32 2010 -32 
+z
+M 2010 371 
+C 1293 371 755 896 755 1683 
+C 755 2470 1293 2995 2010 2995 
+C 2726 2995 3258 2470 3258 1683 
+C 3258 896 2726 371 2010 371 
+z
+" transform="scale(0.015625)"/>
+     <path id="Montserrat-Regular-6e" d="M 2349 3392 
+C 1766 3392 1312 3155 1069 2746 
+L 1069 3366 
+L 634 3366 
+L 634 0 
+L 1088 0 
+L 1088 1766 
+C 1088 2534 1542 2982 2266 2982 
+C 2906 2982 3277 2618 3277 1907 
+L 3277 0 
+L 3731 0 
+L 3731 1952 
+C 3731 2918 3168 3392 2349 3392 
+z
+" transform="scale(0.015625)"/>
+    </defs>
+    <use xlink:href="#Montserrat-Regular-72"/>
+    <use xlink:href="#Montserrat-Regular-65" x="40.099991"/>
+    <use xlink:href="#Montserrat-Regular-73" x="100.499985"/>
+    <use xlink:href="#Montserrat-Regular-70" x="149.399979"/>
+    <use xlink:href="#Montserrat-Regular-6f" x="217.199966"/>
+    <use xlink:href="#Montserrat-Regular-6e" x="279.899963"/>
+    <use xlink:href="#Montserrat-Regular-73" x="347.599945"/>
+    <use xlink:href="#Montserrat-Regular-65" x="396.499939"/>
+   </g>
+  </g>
+  <g id="subfigure_1">
+   <g id="patch_2">
+    <path d="M 32.66649 275.086395 
+L 1084.19976 275.086395 
+L 1084.19976 4.19976 
+L 32.66649 4.19976 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="axes_1">
+    <g id="patch_3">
+     <path d="M 69.94048 255.480842 
+L 322.58877 255.480842 
+L 322.58877 44.169995 
+L 69.94048 44.169995 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <g id="PolyCollection_1">
+     <defs>
+      <path id="me6ebb9f384" d="M 69.94048 -499.786147 
+L 69.94048 -525.269102 
+L 82.572895 -530.624486 
+L 95.205309 -493.330403 
+L 107.837724 -476.753378 
+L 120.470138 -465.934285 
+L 133.102553 -457.216748 
+L 145.734967 -449.299437 
+L 158.367382 -432.097143 
+L 170.999796 -431.293146 
+L 183.632211 -436.058679 
+L 196.264625 -423.915071 
+L 208.89704 -398.691524 
+L 221.529454 -377.058655 
+L 234.161869 -365.806111 
+L 246.794283 -362.761803 
+L 259.426698 -362.489827 
+L 272.059112 -360.809632 
+L 284.691527 -364.44602 
+L 297.323941 -374.264476 
+L 309.956356 -367.584452 
+L 309.956356 -347.934299 
+L 309.956356 -347.934299 
+L 297.323941 -348.26265 
+L 284.691527 -338.523716 
+L 272.059112 -341.83945 
+L 259.426698 -348.463006 
+L 246.794283 -350.510232 
+L 234.161869 -353.505622 
+L 221.529454 -365.96438 
+L 208.89704 -387.151518 
+L 196.264625 -405.697388 
+L 183.632211 -416.673772 
+L 170.999796 -417.937459 
+L 158.367382 -421.293856 
+L 145.734967 -429.767178 
+L 133.102553 -438.140776 
+L 120.470138 -446.670994 
+L 107.837724 -454.131896 
+L 95.205309 -471.763754 
+L 82.572895 -509.707591 
+L 69.94048 -499.786147 
+z
+" style="stroke: #1b9e77; stroke-opacity: 0.3"/>
+     </defs>
+     <g clip-path="url(#pe6d9b1c9da)">
+      <use xlink:href="#me6ebb9f384" x="0" y="584.39952" style="fill: #1b9e77; fill-opacity: 0.3; stroke: #1b9e77; stroke-opacity: 0.3"/>
+     </g>
+    </g>
+    <g id="matplotlib.axis_1">
+     <g id="xtick_1">
+      <g id="line2d_1"/>
+      <g id="text_3">
+       <!-- 0 -->
+       <g transform="translate(65.306261 269.36928) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-30" d="M 2118 -38 
+C 3155 -38 3910 813 3910 2240 
+C 3910 3667 3155 4518 2118 4518 
+C 1082 4518 333 3667 333 2240 
+C 333 813 1082 -38 2118 -38 
+z
+M 2118 384 
+C 1338 384 800 1043 800 2240 
+C 800 3437 1338 4096 2118 4096 
+C 2899 4096 3437 3437 3437 2240 
+C 3437 1043 2899 384 2118 384 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-30"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_2">
+      <g id="line2d_2"/>
+      <g id="text_4">
+       <!-- 25 -->
+       <g transform="translate(125.165209 269.36928) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-32" d="M 928 410 
+L 2451 1907 
+C 3053 2496 3187 2880 3187 3309 
+C 3187 4058 2611 4518 1702 4518 
+C 1018 4518 461 4288 115 3878 
+L 442 3597 
+C 736 3936 1139 4096 1664 4096 
+C 2349 4096 2714 3776 2714 3258 
+C 2714 2950 2618 2650 2112 2150 
+L 250 326 
+L 250 0 
+L 3392 0 
+L 3392 410 
+L 928 410 
+z
+" transform="scale(0.015625)"/>
+         <path id="Montserrat-Regular-35" d="M 1510 2643 
+L 934 2643 
+L 1088 4070 
+L 3136 4070 
+L 3136 4480 
+L 685 4480 
+L 454 2234 
+L 1408 2234 
+C 2547 2234 2906 1875 2906 1299 
+C 2906 755 2502 384 1741 384 
+C 1165 384 653 602 365 902 
+L 141 538 
+C 486 186 1101 -38 1747 -38 
+C 2842 -38 3373 557 3373 1318 
+C 3373 2112 2861 2643 1510 2643 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-32"/>
+        <use xlink:href="#Montserrat-Regular-35" x="56.799988"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_3">
+      <g id="line2d_3"/>
+      <g id="text_5">
+       <!-- 50 -->
+       <g transform="translate(187.668844 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-35"/>
+        <use xlink:href="#Montserrat-Regular-30" x="56.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_4">
+      <g id="line2d_4"/>
+      <g id="text_6">
+       <!-- 75 -->
+       <g transform="translate(251.341698 269.36928) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-37" d="M 205 4480 
+L 205 3232 
+L 659 3232 
+L 659 4070 
+L 2963 4070 
+L 1120 0 
+L 1619 0 
+L 3494 4154 
+L 3494 4480 
+L 205 4480 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-37"/>
+        <use xlink:href="#Montserrat-Regular-35" x="58.899994"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_5">
+      <g id="line2d_5"/>
+      <g id="text_7">
+       <!-- 100 -->
+       <g transform="translate(310.79377 269.36928) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-31" d="M 58 4480 
+L 58 4070 
+L 1114 4070 
+L 1114 0 
+L 1574 0 
+L 1574 4480 
+L 58 4480 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-31"/>
+        <use xlink:href="#Montserrat-Regular-30" x="36.099991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="102.299988"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="matplotlib.axis_2">
+     <g id="ytick_1">
+      <g id="line2d_6"/>
+      <g id="text_8">
+       <!-- 0.00 -->
+       <g transform="translate(35.66673 259.366349) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-2e" d="M 678 -32 
+C 864 -32 1024 122 1024 320 
+C 1024 518 864 666 678 666 
+C 493 666 339 518 339 320 
+C 339 122 493 -32 678 -32 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-30" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="153.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_2">
+      <g id="line2d_7"/>
+      <g id="text_9">
+       <!-- 0.50 -->
+       <g transform="translate(37.012043 225.57183) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-35" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="143.999985"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_3">
+      <g id="line2d_8"/>
+      <g id="text_10">
+       <!-- 1.00 -->
+       <g transform="translate(39.882043 191.777312) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-31"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="36.099991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="57.299988"/>
+        <use xlink:href="#Montserrat-Regular-30" x="123.499985"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_4">
+      <g id="line2d_9"/>
+      <g id="text_11">
+       <!-- 1.50 -->
+       <g transform="translate(41.227355 157.982793) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-31"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="36.099991"/>
+        <use xlink:href="#Montserrat-Regular-35" x="57.299988"/>
+        <use xlink:href="#Montserrat-Regular-30" x="113.899979"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_5">
+      <g id="line2d_10"/>
+      <g id="text_12">
+       <!-- 2.00 -->
+       <g transform="translate(36.983605 124.188275) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-32"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="56.799988"/>
+        <use xlink:href="#Montserrat-Regular-30" x="77.999985"/>
+        <use xlink:href="#Montserrat-Regular-30" x="144.199982"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_6">
+      <g id="line2d_11"/>
+      <g id="text_13">
+       <!-- 2.50 -->
+       <g transform="translate(38.328918 90.393756) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-32"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="56.799988"/>
+        <use xlink:href="#Montserrat-Regular-35" x="77.999985"/>
+        <use xlink:href="#Montserrat-Regular-30" x="134.599976"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_7">
+      <g id="line2d_12"/>
+      <g id="text_14">
+       <!-- 3.00 -->
+       <g transform="translate(37.038293 56.599238) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-33" d="M 1856 2560 
+L 3123 4154 
+L 3123 4480 
+L 243 4480 
+L 243 4070 
+L 2534 4070 
+L 1293 2515 
+L 1293 2176 
+L 1613 2176 
+C 2445 2176 2822 1824 2822 1286 
+C 2822 730 2413 384 1670 384 
+C 1088 384 570 602 282 902 
+L 58 538 
+C 403 186 1024 -38 1670 -38 
+C 2752 -38 3296 538 3296 1286 
+C 3296 2003 2816 2509 1856 2560 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-33"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="56.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="77.599991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="143.799988"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="line2d_13">
+     <path d="M 69.94048 71.871896 
+L 82.572895 64.233481 
+L 95.205309 101.852442 
+L 107.837724 118.956883 
+L 120.470138 128.09688 
+L 133.102553 136.720758 
+L 145.734967 144.866213 
+L 158.367382 157.704021 
+L 170.999796 159.784217 
+L 183.632211 158.033294 
+L 196.264625 169.593291 
+L 208.89704 191.477999 
+L 221.529454 212.888002 
+L 234.161869 224.743653 
+L 246.794283 227.763503 
+L 259.426698 228.923103 
+L 272.059112 233.074979 
+L 284.691527 232.914652 
+L 297.323941 223.135957 
+L 309.956356 226.640144 
+" clip-path="url(#pe6d9b1c9da)" style="fill: none; stroke: #1b9e77; stroke-width: 3; stroke-linecap: square"/>
+    </g>
+    <g id="patch_4">
+     <path d="M 69.94048 255.480842 
+L 69.94048 44.169995 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="patch_5">
+     <path d="M 69.94048 255.480842 
+L 322.58877 255.480842 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="text_15">
+     <!-- pial -->
+     <g transform="translate(74.993446 250.198071) scale(0.18 -0.18)">
+      <defs>
+       <path id="Montserrat-Bold-70" d="M 2496 3494 
+C 2035 3494 1664 3347 1414 3046 
+L 1414 3443 
+L 461 3443 
+L 461 -1242 
+L 1459 -1242 
+L 1459 365 
+C 1715 83 2067 -51 2496 -51 
+C 3462 -51 4211 640 4211 1722 
+C 4211 2803 3462 3494 2496 3494 
+z
+M 2323 768 
+C 1824 768 1446 1126 1446 1722 
+C 1446 2317 1824 2675 2323 2675 
+C 2822 2675 3200 2317 3200 1722 
+C 3200 1126 2822 768 2323 768 
+z
+" transform="scale(0.015625)"/>
+       <path id="Montserrat-Bold-69" d="M 960 3923 
+C 1331 3923 1581 4166 1581 4499 
+C 1581 4806 1331 5037 960 5037 
+C 589 5037 339 4794 339 4480 
+C 339 4166 589 3923 960 3923 
+z
+M 461 0 
+L 1459 0 
+L 1459 3443 
+L 461 3443 
+L 461 0 
+z
+" transform="scale(0.015625)"/>
+       <path id="Montserrat-Bold-61" d="M 1850 3494 
+C 1299 3494 742 3347 365 3078 
+L 723 2381 
+C 973 2579 1350 2701 1715 2701 
+C 2253 2701 2509 2451 2509 2022 
+L 1715 2022 
+C 666 2022 237 1600 237 992 
+C 237 397 717 -51 1523 -51 
+C 2029 -51 2387 115 2573 429 
+L 2573 0 
+L 3507 0 
+L 3507 1965 
+C 3507 3008 2899 3494 1850 3494 
+z
+M 1773 621 
+C 1421 621 1210 787 1210 1037 
+C 1210 1267 1357 1440 1824 1440 
+L 2509 1440 
+L 2509 1088 
+C 2394 774 2106 621 1773 621 
+z
+" transform="scale(0.015625)"/>
+       <path id="Montserrat-Bold-6c" d="M 461 0 
+L 1459 0 
+L 1459 4749 
+L 461 4749 
+L 461 0 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#Montserrat-Bold-70"/>
+      <use xlink:href="#Montserrat-Bold-69" x="68.999985"/>
+      <use xlink:href="#Montserrat-Bold-61" x="99.099976"/>
+      <use xlink:href="#Montserrat-Bold-6c" x="160.799973"/>
+     </g>
+    </g>
+    <g id="text_16">
+     <!-- wm -->
+     <g transform="translate(287.21801 250.198071) scale(0.18 -0.18)">
+      <defs>
+       <path id="Montserrat-Bold-77" d="M 5107 3443 
+L 4269 1114 
+L 3450 3443 
+L 2605 3443 
+L 1760 1114 
+L 947 3443 
+L 6 3443 
+L 1248 0 
+L 2208 0 
+L 3008 2138 
+L 3782 0 
+L 4742 0 
+L 5990 3443 
+L 5107 3443 
+z
+" transform="scale(0.015625)"/>
+       <path id="Montserrat-Bold-6d" d="M 4870 3494 
+C 4352 3494 3904 3283 3629 2931 
+C 3386 3309 2976 3494 2496 3494 
+C 2054 3494 1670 3341 1414 3046 
+L 1414 3443 
+L 461 3443 
+L 461 0 
+L 1459 0 
+L 1459 1728 
+C 1459 2342 1773 2630 2214 2630 
+C 2630 2630 2867 2374 2867 1818 
+L 2867 0 
+L 3866 0 
+L 3866 1728 
+C 3866 2342 4179 2630 4627 2630 
+C 5030 2630 5280 2374 5280 1818 
+L 5280 0 
+L 6278 0 
+L 6278 1971 
+C 6278 3021 5690 3494 4870 3494 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#Montserrat-Bold-77"/>
+      <use xlink:href="#Montserrat-Bold-6d" x="93.699982"/>
+     </g>
+    </g>
+   </g>
+   <g id="axes_2">
+    <g id="patch_6">
+     <path d="M 378.689563 255.480842 
+L 631.337853 255.480842 
+L 631.337853 44.169995 
+L 378.689563 44.169995 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <g id="PolyCollection_2">
+     <defs>
+      <path id="m3706734686" d="M 378.689563 -377.370068 
+L 378.689563 -427.903228 
+L 391.321977 -438.648685 
+L 403.954392 -427.43009 
+L 416.586806 -419.941265 
+L 429.219221 -443.8868 
+L 441.851636 -482.923032 
+L 454.48405 -499.048369 
+L 467.116465 -477.853917 
+L 479.748879 -438.604402 
+L 492.381294 -387.751609 
+L 505.013708 -392.40688 
+L 517.646123 -447.558197 
+L 530.278537 -493.803217 
+L 542.910952 -530.624486 
+L 555.543366 -472.508723 
+L 568.175781 -423.466904 
+L 580.808195 -434.605656 
+L 593.44061 -475.54274 
+L 606.073024 -522.758901 
+L 618.705439 -487.177154 
+L 618.705439 -455.764223 
+L 618.705439 -455.764223 
+L 606.073024 -473.961507 
+L 593.44061 -438.672167 
+L 580.808195 -388.384017 
+L 568.175781 -375.302879 
+L 555.543366 -418.056759 
+L 542.910952 -467.294824 
+L 530.278537 -459.720241 
+L 517.646123 -409.23503 
+L 505.013708 -340.093301 
+L 492.381294 -338.523716 
+L 479.748879 -399.232134 
+L 467.116465 -432.943389 
+L 454.48405 -451.946611 
+L 441.851636 -436.564311 
+L 429.219221 -389.656328 
+L 416.586806 -372.823819 
+L 403.954392 -387.221124 
+L 391.321977 -370.290206 
+L 378.689563 -377.370068 
+z
+" style="stroke: #d95f02; stroke-opacity: 0.3"/>
+     </defs>
+     <g clip-path="url(#p0452089d9c)">
+      <use xlink:href="#m3706734686" x="0" y="584.39952" style="fill: #d95f02; fill-opacity: 0.3; stroke: #d95f02; stroke-opacity: 0.3"/>
+     </g>
+    </g>
+    <g id="matplotlib.axis_3">
+     <g id="xtick_6">
+      <g id="line2d_14"/>
+      <g id="text_17">
+       <!-- 0 -->
+       <g transform="translate(374.055344 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_7">
+      <g id="line2d_15"/>
+      <g id="text_18">
+       <!-- 25 -->
+       <g transform="translate(433.914292 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-32"/>
+        <use xlink:href="#Montserrat-Regular-35" x="56.799988"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_8">
+      <g id="line2d_16"/>
+      <g id="text_19">
+       <!-- 50 -->
+       <g transform="translate(496.417927 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-35"/>
+        <use xlink:href="#Montserrat-Regular-30" x="56.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_9">
+      <g id="line2d_17"/>
+      <g id="text_20">
+       <!-- 75 -->
+       <g transform="translate(560.090781 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-37"/>
+        <use xlink:href="#Montserrat-Regular-35" x="58.899994"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_10">
+      <g id="line2d_18"/>
+      <g id="text_21">
+       <!-- 100 -->
+       <g transform="translate(619.542853 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-31"/>
+        <use xlink:href="#Montserrat-Regular-30" x="36.099991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="102.299988"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="matplotlib.axis_4">
+     <g id="ytick_8">
+      <g id="line2d_19"/>
+      <g id="text_22">
+       <!-- -0.20 -->
+       <g transform="translate(340.38425 246.521836) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-2d" d="M 384 1536 
+L 2061 1536 
+L 2061 1933 
+L 384 1933 
+L 384 1536 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-2d"/>
+        <use xlink:href="#Montserrat-Regular-30" x="38.199997"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="104.399994"/>
+        <use xlink:href="#Montserrat-Regular-32" x="125.599991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="182.399979"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_9">
+      <g id="line2d_20"/>
+      <g id="text_23">
+       <!-- 0.00 -->
+       <g transform="translate(344.415813 204.358336) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-30" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="153.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_10">
+      <g id="line2d_21"/>
+      <g id="text_24">
+       <!-- 0.20 -->
+       <g transform="translate(345.732688 162.194836) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-32" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="144.199982"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_11">
+      <g id="line2d_22"/>
+      <g id="text_25">
+       <!-- 0.40 -->
+       <g transform="translate(344.431125 120.031336) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-34" d="M 4141 1587 
+L 3245 1587 
+L 3245 2624 
+L 2797 2624 
+L 2797 1587 
+L 851 1587 
+L 3142 4480 
+L 2630 4480 
+L 256 1510 
+L 256 1178 
+L 2784 1178 
+L 2784 0 
+L 3245 0 
+L 3245 1178 
+L 4141 1178 
+L 4141 1587 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-34" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="153.499985"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_12">
+      <g id="line2d_23"/>
+      <g id="text_26">
+       <!-- 0.60 -->
+       <g transform="translate(345.157375 77.867836) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-36" d="M 2189 2682 
+C 1568 2682 1043 2406 819 1914 
+C 806 2048 800 2176 800 2278 
+C 800 3494 1421 4115 2387 4115 
+C 2720 4115 3027 4058 3258 3904 
+L 3443 4275 
+C 3162 4448 2784 4518 2381 4518 
+C 1165 4518 333 3725 333 2202 
+C 333 787 979 -38 2170 -38 
+C 3040 -38 3699 499 3699 1338 
+C 3699 2157 3078 2682 2189 2682 
+z
+M 2150 352 
+C 1376 352 966 819 966 1312 
+C 966 1869 1434 2291 2118 2291 
+C 2810 2291 3245 1914 3245 1325 
+C 3245 730 2797 352 2150 352 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-36" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="148.299988"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="line2d_24">
+     <path d="M 378.689563 181.762872 
+L 391.321977 179.930074 
+L 403.954392 177.073913 
+L 416.586806 188.016978 
+L 429.219221 167.627956 
+L 441.851636 124.655849 
+L 454.48405 108.90203 
+L 467.116465 129.000867 
+L 479.748879 165.481252 
+L 492.381294 221.261857 
+L 505.013708 218.14943 
+L 517.646123 156.002906 
+L 530.278537 107.637791 
+L 542.910952 85.439865 
+L 555.543366 139.116779 
+L 568.175781 185.014628 
+L 580.808195 172.904684 
+L 593.44061 127.292066 
+L 606.073024 86.039316 
+L 618.705439 112.928831 
+" clip-path="url(#p0452089d9c)" style="fill: none; stroke: #d95f02; stroke-width: 3; stroke-linecap: square"/>
+    </g>
+    <g id="patch_7">
+     <path d="M 378.689563 255.480842 
+L 378.689563 44.169995 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="patch_8">
+     <path d="M 378.689563 255.480842 
+L 631.337853 255.480842 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="text_27">
+     <!-- pial -->
+     <g transform="translate(383.742529 250.198071) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-70"/>
+      <use xlink:href="#Montserrat-Bold-69" x="68.999985"/>
+      <use xlink:href="#Montserrat-Bold-61" x="99.099976"/>
+      <use xlink:href="#Montserrat-Bold-6c" x="160.799973"/>
+     </g>
+    </g>
+    <g id="text_28">
+     <!-- wm -->
+     <g transform="translate(595.967093 250.198071) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-77"/>
+      <use xlink:href="#Montserrat-Bold-6d" x="93.699982"/>
+     </g>
+    </g>
+   </g>
+   <g id="axes_3">
+    <g id="patch_9">
+     <path d="M 687.410208 255.480842 
+L 940.058499 255.480842 
+L 940.058499 44.169995 
+L 687.410208 44.169995 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <g id="PolyCollection_3">
+     <defs>
+      <path id="m5b5370e3ac" d="M 687.410208 -442.770558 
+L 687.410208 -467.075031 
+L 700.042623 -476.198786 
+L 712.675037 -515.29986 
+L 725.307452 -530.624486 
+L 737.939866 -507.881893 
+L 750.572281 -483.072942 
+L 763.204695 -451.158524 
+L 775.83711 -404.230331 
+L 788.469524 -378.439929 
+L 801.101939 -380.097444 
+L 813.734354 -378.999728 
+L 826.366768 -373.26701 
+L 838.999183 -397.247141 
+L 851.631597 -445.251072 
+L 864.264012 -457.532462 
+L 876.896426 -455.620893 
+L 889.528841 -451.023481 
+L 902.161255 -439.013288 
+L 914.79367 -423.940012 
+L 927.426084 -422.023306 
+L 927.426084 -390.421231 
+L 927.426084 -390.421231 
+L 914.79367 -382.44662 
+L 902.161255 -415.430188 
+L 889.528841 -434.406773 
+L 876.896426 -435.41242 
+L 864.264012 -426.821206 
+L 851.631597 -406.647089 
+L 838.999183 -363.900943 
+L 826.366768 -341.2523 
+L 813.734354 -360.779583 
+L 801.101939 -362.298731 
+L 788.469524 -338.523716 
+L 775.83711 -376.265916 
+L 763.204695 -429.785438 
+L 750.572281 -457.477348 
+L 737.939866 -475.036363 
+L 725.307452 -493.398385 
+L 712.675037 -484.614366 
+L 700.042623 -446.705375 
+L 687.410208 -442.770558 
+z
+" style="stroke: #4c75ff; stroke-opacity: 0.3"/>
+     </defs>
+     <g clip-path="url(#p3a7cfdafc3)">
+      <use xlink:href="#m5b5370e3ac" x="0" y="584.39952" style="fill: #4c75ff; fill-opacity: 0.3; stroke: #4c75ff; stroke-opacity: 0.3"/>
+     </g>
+    </g>
+    <g id="matplotlib.axis_5">
+     <g id="xtick_11">
+      <g id="line2d_25"/>
+      <g id="text_29">
+       <!-- 0 -->
+       <g transform="translate(682.77599 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_12">
+      <g id="line2d_26"/>
+      <g id="text_30">
+       <!-- 25 -->
+       <g transform="translate(742.634937 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-32"/>
+        <use xlink:href="#Montserrat-Regular-35" x="56.799988"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_13">
+      <g id="line2d_27"/>
+      <g id="text_31">
+       <!-- 50 -->
+       <g transform="translate(805.138572 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-35"/>
+        <use xlink:href="#Montserrat-Regular-30" x="56.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_14">
+      <g id="line2d_28"/>
+      <g id="text_32">
+       <!-- 75 -->
+       <g transform="translate(868.811426 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-37"/>
+        <use xlink:href="#Montserrat-Regular-35" x="58.899994"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_15">
+      <g id="line2d_29"/>
+      <g id="text_33">
+       <!-- 100 -->
+       <g transform="translate(928.263499 269.36928) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-31"/>
+        <use xlink:href="#Montserrat-Regular-30" x="36.099991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="102.299988"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="matplotlib.axis_6">
+     <g id="ytick_13">
+      <g id="line2d_30"/>
+      <g id="text_34">
+       <!-- -0.50 -->
+       <g transform="translate(649.133333 230.198159) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-2d"/>
+        <use xlink:href="#Montserrat-Regular-30" x="38.199997"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="104.399994"/>
+        <use xlink:href="#Montserrat-Regular-35" x="125.599991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="182.199982"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_14">
+      <g id="line2d_31"/>
+      <g id="text_35">
+       <!-- 0.00 -->
+       <g transform="translate(653.136458 171.218991) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-30" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="153.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_15">
+      <g id="line2d_32"/>
+      <g id="text_36">
+       <!-- 0.50 -->
+       <g transform="translate(654.481771 112.239823) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-35" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="143.999985"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_16">
+      <g id="line2d_33"/>
+      <g id="text_37">
+       <!-- 1.00 -->
+       <g transform="translate(657.351771 53.260655) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-31"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="36.099991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="57.299988"/>
+        <use xlink:href="#Montserrat-Regular-30" x="123.499985"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="line2d_34">
+     <path d="M 687.410208 129.476726 
+L 700.042623 122.94744 
+L 712.675037 84.442407 
+L 725.307452 72.388085 
+L 737.939866 92.940392 
+L 750.572281 114.124375 
+L 763.204695 143.927539 
+L 775.83711 194.151396 
+L 788.469524 225.917697 
+L 801.101939 213.201432 
+L 813.734354 214.509865 
+L 826.366768 227.139865 
+L 838.999183 203.825478 
+L 851.631597 158.450439 
+L 864.264012 142.222686 
+L 876.896426 138.882864 
+L 889.528841 141.684393 
+L 902.161255 157.177782 
+L 914.79367 181.206204 
+L 927.426084 178.177252 
+" clip-path="url(#p3a7cfdafc3)" style="fill: none; stroke: #4c75ff; stroke-width: 3; stroke-linecap: square"/>
+    </g>
+    <g id="patch_10">
+     <path d="M 687.410208 255.480842 
+L 687.410208 44.169995 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="patch_11">
+     <path d="M 687.410208 255.480842 
+L 940.058499 255.480842 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="text_38">
+     <!-- pial -->
+     <g transform="translate(692.463174 250.198071) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-70"/>
+      <use xlink:href="#Montserrat-Bold-69" x="68.999985"/>
+      <use xlink:href="#Montserrat-Bold-61" x="99.099976"/>
+      <use xlink:href="#Montserrat-Bold-6c" x="160.799973"/>
+     </g>
+    </g>
+    <g id="text_39">
+     <!-- wm -->
+     <g transform="translate(904.687738 250.198071) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-77"/>
+      <use xlink:href="#Montserrat-Bold-6d" x="93.699982"/>
+     </g>
+    </g>
+   </g>
+   <g id="axes_4">
+    <g id="patch_12">
+     <path d="M 1002.995541 255.480842 
+L 1066.157614 255.480842 
+L 1066.157614 44.169995 
+L 1002.995541 44.169995 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <g id="patch_13">
+     <path d="M 1050.038981 187.911305 
+L 1060.128507 187.911305 
+Q 1063.204582 187.911305 1063.204582 183.96626 
+L 1063.204582 166.60935 
+Q 1063.204582 162.664306 1060.128507 162.664306 
+L 1050.038981 162.664306 
+Q 1046.962906 162.664306 1046.962906 166.60935 
+L 1046.962906 183.96626 
+Q 1046.962906 187.911305 1050.038981 187.911305 
+z
+" clip-path="url(#p25363e48d2)" style="fill: #6281e9"/>
+    </g>
+    <g id="patch_14">
+     <path d="M 1029.531815 187.911305 
+L 1039.62134 187.911305 
+Q 1042.697415 187.911305 1042.697415 183.96626 
+L 1042.697415 183.99486 
+Q 1042.697415 180.049815 1039.62134 180.049815 
+L 1029.531815 180.049815 
+Q 1026.45574 180.049815 1026.45574 183.99486 
+L 1026.45574 183.96626 
+Q 1026.45574 187.911305 1029.531815 187.911305 
+z
+" clip-path="url(#p25363e48d2)" style="fill: #be631d"/>
+    </g>
+    <g id="patch_15">
+     <path d="M 1009.024648 206.249195 
+L 1019.114174 206.249195 
+Q 1022.190249 206.249195 1022.190249 202.304151 
+L 1022.190249 192.066751 
+Q 1022.190249 188.121707 1019.114174 188.121707 
+L 1009.024648 188.121707 
+Q 1005.948573 188.121707 1005.948573 192.066751 
+L 1005.948573 202.304151 
+Q 1005.948573 206.249195 1009.024648 206.249195 
+z
+" clip-path="url(#p25363e48d2)" style="fill: #2b8e70"/>
+    </g>
+    <g id="matplotlib.axis_7"/>
+    <g id="matplotlib.axis_8">
+     <g id="ytick_17">
+      <g id="line2d_35"/>
+      <g id="text_40">
+       <!-- −2 -->
+       <g transform="translate(979.493979 233.037034) scale(0.14 -0.14)">
+        <defs>
+         <path id="Montserrat-Regular-2212" d="M 448 2048 
+L 3232 2048 
+L 3232 2426 
+L 448 2426 
+L 448 2048 
+z
+" transform="scale(0.015625)"/>
+        </defs>
+        <use xlink:href="#Montserrat-Regular-2212"/>
+        <use xlink:href="#Montserrat-Regular-32" x="57.499985"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_18">
+      <g id="line2d_36"/>
+      <g id="text_41">
+       <!-- 0 -->
+       <g transform="translate(986.227104 193.210724) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_19">
+      <g id="line2d_37"/>
+      <g id="text_42">
+       <!-- 2 -->
+       <g transform="translate(987.543979 153.384415) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-32"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_20">
+      <g id="line2d_38"/>
+      <g id="text_43">
+       <!-- 4 -->
+       <g transform="translate(986.242416 113.558105) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-34"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_21">
+      <g id="line2d_39"/>
+      <g id="text_44">
+       <!-- 6 -->
+       <g transform="translate(986.968666 73.731796) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-36"/>
+       </g>
+      </g>
+     </g>
+     <g id="text_45">
+      <!-- $\beta_{context}$ -->
+      <g transform="translate(971.713979 179.705419) rotate(-90) scale(0.18 -0.18)">
+       <defs>
+        <path id="DejaVuSans-Oblique-3b2" d="M 872 216 
+L 572 -1331 
+L -6 -1331 
+L 928 3478 
+Q 1206 4903 2538 4903 
+Q 3888 4903 3659 3700 
+Q 3503 2844 2894 2531 
+Q 3713 2250 3553 1416 
+Q 3272 -69 1759 -66 
+Q 1097 -63 872 216 
+z
+M 1019 966 
+Q 1259 422 1875 425 
+Q 2775 425 2966 1406 
+Q 3138 2288 1675 2219 
+L 1778 2750 
+Q 2909 2731 3106 3750 
+Q 3241 4438 2509 4434 
+Q 1691 4434 1503 3459 
+L 1019 966 
+z
+" transform="scale(0.015625)"/>
+        <path id="DejaVuSans-Oblique-63" d="M 3431 3366 
+L 3316 2797 
+Q 3109 2947 2876 3022 
+Q 2644 3097 2394 3097 
+Q 2119 3097 1870 3000 
+Q 1622 2903 1453 2725 
+Q 1184 2453 1037 2087 
+Q 891 1722 891 1331 
+Q 891 859 1127 628 
+Q 1363 397 1844 397 
+Q 2081 397 2348 469 
+Q 2616 541 2906 684 
+L 2797 116 
+Q 2547 13 2283 -39 
+Q 2019 -91 1741 -91 
+Q 1044 -91 669 257 
+Q 294 606 294 1253 
+Q 294 1797 489 2255 
+Q 684 2713 1069 3078 
+Q 1331 3328 1684 3456 
+Q 2038 3584 2456 3584 
+Q 2700 3584 2940 3529 
+Q 3181 3475 3431 3366 
+z
+" transform="scale(0.015625)"/>
+        <path id="DejaVuSans-Oblique-6f" d="M 1625 -91 
+Q 1009 -91 651 289 
+Q 294 669 294 1325 
+Q 294 1706 417 2101 
+Q 541 2497 738 2766 
+Q 1047 3184 1428 3384 
+Q 1809 3584 2291 3584 
+Q 2888 3584 3255 3212 
+Q 3622 2841 3622 2241 
+Q 3622 1825 3500 1412 
+Q 3378 1000 3181 728 
+Q 2875 309 2494 109 
+Q 2113 -91 1625 -91 
+z
+M 891 1344 
+Q 891 869 1089 633 
+Q 1288 397 1691 397 
+Q 2269 397 2648 901 
+Q 3028 1406 3028 2181 
+Q 3028 2634 2825 2865 
+Q 2622 3097 2228 3097 
+Q 1903 3097 1650 2945 
+Q 1397 2794 1197 2484 
+Q 1050 2253 970 1956 
+Q 891 1659 891 1344 
+z
+" transform="scale(0.015625)"/>
+        <path id="DejaVuSans-Oblique-6e" d="M 3566 2113 
+L 3156 0 
+L 2578 0 
+L 2988 2091 
+Q 3016 2238 3031 2350 
+Q 3047 2463 3047 2528 
+Q 3047 2791 2881 2937 
+Q 2716 3084 2419 3084 
+Q 1956 3084 1622 2776 
+Q 1288 2469 1184 1941 
+L 800 0 
+L 225 0 
+L 903 3500 
+L 1478 3500 
+L 1363 2950 
+Q 1603 3253 1940 3418 
+Q 2278 3584 2650 3584 
+Q 3113 3584 3367 3334 
+Q 3622 3084 3622 2631 
+Q 3622 2519 3608 2391 
+Q 3594 2263 3566 2113 
+z
+" transform="scale(0.015625)"/>
+        <path id="DejaVuSans-Oblique-74" d="M 2706 3500 
+L 2619 3053 
+L 1472 3053 
+L 1100 1153 
+Q 1081 1047 1072 975 
+Q 1063 903 1063 863 
+Q 1063 663 1183 572 
+Q 1303 481 1569 481 
+L 2150 481 
+L 2053 0 
+L 1503 0 
+Q 991 0 739 200 
+Q 488 400 488 806 
+Q 488 878 497 964 
+Q 506 1050 525 1153 
+L 897 3053 
+L 409 3053 
+L 500 3500 
+L 978 3500 
+L 1172 4494 
+L 1747 4494 
+L 1556 3500 
+L 2706 3500 
+z
+" transform="scale(0.015625)"/>
+        <path id="DejaVuSans-Oblique-65" d="M 3078 2063 
+Q 3088 2113 3092 2166 
+Q 3097 2219 3097 2272 
+Q 3097 2653 2873 2875 
+Q 2650 3097 2266 3097 
+Q 1838 3097 1509 2826 
+Q 1181 2556 1013 2059 
+L 3078 2063 
+z
+M 3578 1613 
+L 903 1613 
+Q 884 1494 878 1425 
+Q 872 1356 872 1306 
+Q 872 872 1139 634 
+Q 1406 397 1894 397 
+Q 2269 397 2603 481 
+Q 2938 566 3225 728 
+L 3116 159 
+Q 2806 34 2476 -28 
+Q 2147 -91 1806 -91 
+Q 1078 -91 686 257 
+Q 294 606 294 1247 
+Q 294 1794 489 2264 
+Q 684 2734 1063 3103 
+Q 1306 3334 1642 3459 
+Q 1978 3584 2356 3584 
+Q 2950 3584 3301 3228 
+Q 3653 2872 3653 2272 
+Q 3653 2128 3634 1964 
+Q 3616 1800 3578 1613 
+z
+" transform="scale(0.015625)"/>
+        <path id="DejaVuSans-Oblique-78" d="M 3841 3500 
+L 2234 1784 
+L 3219 0 
+L 2559 0 
+L 1819 1388 
+L 531 0 
+L -166 0 
+L 1556 1844 
+L 641 3500 
+L 1300 3500 
+L 1972 2234 
+L 3144 3500 
+L 3841 3500 
+z
+" transform="scale(0.015625)"/>
+       </defs>
+       <use xlink:href="#DejaVuSans-Oblique-3b2" transform="translate(0 0.390625)"/>
+       <use xlink:href="#DejaVuSans-Oblique-63" transform="translate(63.818359 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-6f" transform="translate(102.304688 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-6e" transform="translate(145.131836 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-74" transform="translate(189.49707 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-65" transform="translate(216.943359 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-78" transform="translate(260.009766 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-74" transform="translate(301.435547 -16.015625) scale(0.7)"/>
+      </g>
+     </g>
+    </g>
+    <g id="line2d_40">
+     <path d="M 1014.069411 212.416669 
+L 1014.069411 200.292123 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #424242; stroke-width: 2.7; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_41">
+     <path d="M 1034.576578 184.330467 
+L 1034.576578 175.558761 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #424242; stroke-width: 2.7; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_42">
+     <path d="M 1055.083744 174.776678 
+L 1055.083744 150.341532 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #424242; stroke-width: 2.7; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_43">
+     <path d="M 1015.535378 194.617374 
+L 1034.299258 191.169887 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_44">
+     <path d="M 1014.136896 199.896853 
+L 1035.694043 180.771491 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_45">
+     <path d="M 1014.255398 201.051943 
+L 1035.961846 172.957944 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_46">
+     <path d="M 1012.845846 245.875804 
+L 1036.313816 181.613094 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_47">
+     <path d="M 1015.790255 213.851585 
+L 1036.066117 177.242942 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_48">
+     <path d="M 1014.377949 233.824325 
+L 1033.12712 192.952348 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_49">
+     <path d="M 1013.01418 201.673344 
+L 1035.95923 169.754428 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_50">
+     <path d="M 1014.555413 181.024577 
+L 1034.108278 152.337924 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_51">
+     <path d="M 1014.90296 216.739036 
+L 1032.732978 209.168279 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_52">
+     <path d="M 1013.499814 200.64834 
+L 1036.37092 177.339738 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_53">
+     <path d="M 1013.412234 180.695175 
+L 1033.667078 174.082682 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_54">
+     <path d="M 1032.732978 209.168279 
+L 1056.53673 219.78283 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_55">
+     <path d="M 1035.694043 180.771491 
+L 1056.706866 161.564362 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_56">
+     <path d="M 1036.37092 177.339738 
+L 1055.780181 170.965682 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_57">
+     <path d="M 1033.667078 174.082682 
+L 1054.52206 137.492326 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_58">
+     <path d="M 1034.108278 152.337924 
+L 1056.164312 207.418409 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_59">
+     <path d="M 1033.12712 192.952348 
+L 1056.946313 206.991959 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_60">
+     <path d="M 1036.066117 177.242942 
+L 1055.577024 160.412242 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_61">
+     <path d="M 1034.299258 191.169887 
+L 1053.056843 171.026627 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_62">
+     <path d="M 1035.95923 169.754428 
+L 1055.053661 106.423768 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_63">
+     <path d="M 1035.961846 172.957944 
+L 1054.965525 90.580113 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_64">
+     <path d="M 1036.313816 181.613094 
+L 1054.84414 155.491837 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_65">
+     <path d="M 1014.069411 57.191539 
+L 1014.069411 53.775034 
+L 1055.083744 53.775034 
+L 1055.083744 57.191539 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_66">
+     <path d="M 1014.069411 70.003434 
+L 1014.069411 66.586929 
+L 1034.576578 66.586929 
+L 1034.576578 70.003434 
+" clip-path="url(#p25363e48d2)" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linecap: square"/>
+    </g>
+    <g id="patch_16">
+     <path d="M 998.995541 255.480842 
+L 998.995541 44.169995 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="PathCollection_1">
+     <defs>
+      <path id="mf2455bc2ef" d="M 0 2.5 
+C 0.663008 2.5 1.29895 2.236584 1.767767 1.767767 
+C 2.236584 1.29895 2.5 0.663008 2.5 0 
+C 2.5 -0.663008 2.236584 -1.29895 1.767767 -1.767767 
+C 1.29895 -2.236584 0.663008 -2.5 0 -2.5 
+C -0.663008 -2.5 -1.29895 -2.236584 -1.767767 -1.767767 
+C -2.236584 -1.29895 -2.5 -0.663008 -2.5 0 
+C -2.5 0.663008 -2.236584 1.29895 -1.767767 1.767767 
+C -1.29895 2.236584 -0.663008 2.5 0 2.5 
+z
+"/>
+     </defs>
+     <g clip-path="url(#p25363e48d2)">
+      <use xlink:href="#mf2455bc2ef" x="1015.535378" y="194.617374"/>
+      <use xlink:href="#mf2455bc2ef" x="1014.136896" y="199.896853"/>
+      <use xlink:href="#mf2455bc2ef" x="1014.255398" y="201.051943"/>
+      <use xlink:href="#mf2455bc2ef" x="1012.845846" y="245.875804"/>
+      <use xlink:href="#mf2455bc2ef" x="1015.790255" y="213.851585"/>
+      <use xlink:href="#mf2455bc2ef" x="1014.377949" y="233.824325"/>
+      <use xlink:href="#mf2455bc2ef" x="1013.01418" y="201.673344"/>
+      <use xlink:href="#mf2455bc2ef" x="1014.555413" y="181.024577"/>
+      <use xlink:href="#mf2455bc2ef" x="1014.90296" y="216.739036"/>
+      <use xlink:href="#mf2455bc2ef" x="1013.499814" y="200.64834"/>
+      <use xlink:href="#mf2455bc2ef" x="1013.412234" y="180.695175"/>
+     </g>
+    </g>
+    <g id="PathCollection_2">
+     <g clip-path="url(#p25363e48d2)">
+      <use xlink:href="#mf2455bc2ef" x="1032.732978" y="209.168279"/>
+      <use xlink:href="#mf2455bc2ef" x="1035.694043" y="180.771491"/>
+      <use xlink:href="#mf2455bc2ef" x="1036.37092" y="177.339738"/>
+      <use xlink:href="#mf2455bc2ef" x="1033.667078" y="174.082682"/>
+      <use xlink:href="#mf2455bc2ef" x="1034.108278" y="152.337924"/>
+      <use xlink:href="#mf2455bc2ef" x="1033.12712" y="192.952348"/>
+      <use xlink:href="#mf2455bc2ef" x="1036.066117" y="177.242942"/>
+      <use xlink:href="#mf2455bc2ef" x="1034.299258" y="191.169887"/>
+      <use xlink:href="#mf2455bc2ef" x="1035.95923" y="169.754428"/>
+      <use xlink:href="#mf2455bc2ef" x="1035.961846" y="172.957944"/>
+      <use xlink:href="#mf2455bc2ef" x="1036.313816" y="181.613094"/>
+     </g>
+    </g>
+    <g id="PathCollection_3">
+     <g clip-path="url(#p25363e48d2)">
+      <use xlink:href="#mf2455bc2ef" x="1055.053661" y="106.423768"/>
+      <use xlink:href="#mf2455bc2ef" x="1056.706866" y="161.564362"/>
+      <use xlink:href="#mf2455bc2ef" x="1053.056843" y="171.026627"/>
+      <use xlink:href="#mf2455bc2ef" x="1056.946313" y="206.991959"/>
+      <use xlink:href="#mf2455bc2ef" x="1054.965525" y="90.580113"/>
+      <use xlink:href="#mf2455bc2ef" x="1056.164312" y="207.418409"/>
+      <use xlink:href="#mf2455bc2ef" x="1055.577024" y="160.412242"/>
+      <use xlink:href="#mf2455bc2ef" x="1054.52206" y="137.492326"/>
+      <use xlink:href="#mf2455bc2ef" x="1055.780181" y="170.965682"/>
+      <use xlink:href="#mf2455bc2ef" x="1056.53673" y="219.78283"/>
+      <use xlink:href="#mf2455bc2ef" x="1054.84414" y="155.491837"/>
+     </g>
+    </g>
+    <g id="text_46">
+     <!-- ** -->
+     <g transform="translate(1027.629703 58.931413) scale(0.18 -0.18)">
+      <defs>
+       <path id="Montserrat-Regular-2a" d="M 2330 4038 
+L 2182 4314 
+L 1382 3840 
+L 1382 4749 
+L 1088 4749 
+L 1094 3840 
+L 294 4314 
+L 141 4038 
+L 941 3590 
+L 141 3142 
+L 294 2874 
+L 1094 3341 
+L 1088 2432 
+L 1382 2432 
+L 1382 3341 
+L 2182 2874 
+L 2330 3142 
+L 1536 3590 
+L 2330 4038 
+z
+" transform="scale(0.015625)"/>
+      </defs>
+      <use xlink:href="#Montserrat-Regular-2a"/>
+      <use xlink:href="#Montserrat-Regular-2a" x="38.599991"/>
+     </g>
+    </g>
+    <g id="text_47">
+     <!-- * -->
+     <g transform="translate(1020.849557 71.230832) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Regular-2a"/>
+     </g>
+    </g>
+    <g id="legend_1"/>
+   </g>
+   <g id="text_48">
+    <!-- Original -->
+    <g transform="translate(495.646406 30.810937) scale(0.3 -0.3)">
+     <defs>
+      <path id="Montserrat-Bold-4f" d="M 2701 -77 
+C 4109 -77 5152 902 5152 2240 
+C 5152 3578 4109 4557 2701 4557 
+C 1286 4557 250 3571 250 2240 
+C 250 909 1286 -77 2701 -77 
+z
+M 2701 806 
+C 1901 806 1299 1389 1299 2240 
+C 1299 3091 1901 3674 2701 3674 
+C 3501 3674 4102 3091 4102 2240 
+C 4102 1389 3501 806 2701 806 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-72" d="M 1414 2989 
+L 1414 3443 
+L 461 3443 
+L 461 0 
+L 1459 0 
+L 1459 1626 
+C 1459 2285 1824 2586 2374 2586 
+C 2451 2586 2515 2579 2598 2573 
+L 2598 3494 
+C 2067 3494 1658 3322 1414 2989 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-67" d="M 3066 3443 
+L 3066 3002 
+C 2803 3334 2406 3494 1926 3494 
+C 973 3494 205 2835 205 1830 
+C 205 826 973 166 1926 166 
+C 2374 166 2752 307 3014 595 
+L 3014 448 
+C 3014 -173 2707 -493 2003 -493 
+C 1562 -493 1082 -339 787 -102 
+L 390 -819 
+C 794 -1133 1427 -1293 2080 -1293 
+C 3322 -1293 4013 -704 4013 576 
+L 4013 3443 
+L 3066 3443 
+z
+M 2125 986 
+C 1600 986 1216 1325 1216 1830 
+C 1216 2336 1600 2675 2125 2675 
+C 2650 2675 3027 2336 3027 1830 
+C 3027 1325 2650 986 2125 986 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-6e" d="M 2554 3494 
+C 2086 3494 1683 3334 1414 3040 
+L 1414 3443 
+L 461 3443 
+L 461 0 
+L 1459 0 
+L 1459 1702 
+C 1459 2336 1805 2630 2285 2630 
+C 2726 2630 2982 2374 2982 1818 
+L 2982 0 
+L 3981 0 
+L 3981 1971 
+C 3981 3021 3366 3494 2554 3494 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Montserrat-Bold-4f"/>
+     <use xlink:href="#Montserrat-Bold-72" x="84.399994"/>
+     <use xlink:href="#Montserrat-Bold-69" x="127.499985"/>
+     <use xlink:href="#Montserrat-Bold-67" x="157.599976"/>
+     <use xlink:href="#Montserrat-Bold-69" x="227.59996"/>
+     <use xlink:href="#Montserrat-Bold-6e" x="257.699951"/>
+     <use xlink:href="#Montserrat-Bold-61" x="326.799942"/>
+     <use xlink:href="#Montserrat-Bold-6c" x="388.499939"/>
+    </g>
+   </g>
+  </g>
+  <g id="subfigure_2">
+   <g id="patch_17">
+    <path d="M 32.66649 551.73303 
+L 1084.19976 551.73303 
+L 1084.19976 280.846395 
+L 32.66649 280.846395 
+z
+" style="fill: #ffffff"/>
+   </g>
+   <g id="axes_5">
+    <g id="patch_18">
+     <path d="M 69.94048 532.127477 
+L 323.484041 532.127477 
+L 323.484041 319.51899 
+L 69.94048 319.51899 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <g id="PolyCollection_4">
+     <defs>
+      <path id="m91f8df0d2d" d="M 69.94048 -231.22029 
+L 69.94048 -255.216508 
+L 82.617658 -248.684331 
+L 95.294836 -229.218166 
+L 107.972014 -201.682582 
+L 120.649192 -174.782657 
+L 133.32637 -157.632477 
+L 146.003548 -156.191732 
+L 158.680726 -171.354172 
+L 171.357904 -198.38159 
+L 184.035082 -217.824622 
+L 196.71226 -211.479771 
+L 209.389438 -179.559759 
+L 222.066616 -138.785755 
+L 234.743794 -106.570373 
+L 247.420973 -87.649031 
+L 260.098151 -85.701655 
+L 272.775329 -101.648015 
+L 285.452507 -127.733991 
+L 298.129685 -147.876972 
+L 310.806863 -155.179132 
+L 310.806863 -105.972926 
+L 310.806863 -105.972926 
+L 298.129685 -102.694908 
+L 285.452507 -93.916519 
+L 272.775329 -80.451116 
+L 260.098151 -65.220684 
+L 247.420973 -61.936065 
+L 234.743794 -82.822789 
+L 222.066616 -121.958388 
+L 209.389438 -158.889937 
+L 196.71226 -181.862765 
+L 184.035082 -187.549973 
+L 171.357904 -175.695552 
+L 158.680726 -150.209754 
+L 146.003548 -123.298446 
+L 133.32637 -115.071561 
+L 120.649192 -131.152361 
+L 107.972014 -163.762303 
+L 95.294836 -198.71137 
+L 82.617658 -223.078178 
+L 69.94048 -231.22029 
+z
+" style="stroke: #1b9e77; stroke-opacity: 0.3"/>
+     </defs>
+     <g clip-path="url(#p6af411f29a)">
+      <use xlink:href="#m91f8df0d2d" x="0" y="584.39952" style="fill: #1b9e77; fill-opacity: 0.3; stroke: #1b9e77; stroke-opacity: 0.3"/>
+     </g>
+    </g>
+    <g id="matplotlib.axis_9">
+     <g id="xtick_16">
+      <g id="line2d_67"/>
+      <g id="text_49">
+       <!-- 0 -->
+       <g transform="translate(65.306261 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_17">
+      <g id="line2d_68"/>
+      <g id="text_50">
+       <!-- 25 -->
+       <g transform="translate(125.389026 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-32"/>
+        <use xlink:href="#Montserrat-Regular-35" x="56.799988"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_18">
+      <g id="line2d_69"/>
+      <g id="text_51">
+       <!-- 50 -->
+       <g transform="translate(188.116479 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-35"/>
+        <use xlink:href="#Montserrat-Regular-30" x="56.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_19">
+      <g id="line2d_70"/>
+      <g id="text_52">
+       <!-- 75 -->
+       <g transform="translate(252.013151 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-37"/>
+        <use xlink:href="#Montserrat-Regular-35" x="58.899994"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_20">
+      <g id="line2d_71"/>
+      <g id="text_53">
+       <!-- 100 -->
+       <g transform="translate(311.689041 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-31"/>
+        <use xlink:href="#Montserrat-Regular-30" x="36.099991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="102.299988"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="matplotlib.axis_10">
+     <g id="ytick_22">
+      <g id="line2d_72"/>
+      <g id="text_54">
+       <!-- 0.00 -->
+       <g transform="translate(35.66673 520.816066) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-30" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="153.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_23">
+      <g id="line2d_73"/>
+      <g id="text_55">
+       <!-- 0.10 -->
+       <g transform="translate(39.882043 478.152167) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-31" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="123.499985"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_24">
+      <g id="line2d_74"/>
+      <g id="text_56">
+       <!-- 0.20 -->
+       <g transform="translate(36.983605 435.488268) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-32" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="144.199982"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_25">
+      <g id="line2d_75"/>
+      <g id="text_57">
+       <!-- 0.30 -->
+       <g transform="translate(37.038293 392.82437) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-33" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="143.799988"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_26">
+      <g id="line2d_76"/>
+      <g id="text_58">
+       <!-- 0.40 -->
+       <g transform="translate(35.682043 350.160471) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-34" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="153.499985"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="line2d_77">
+     <path d="M 69.94048 341.181121 
+L 82.617658 348.518265 
+L 95.294836 370.434752 
+L 107.972014 401.677078 
+L 120.649192 431.432011 
+L 133.32637 448.047501 
+L 146.003548 444.654431 
+L 158.680726 423.617557 
+L 171.357904 397.360949 
+L 184.035082 381.712222 
+L 196.71226 387.728252 
+L 209.389438 415.174672 
+L 222.066616 454.027449 
+L 234.743794 489.702939 
+L 247.420973 509.606972 
+L 260.098151 508.938351 
+L 272.775329 493.349954 
+L 285.452507 473.574265 
+L 298.129685 459.11358 
+L 310.806863 453.823491 
+" clip-path="url(#p6af411f29a)" style="fill: none; stroke: #1b9e77; stroke-width: 3; stroke-linecap: square"/>
+    </g>
+    <g id="patch_19">
+     <path d="M 69.94048 532.127477 
+L 69.94048 319.51899 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="patch_20">
+     <path d="M 69.94048 532.127477 
+L 323.484041 532.127477 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="text_59">
+     <!-- pial -->
+     <g transform="translate(75.011351 526.812265) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-70"/>
+      <use xlink:href="#Montserrat-Bold-69" x="68.999985"/>
+      <use xlink:href="#Montserrat-Bold-61" x="99.099976"/>
+      <use xlink:href="#Montserrat-Bold-6c" x="160.799973"/>
+     </g>
+    </g>
+    <g id="text_60">
+     <!-- wm -->
+     <g transform="translate(287.987942 526.812265) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-77"/>
+      <use xlink:href="#Montserrat-Bold-6d" x="93.699982"/>
+     </g>
+    </g>
+   </g>
+   <g id="axes_6">
+    <g id="patch_21">
+     <path d="M 379.556396 532.127477 
+L 633.099956 532.127477 
+L 633.099956 319.51899 
+L 379.556396 319.51899 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <g id="PolyCollection_5">
+     <defs>
+      <path id="md632103d69" d="M 379.556396 -61.936065 
+L 379.556396 -141.645765 
+L 392.233574 -145.064526 
+L 404.910752 -156.698236 
+L 417.58793 -182.431473 
+L 430.265108 -220.385831 
+L 442.942286 -244.730743 
+L 455.619464 -239.945262 
+L 468.296642 -209.867636 
+L 480.97382 -179.369988 
+L 493.650998 -164.542389 
+L 506.328176 -160.20777 
+L 519.005354 -166.010074 
+L 531.682532 -187.006266 
+L 544.35971 -221.016356 
+L 557.036888 -247.629539 
+L 569.714066 -255.216508 
+L 582.391244 -248.346203 
+L 595.068422 -241.741994 
+L 607.7456 -242.635339 
+L 620.422778 -243.705467 
+L 620.422778 -200.309923 
+L 620.422778 -200.309923 
+L 607.7456 -203.660294 
+L 595.068422 -210.107547 
+L 582.391244 -208.75726 
+L 569.714066 -197.724593 
+L 557.036888 -181.959295 
+L 544.35971 -163.419038 
+L 531.682532 -141.100034 
+L 519.005354 -112.879744 
+L 506.328176 -95.279622 
+L 493.650998 -103.925841 
+L 480.97382 -133.993441 
+L 468.296642 -159.187396 
+L 455.619464 -168.724668 
+L 442.942286 -167.744428 
+L 430.265108 -158.218913 
+L 417.58793 -138.342947 
+L 404.910752 -103.918147 
+L 392.233574 -73.118455 
+L 379.556396 -61.936065 
+z
+" style="stroke: #d95f02; stroke-opacity: 0.3"/>
+     </defs>
+     <g clip-path="url(#p427af21e3d)">
+      <use xlink:href="#md632103d69" x="0" y="584.39952" style="fill: #d95f02; fill-opacity: 0.3; stroke: #d95f02; stroke-opacity: 0.3"/>
+     </g>
+    </g>
+    <g id="matplotlib.axis_11">
+     <g id="xtick_21">
+      <g id="line2d_78"/>
+      <g id="text_61">
+       <!-- 0 -->
+       <g transform="translate(374.922177 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_22">
+      <g id="line2d_79"/>
+      <g id="text_62">
+       <!-- 25 -->
+       <g transform="translate(435.004942 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-32"/>
+        <use xlink:href="#Montserrat-Regular-35" x="56.799988"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_23">
+      <g id="line2d_80"/>
+      <g id="text_63">
+       <!-- 50 -->
+       <g transform="translate(497.732395 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-35"/>
+        <use xlink:href="#Montserrat-Regular-30" x="56.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_24">
+      <g id="line2d_81"/>
+      <g id="text_64">
+       <!-- 75 -->
+       <g transform="translate(561.629066 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-37"/>
+        <use xlink:href="#Montserrat-Regular-35" x="58.899994"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_25">
+      <g id="line2d_82"/>
+      <g id="text_65">
+       <!-- 100 -->
+       <g transform="translate(621.304956 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-31"/>
+        <use xlink:href="#Montserrat-Regular-30" x="36.099991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="102.299988"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="matplotlib.axis_12">
+     <g id="ytick_27">
+      <g id="line2d_83"/>
+      <g id="text_66">
+       <!-- -0.10 -->
+       <g transform="translate(344.149521 530.812168) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-2d"/>
+        <use xlink:href="#Montserrat-Regular-30" x="38.199997"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="104.399994"/>
+        <use xlink:href="#Montserrat-Regular-31" x="125.599991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="161.699982"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_28">
+      <g id="line2d_84"/>
+      <g id="text_67">
+       <!-- -0.05 -->
+       <g transform="translate(341.279521 485.057439) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-2d"/>
+        <use xlink:href="#Montserrat-Regular-30" x="38.199997"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="104.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="125.599991"/>
+        <use xlink:href="#Montserrat-Regular-35" x="191.799988"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_29">
+      <g id="line2d_85"/>
+      <g id="text_68">
+       <!-- 0.00 -->
+       <g transform="translate(345.282646 439.302709) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-30" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="153.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_30">
+      <g id="line2d_86"/>
+      <g id="text_69">
+       <!-- 0.05 -->
+       <g transform="translate(346.627958 393.54798) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-30" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-35" x="153.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_31">
+      <g id="line2d_87"/>
+      <g id="text_70">
+       <!-- 0.10 -->
+       <g transform="translate(349.497958 347.793251) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-31" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="123.499985"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="line2d_88">
+     <path d="M 379.556396 482.608605 
+L 392.233574 475.308029 
+L 404.910752 454.091328 
+L 417.58793 424.01231 
+L 430.265108 395.097148 
+L 442.942286 378.161934 
+L 455.619464 380.064555 
+L 468.296642 399.872004 
+L 480.97382 427.717806 
+L 493.650998 450.165405 
+L 506.328176 456.655824 
+L 519.005354 444.954611 
+L 531.682532 420.34637 
+L 544.35971 392.181823 
+L 557.036888 369.605103 
+L 569.714066 357.928969 
+L 582.391244 355.847788 
+L 595.068422 358.47475 
+L 607.7456 361.251704 
+L 620.422778 362.391825 
+" clip-path="url(#p427af21e3d)" style="fill: none; stroke: #d95f02; stroke-width: 3; stroke-linecap: square"/>
+    </g>
+    <g id="patch_22">
+     <path d="M 379.556396 532.127477 
+L 379.556396 319.51899 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="patch_23">
+     <path d="M 379.556396 532.127477 
+L 633.099956 532.127477 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="text_71">
+     <!-- pial -->
+     <g transform="translate(384.627267 526.812265) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-70"/>
+      <use xlink:href="#Montserrat-Bold-69" x="68.999985"/>
+      <use xlink:href="#Montserrat-Bold-61" x="99.099976"/>
+      <use xlink:href="#Montserrat-Bold-6c" x="160.799973"/>
+     </g>
+    </g>
+    <g id="text_72">
+     <!-- wm -->
+     <g transform="translate(597.603858 526.812265) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-77"/>
+      <use xlink:href="#Montserrat-Bold-6d" x="93.699982"/>
+     </g>
+    </g>
+   </g>
+   <g id="axes_7">
+    <g id="patch_24">
+     <path d="M 689.200749 532.127477 
+L 942.74431 532.127477 
+L 942.74431 319.51899 
+L 689.200749 319.51899 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <g id="PolyCollection_6">
+     <defs>
+      <path id="m82874fb7eb" d="M 689.200749 -169.759374 
+L 689.200749 -193.034552 
+L 701.877927 -197.803574 
+L 714.555105 -212.286437 
+L 727.232283 -235.812494 
+L 739.909461 -255.216508 
+L 752.586639 -253.783365 
+L 765.263817 -223.425068 
+L 777.940995 -171.826423 
+L 790.618173 -129.254282 
+L 803.295351 -102.838496 
+L 815.972529 -94.713631 
+L 828.649707 -107.747862 
+L 841.326885 -141.747141 
+L 854.004063 -180.821806 
+L 866.681241 -201.420916 
+L 879.35842 -196.322889 
+L 892.035598 -173.437555 
+L 904.712776 -157.476314 
+L 917.389954 -150.236081 
+L 930.067132 -147.895915 
+L 930.067132 -110.224443 
+L 930.067132 -110.224443 
+L 917.389954 -117.754723 
+L 904.712776 -139.193711 
+L 892.035598 -161.086525 
+L 879.35842 -166.492589 
+L 866.681241 -160.936701 
+L 854.004063 -143.625024 
+L 841.326885 -117.024736 
+L 828.649707 -84.49605 
+L 815.972529 -61.936065 
+L 803.295351 -70.430839 
+L 790.618173 -110.508471 
+L 777.940995 -160.418956 
+L 765.263817 -194.305211 
+L 752.586639 -214.592641 
+L 739.909461 -218.533423 
+L 727.232283 -209.247184 
+L 714.555105 -192.577699 
+L 701.877927 -176.354811 
+L 689.200749 -169.759374 
+z
+" style="stroke: #4c75ff; stroke-opacity: 0.3"/>
+     </defs>
+     <g clip-path="url(#p649fc1060a)">
+      <use xlink:href="#m82874fb7eb" x="0" y="584.39952" style="fill: #4c75ff; fill-opacity: 0.3; stroke: #4c75ff; stroke-opacity: 0.3"/>
+     </g>
+    </g>
+    <g id="matplotlib.axis_13">
+     <g id="xtick_26">
+      <g id="line2d_89"/>
+      <g id="text_73">
+       <!-- 0 -->
+       <g transform="translate(684.56653 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_27">
+      <g id="line2d_90"/>
+      <g id="text_74">
+       <!-- 25 -->
+       <g transform="translate(744.649295 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-32"/>
+        <use xlink:href="#Montserrat-Regular-35" x="56.799988"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_28">
+      <g id="line2d_91"/>
+      <g id="text_75">
+       <!-- 50 -->
+       <g transform="translate(807.376748 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-35"/>
+        <use xlink:href="#Montserrat-Regular-30" x="56.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_29">
+      <g id="line2d_92"/>
+      <g id="text_76">
+       <!-- 75 -->
+       <g transform="translate(871.27342 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-37"/>
+        <use xlink:href="#Montserrat-Regular-35" x="58.899994"/>
+       </g>
+      </g>
+     </g>
+     <g id="xtick_30">
+      <g id="line2d_93"/>
+      <g id="text_77">
+       <!-- 100 -->
+       <g transform="translate(930.94931 546.015915) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-31"/>
+        <use xlink:href="#Montserrat-Regular-30" x="36.099991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="102.299988"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="matplotlib.axis_14">
+     <g id="ytick_32">
+      <g id="line2d_94"/>
+      <g id="text_78">
+       <!-- -0.20 -->
+       <g transform="translate(650.895436 512.962755) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-2d"/>
+        <use xlink:href="#Montserrat-Regular-30" x="38.199997"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="104.399994"/>
+        <use xlink:href="#Montserrat-Regular-32" x="125.599991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="182.399979"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_33">
+      <g id="line2d_95"/>
+      <g id="text_79">
+       <!-- -0.10 -->
+       <g transform="translate(653.793874 476.896) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-2d"/>
+        <use xlink:href="#Montserrat-Regular-30" x="38.199997"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="104.399994"/>
+        <use xlink:href="#Montserrat-Regular-31" x="125.599991"/>
+        <use xlink:href="#Montserrat-Regular-30" x="161.699982"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_34">
+      <g id="line2d_96"/>
+      <g id="text_80">
+       <!-- 0.00 -->
+       <g transform="translate(654.926999 440.829244) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-30" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="153.599991"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_35">
+      <g id="line2d_97"/>
+      <g id="text_81">
+       <!-- 0.10 -->
+       <g transform="translate(659.142311 404.762489) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-31" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="123.499985"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_36">
+      <g id="line2d_98"/>
+      <g id="text_82">
+       <!-- 0.20 -->
+       <g transform="translate(656.243874 368.695734) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-32" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="144.199982"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_37">
+      <g id="line2d_99"/>
+      <g id="text_83">
+       <!-- 0.30 -->
+       <g transform="translate(656.298561 332.628979) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+        <use xlink:href="#Montserrat-Regular-2e" x="66.199997"/>
+        <use xlink:href="#Montserrat-Regular-33" x="87.399994"/>
+        <use xlink:href="#Montserrat-Regular-30" x="143.799988"/>
+       </g>
+      </g>
+     </g>
+    </g>
+    <g id="line2d_100">
+     <path d="M 689.200749 403.002557 
+L 701.877927 397.320327 
+L 714.555105 381.967452 
+L 727.232283 361.869681 
+L 739.909461 347.524555 
+L 752.586639 350.211517 
+L 765.263817 375.534381 
+L 777.940995 418.27683 
+L 790.618173 464.518144 
+L 803.295351 497.764852 
+L 815.972529 506.074672 
+L 828.649707 488.277564 
+L 841.326885 455.013582 
+L 854.004063 422.176105 
+L 866.681241 403.220711 
+L 879.35842 402.991781 
+L 892.035598 417.13748 
+L 904.712776 436.064507 
+L 917.389954 450.404118 
+L 930.067132 455.339341 
+" clip-path="url(#p649fc1060a)" style="fill: none; stroke: #4c75ff; stroke-width: 3; stroke-linecap: square"/>
+    </g>
+    <g id="patch_25">
+     <path d="M 689.200749 532.127477 
+L 689.200749 319.51899 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="patch_26">
+     <path d="M 689.200749 532.127477 
+L 942.74431 532.127477 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="text_84">
+     <!-- pial -->
+     <g transform="translate(694.27162 526.812265) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-70"/>
+      <use xlink:href="#Montserrat-Bold-69" x="68.999985"/>
+      <use xlink:href="#Montserrat-Bold-61" x="99.099976"/>
+      <use xlink:href="#Montserrat-Bold-6c" x="160.799973"/>
+     </g>
+    </g>
+    <g id="text_85">
+     <!-- wm -->
+     <g transform="translate(907.248211 526.812265) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Bold-77"/>
+      <use xlink:href="#Montserrat-Bold-6d" x="93.699982"/>
+     </g>
+    </g>
+   </g>
+   <g id="axes_8">
+    <g id="patch_27">
+     <path d="M 1002.782915 532.127477 
+L 1066.168805 532.127477 
+L 1066.168805 319.51899 
+L 1002.782915 319.51899 
+z
+" style="fill: #ffffff"/>
+    </g>
+    <g id="patch_28">
+     <path d="M 1049.993055 444.600919 
+L 1060.118334 444.600919 
+Q 1063.205309 444.600919 1063.205309 441.36521 
+L 1063.205309 424.632805 
+Q 1063.205309 421.397096 1060.118334 421.397096 
+L 1049.993055 421.397096 
+Q 1046.90608 421.397096 1046.90608 424.632805 
+L 1046.90608 441.36521 
+Q 1046.90608 444.600919 1049.993055 444.600919 
+z
+" clip-path="url(#p0ae1ad4c11)" style="fill: #6281e9"/>
+    </g>
+    <g id="patch_29">
+     <path d="M 1029.413221 444.600919 
+L 1039.538499 444.600919 
+Q 1042.625474 444.600919 1042.625474 441.36521 
+L 1042.625474 443.995677 
+Q 1042.625474 440.759969 1039.538499 440.759969 
+L 1029.413221 440.759969 
+Q 1026.326245 440.759969 1026.326245 443.995677 
+L 1026.326245 441.36521 
+Q 1026.326245 444.600919 1029.413221 444.600919 
+z
+" clip-path="url(#p0ae1ad4c11)" style="fill: #be631d"/>
+    </g>
+    <g id="patch_30">
+     <path d="M 1008.833386 464.470287 
+L 1018.958665 464.470287 
+Q 1022.04564 464.470287 1022.04564 461.234579 
+L 1022.04564 448.009199 
+Q 1022.04564 444.77349 1018.958665 444.77349 
+L 1008.833386 444.77349 
+Q 1005.746411 444.77349 1005.746411 448.009199 
+L 1005.746411 461.234579 
+Q 1005.746411 464.470287 1008.833386 464.470287 
+z
+" clip-path="url(#p0ae1ad4c11)" style="fill: #2b8e70"/>
+    </g>
+    <g id="matplotlib.axis_15"/>
+    <g id="matplotlib.axis_16">
+     <g id="ytick_38">
+      <g id="line2d_101"/>
+      <g id="text_86">
+       <!-- −1 -->
+       <g transform="translate(982.17979 507.108316) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-2212"/>
+        <use xlink:href="#Montserrat-Regular-31" x="57.499985"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_39">
+      <g id="line2d_102"/>
+      <g id="text_87">
+       <!-- 0 -->
+       <g transform="translate(986.014477 449.881423) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-30"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_40">
+      <g id="line2d_103"/>
+      <g id="text_88">
+       <!-- 1 -->
+       <g transform="translate(990.22979 392.65453) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-31"/>
+       </g>
+      </g>
+     </g>
+     <g id="ytick_41">
+      <g id="line2d_104"/>
+      <g id="text_89">
+       <!-- 2 -->
+       <g transform="translate(987.331352 335.427637) scale(0.14 -0.14)">
+        <use xlink:href="#Montserrat-Regular-32"/>
+       </g>
+      </g>
+     </g>
+     <g id="text_90">
+      <!-- $\beta_{context}$ -->
+      <g transform="translate(974.39979 455.703234) rotate(-90) scale(0.18 -0.18)">
+       <use xlink:href="#DejaVuSans-Oblique-3b2" transform="translate(0 0.390625)"/>
+       <use xlink:href="#DejaVuSans-Oblique-63" transform="translate(63.818359 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-6f" transform="translate(102.304688 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-6e" transform="translate(145.131836 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-74" transform="translate(189.49707 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-65" transform="translate(216.943359 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-78" transform="translate(260.009766 -16.015625) scale(0.7)"/>
+       <use xlink:href="#DejaVuSans-Oblique-74" transform="translate(301.435547 -16.015625) scale(0.7)"/>
+      </g>
+     </g>
+    </g>
+    <g id="line2d_105">
+     <path d="M 1013.896025 471.456209 
+L 1013.896025 457.656937 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #424242; stroke-width: 2.7; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_106">
+     <path d="M 1034.47586 446.166987 
+L 1034.47586 435.180379 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #424242; stroke-width: 2.7; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_107">
+     <path d="M 1055.055694 431.393979 
+L 1055.055694 411.227642 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #424242; stroke-width: 2.7; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_108">
+     <path d="M 1013.360335 456.574927 
+L 1032.601672 448.487032 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_109">
+     <path d="M 1014.208027 454.29218 
+L 1034.804464 435.765236 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_110">
+     <path d="M 1012.102626 463.355704 
+L 1035.365548 428.163899 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_111">
+     <path d="M 1014.48999 522.463455 
+L 1033.973118 397.160045 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_112">
+     <path d="M 1015.936184 449.069704 
+L 1036.155187 446.220525 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_113">
+     <path d="M 1012.693814 479.590824 
+L 1034.570946 442.061558 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_114">
+     <path d="M 1014.271331 461.534091 
+L 1034.464706 464.310502 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_115">
+     <path d="M 1013.833676 442.44024 
+L 1034.139333 460.429175 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_116">
+     <path d="M 1015.850675 479.939016 
+L 1034.986323 444.502036 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_117">
+     <path d="M 1015.15023 457.948238 
+L 1036.213901 430.473727 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_118">
+     <path d="M 1015.931768 442.913923 
+L 1033.109013 449.836779 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_119">
+     <path d="M 1034.464706 464.310502 
+L 1055.385397 415.552809 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_120">
+     <path d="M 1032.601672 448.487032 
+L 1055.382426 428.170398 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_121">
+     <path d="M 1036.155187 446.220525 
+L 1053.570833 420.66675 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_122">
+     <path d="M 1034.139333 460.429175 
+L 1057.026244 447.215071 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_123">
+     <path d="M 1033.973118 397.160045 
+L 1055.88002 367.49555 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_124">
+     <path d="M 1036.213901 430.473727 
+L 1054.564079 403.983124 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_125">
+     <path d="M 1033.109013 449.836779 
+L 1055.471 425.888071 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_126">
+     <path d="M 1034.570946 442.061558 
+L 1053.409426 366.214108 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_127">
+     <path d="M 1035.365548 428.163899 
+L 1055.727069 430.778527 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_128">
+     <path d="M 1034.804464 435.765236 
+L 1056.806259 449.981743 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_129">
+     <path d="M 1034.986323 444.502036 
+L 1056.541491 478.472762 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-opacity: 0.1; stroke-width: 1.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_130">
+     <path d="M 1013.896025 332.620498 
+L 1013.896025 329.183012 
+L 1055.055694 329.183012 
+L 1055.055694 332.620498 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linecap: square"/>
+    </g>
+    <g id="line2d_131">
+     <path d="M 1013.896025 345.511069 
+L 1013.896025 342.073583 
+L 1034.47586 342.073583 
+L 1034.47586 345.511069 
+" clip-path="url(#p0ae1ad4c11)" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linecap: square"/>
+    </g>
+    <g id="patch_31">
+     <path d="M 998.782915 532.127477 
+L 998.782915 319.51899 
+" style="fill: none; stroke: #000000; stroke-width: 0.5; stroke-linejoin: miter; stroke-linecap: square"/>
+    </g>
+    <g id="PathCollection_4">
+     <g clip-path="url(#p0ae1ad4c11)">
+      <use xlink:href="#mf2455bc2ef" x="1013.360335" y="456.574927"/>
+      <use xlink:href="#mf2455bc2ef" x="1014.208027" y="454.29218"/>
+      <use xlink:href="#mf2455bc2ef" x="1012.102626" y="463.355704"/>
+      <use xlink:href="#mf2455bc2ef" x="1014.48999" y="522.463455"/>
+      <use xlink:href="#mf2455bc2ef" x="1015.936184" y="449.069704"/>
+      <use xlink:href="#mf2455bc2ef" x="1012.693814" y="479.590824"/>
+      <use xlink:href="#mf2455bc2ef" x="1014.271331" y="461.534091"/>
+      <use xlink:href="#mf2455bc2ef" x="1013.833676" y="442.44024"/>
+      <use xlink:href="#mf2455bc2ef" x="1015.850675" y="479.939016"/>
+      <use xlink:href="#mf2455bc2ef" x="1015.15023" y="457.948238"/>
+      <use xlink:href="#mf2455bc2ef" x="1015.931768" y="442.913923"/>
+     </g>
+    </g>
+    <g id="PathCollection_5">
+     <g clip-path="url(#p0ae1ad4c11)">
+      <use xlink:href="#mf2455bc2ef" x="1034.464706" y="464.310502"/>
+      <use xlink:href="#mf2455bc2ef" x="1032.601672" y="448.487032"/>
+      <use xlink:href="#mf2455bc2ef" x="1036.155187" y="446.220525"/>
+      <use xlink:href="#mf2455bc2ef" x="1034.139333" y="460.429175"/>
+      <use xlink:href="#mf2455bc2ef" x="1033.973118" y="397.160045"/>
+      <use xlink:href="#mf2455bc2ef" x="1036.213901" y="430.473727"/>
+      <use xlink:href="#mf2455bc2ef" x="1033.109013" y="449.836779"/>
+      <use xlink:href="#mf2455bc2ef" x="1034.570946" y="442.061558"/>
+      <use xlink:href="#mf2455bc2ef" x="1035.365548" y="428.163899"/>
+      <use xlink:href="#mf2455bc2ef" x="1034.804464" y="435.765236"/>
+      <use xlink:href="#mf2455bc2ef" x="1034.986323" y="444.502036"/>
+     </g>
+    </g>
+    <g id="PathCollection_6">
+     <g clip-path="url(#p0ae1ad4c11)">
+      <use xlink:href="#mf2455bc2ef" x="1053.409426" y="366.214108"/>
+      <use xlink:href="#mf2455bc2ef" x="1055.727069" y="430.778527"/>
+      <use xlink:href="#mf2455bc2ef" x="1055.382426" y="428.170398"/>
+      <use xlink:href="#mf2455bc2ef" x="1057.026244" y="447.215071"/>
+      <use xlink:href="#mf2455bc2ef" x="1055.88002" y="367.49555"/>
+      <use xlink:href="#mf2455bc2ef" x="1056.806259" y="449.981743"/>
+      <use xlink:href="#mf2455bc2ef" x="1053.570833" y="420.66675"/>
+      <use xlink:href="#mf2455bc2ef" x="1054.564079" y="403.983124"/>
+      <use xlink:href="#mf2455bc2ef" x="1055.471" y="425.888071"/>
+      <use xlink:href="#mf2455bc2ef" x="1056.541491" y="478.472762"/>
+      <use xlink:href="#mf2455bc2ef" x="1055.385397" y="415.552809"/>
+     </g>
+    </g>
+    <g id="text_91">
+     <!-- ** -->
+     <g transform="translate(1027.528985 333.610041) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Regular-2a"/>
+      <use xlink:href="#Montserrat-Regular-2a" x="38.599991"/>
+     </g>
+    </g>
+    <g id="text_92">
+     <!-- * -->
+     <g transform="translate(1020.712505 345.984989) scale(0.18 -0.18)">
+      <use xlink:href="#Montserrat-Regular-2a"/>
+     </g>
+    </g>
+    <g id="legend_2"/>
+   </g>
+   <g id="text_93">
+    <!-- Markuerkiaga-correction -->
+    <g transform="translate(361.8675 307.457572) scale(0.3 -0.3)">
+     <defs>
+      <path id="Montserrat-Bold-4d" d="M 5581 0 
+L 5568 4480 
+L 4717 4480 
+L 3066 1696 
+L 1389 4480 
+L 531 4480 
+L 531 0 
+L 1504 0 
+L 1504 2630 
+L 2816 474 
+L 3283 474 
+L 4602 2688 
+L 4608 0 
+L 5581 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-6b" d="M 3027 0 
+L 4237 0 
+L 2675 1984 
+L 4109 3443 
+L 2918 3443 
+L 1459 2061 
+L 1459 4749 
+L 461 4749 
+L 461 0 
+L 1459 0 
+L 1459 877 
+L 1939 1350 
+L 3027 0 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-75" d="M 2931 3443 
+L 2931 1741 
+C 2931 1107 2598 813 2138 813 
+C 1696 813 1440 1069 1440 1645 
+L 1440 3443 
+L 442 3443 
+L 442 1498 
+C 442 435 1050 -51 1914 -51 
+C 2336 -51 2720 109 2982 410 
+L 2982 0 
+L 3930 0 
+L 3930 3443 
+L 2931 3443 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-65" d="M 3834 1709 
+C 3834 2816 3053 3494 2042 3494 
+C 992 3494 205 2752 205 1722 
+C 205 698 979 -51 2170 -51 
+C 2790 -51 3270 141 3590 506 
+L 3059 1082 
+C 2822 858 2560 749 2195 749 
+C 1670 749 1306 1011 1210 1440 
+L 3814 1440 
+C 3821 1523 3834 1632 3834 1709 
+z
+M 2048 2739 
+C 2496 2739 2822 2458 2893 2022 
+L 1197 2022 
+C 1267 2464 1594 2739 2048 2739 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-2d" d="M 333 1402 
+L 2144 1402 
+L 2144 2202 
+L 333 2202 
+L 333 1402 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-63" d="M 2125 -51 
+C 2848 -51 3418 269 3667 819 
+L 2893 1242 
+C 2707 909 2432 768 2118 768 
+C 1613 768 1216 1120 1216 1722 
+C 1216 2323 1613 2675 2118 2675 
+C 2432 2675 2707 2528 2893 2202 
+L 3667 2618 
+C 3418 3181 2848 3494 2125 3494 
+C 1005 3494 205 2758 205 1722 
+C 205 685 1005 -51 2125 -51 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-6f" d="M 2099 -51 
+C 3194 -51 3987 685 3987 1722 
+C 3987 2758 3194 3494 2099 3494 
+C 1005 3494 205 2758 205 1722 
+C 205 685 1005 -51 2099 -51 
+z
+M 2099 768 
+C 1600 768 1216 1126 1216 1722 
+C 1216 2317 1600 2675 2099 2675 
+C 2598 2675 2976 2317 2976 1722 
+C 2976 1126 2598 768 2099 768 
+z
+" transform="scale(0.015625)"/>
+      <path id="Montserrat-Bold-74" d="M 2413 870 
+C 2304 787 2157 742 2010 742 
+C 1741 742 1581 902 1581 1197 
+L 1581 2598 
+L 2438 2598 
+L 2438 3366 
+L 1581 3366 
+L 1581 4205 
+L 582 4205 
+L 582 3366 
+L 51 3366 
+L 51 2598 
+L 582 2598 
+L 582 1184 
+C 582 365 1056 -51 1869 -51 
+C 2176 -51 2477 19 2682 166 
+L 2413 870 
+z
+" transform="scale(0.015625)"/>
+     </defs>
+     <use xlink:href="#Montserrat-Bold-4d"/>
+     <use xlink:href="#Montserrat-Bold-61" x="95.499985"/>
+     <use xlink:href="#Montserrat-Bold-72" x="157.199982"/>
+     <use xlink:href="#Montserrat-Bold-6b" x="200.299973"/>
+     <use xlink:href="#Montserrat-Bold-75" x="266.299957"/>
+     <use xlink:href="#Montserrat-Bold-65" x="334.999939"/>
+     <use xlink:href="#Montserrat-Bold-72" x="398.09993"/>
+     <use xlink:href="#Montserrat-Bold-6b" x="441.199921"/>
+     <use xlink:href="#Montserrat-Bold-69" x="507.199905"/>
+     <use xlink:href="#Montserrat-Bold-61" x="537.299896"/>
+     <use xlink:href="#Montserrat-Bold-67" x="598.999893"/>
+     <use xlink:href="#Montserrat-Bold-61" x="668.999878"/>
+     <use xlink:href="#Montserrat-Bold-2d" x="730.699875"/>
+     <use xlink:href="#Montserrat-Bold-63" x="769.299866"/>
+     <use xlink:href="#Montserrat-Bold-6f" x="828.399857"/>
+     <use xlink:href="#Montserrat-Bold-72" x="893.899841"/>
+     <use xlink:href="#Montserrat-Bold-72" x="936.999832"/>
+     <use xlink:href="#Montserrat-Bold-65" x="980.099823"/>
+     <use xlink:href="#Montserrat-Bold-63" x="1043.199814"/>
+     <use xlink:href="#Montserrat-Bold-74" x="1102.299805"/>
+     <use xlink:href="#Montserrat-Bold-69" x="1145.799789"/>
+     <use xlink:href="#Montserrat-Bold-6f" x="1175.89978"/>
+     <use xlink:href="#Montserrat-Bold-6e" x="1241.399765"/>
+    </g>
+   </g>
+  </g>
+ </g>
+ <defs>
+  <clipPath id="pe6d9b1c9da">
+   <rect x="69.94048" y="44.169995" width="252.64829" height="211.310847"/>
+  </clipPath>
+  <clipPath id="p0452089d9c">
+   <rect x="378.689563" y="44.169995" width="252.64829" height="211.310847"/>
+  </clipPath>
+  <clipPath id="p3a7cfdafc3">
+   <rect x="687.410208" y="44.169995" width="252.64829" height="211.310847"/>
+  </clipPath>
+  <clipPath id="p25363e48d2">
+   <rect x="1002.995541" y="44.169995" width="63.162073" height="211.310847"/>
+  </clipPath>
+  <clipPath id="p6af411f29a">
+   <rect x="69.94048" y="319.51899" width="253.543561" height="212.608488"/>
+  </clipPath>
+  <clipPath id="p427af21e3d">
+   <rect x="379.556396" y="319.51899" width="253.543561" height="212.608488"/>
+  </clipPath>
+  <clipPath id="p649fc1060a">
+   <rect x="689.200749" y="319.51899" width="253.543561" height="212.608488"/>
+  </clipPath>
+  <clipPath id="p0ae1ad4c11">
+   <rect x="1002.782915" y="319.51899" width="63.38589" height="212.608488"/>
+  </clipPath>
+ </defs>
+</svg>
