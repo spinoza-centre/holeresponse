@@ -25,14 +25,14 @@
      inkscape:pagecheckerboard="0"
      inkscape:document-units="pt"
      showgrid="false"
-     inkscape:zoom="10.043328"
-     inkscape:cx="538.61629"
-     inkscape:cy="57.301724"
-     inkscape:window-width="1920"
-     inkscape:window-height="1001"
-     inkscape:window-x="-9"
-     inkscape:window-y="-9"
-     inkscape:window-maximized="1"
+     inkscape:zoom="1.255416"
+     inkscape:cx="322.20395"
+     inkscape:cy="109.12717"
+     inkscape:window-width="1588"
+     inkscape:window-height="1030"
+     inkscape:window-x="64"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
      inkscape:current-layer="figure_1" />
   <metadata
      id="metadata1898">
@@ -55,6 +55,14 @@
     <style
        type="text/css"
        id="style1900">*{stroke-linejoin: round; stroke-linecap: butt}</style>
+    <path
+       id="Montserrat-Regular-2a"
+       d="m 2330,4038 -148,276 -800,-474 v 909 h -294 l 6,-909 -800,474 -153,-276 800,-448 -800,-448 153,-268 800,467 -6,-909 h 294 v 909 l 800,-467 148,268 -794,448 z"
+       transform="scale(0.015625)" />
+    <path
+       id="Montserrat-Regular-2a-9"
+       d="m 2330,4038 -148,276 -800,-474 v 909 h -294 l 6,-909 -800,474 -153,-276 800,-448 -800,-448 153,-268 800,467 -6,-909 h 294 v 909 l 800,-467 148,268 -794,448 z"
+       transform="scale(0.015625)" />
   </defs>
   <g
      id="figure_1"
@@ -1733,7 +1741,8 @@
          id="path2495" />
     </g>
     <g
-       id="line2d_37">
+       id="line2d_37"
+       transform="translate(0,2.499527)">
       <path
          d="m 414.24737,47.716509 v -4.456036 h 32.0583 v 4.456036"
          clip-path="url(#p378b641232)"
@@ -2090,17 +2099,37 @@
            x="252.65025"
            y="81.340996">context</tspan></text>
     </g>
-    <text
-       xml:space="preserve"
-       style="font-size:18.0028px;line-height:1.25;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;letter-spacing:0px;word-spacing:0px;text-anchor:middle;stroke-width:1.12517"
-       x="430.27652"
-       y="47.225079"
-       id="text5264"><tspan
-         sodipodi:role="line"
-         id="tspan5262"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Montserrat;-inkscape-font-specification:Montserrat;stroke-width:1.12517"
-         x="430.27652"
-         y="47.225079">***</tspan></text>
+    <g
+       id="text_28"
+       transform="translate(-2.125e-4,5.5001785)"
+       style="stroke-linecap:butt;stroke-linejoin:round">
+      <!-- ** -->
+      <g
+         transform="matrix(0.18,0,0,-0.18,423.32965,44.223384)"
+         id="g6054">
+        <defs
+           id="defs6048">
+          <path
+             id="path1849"
+             d="m 2330,4038 -148,276 -800,-474 v 909 h -294 l 6,-909 -800,474 -153,-276 800,-448 -800,-448 153,-268 800,467 -6,-909 h 294 v 909 l 800,-467 148,268 -794,448 z"
+             transform="scale(0.015625)" />
+        </defs>
+        <use
+           xlink:href="#Montserrat-Regular-2a-9"
+           id="use6050"
+           x="0"
+           y="0"
+           width="100%"
+           height="100%" />
+        <use
+           xlink:href="#Montserrat-Regular-2a-9"
+           x="38.599991"
+           id="use6052"
+           y="0"
+           width="100%"
+           height="100%" />
+      </g>
+    </g>
   </g>
   <defs
      id="defs2584">
