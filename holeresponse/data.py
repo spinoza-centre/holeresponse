@@ -1001,16 +1001,21 @@ def weighted_hrf_depth(
     zscore=False,
     detrend=False,
     norm=False,
+    interval=None,
+    time_col="t"
     ):
 
-    # get average HRF profile
-    if not isinstance(hrf, (np.ndarray,pd.DataFrame)):
-        avg_hrf = avg.mean(axis=1).values
-    else:
-        if isinstance(hrf, np.ndarray):
-            avg_hrf = hrf.copy()
-        elif isinstance(hrf, pd.DataFrame):
-            avg_hrf = hrf.values
+    avg_hrf = None
+    if not isinstance(interval, (list,tuple)):
+
+        # get average HRF profile
+        if not isinstance(hrf, (np.ndarray,pd.DataFrame)):
+            avg_hrf = avg.mean(axis=1).values
+        else:
+            if isinstance(hrf, np.ndarray):
+                avg_hrf = hrf.copy()
+            elif isinstance(hrf, pd.DataFrame):
+                avg_hrf = hrf.values
 
     # get subject-specific profiles over depth & correct baseline because we did the same in the plots above
     ev1 = utils.select_from_df(subjs, expression=f"event_type = {ev}")
@@ -1021,14 +1026,30 @@ def weighted_hrf_depth(
     sub_zscore = []
     for sub in sub_ids:
         sub_vals = utils.select_from_df(ev1, expression=f"subject = {sub}")
-        sub_shift = fitting.Epoch.correct_baseline(sub_vals, bsl=bsl).values
-        sub_w = single_weights(sub_shift, avg_hrf)
+        sub_shift = fitting.Epoch.correct_baseline(sub_vals, bsl=bsl)
+
+        if not isinstance(interval, (list,tuple)):
+            sub_w = single_weights(sub_shift.values, avg_hrf)
+        else:
+            assert len(interval) == 2, f"Interval must have 2 elements, not {len(interval)}: {interval}"
+
+            sub_t = utils.select_from_df(
+                sub_shift,
+                expression=(
+                    f"{time_col} > {interval[0]}",
+                    "&",
+                    f"{time_col} < {interval[1]}"
+                )
+            )
+
+            sub_w = sub_t.mean(axis=0).values
+            avg_hrf = sub_w.copy()
 
         if detrend:
             sub_w = signal.detrend(sub_w)
 
         sub_weights.append(sub_w)
-
+        
         # zscore?
         if zscore:
             m_ = sub_w.mean()

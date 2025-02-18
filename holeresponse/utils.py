@@ -6,6 +6,7 @@ import PIL
 import numpy as np
 import cv2
 from scipy import stats
+import subprocess
 opj = os.path.join
 opd = os.path.dirname
 
@@ -767,6 +768,63 @@ class SubjectsDict():
 
         df = pd.concat(df)
         df.set_index(["subject","event_type"], inplace=True)
+        return df
+    
+    def get_slicepar(self, subject):
+        sesID = self.get_session(subject)
+        src_dir = opj(self.proj_dir, "sourcedata", subject, f"ses-{sesID}")
+
+        filts = self.get_slc_criteria(subject)+["acq-1slice", ".par"]
+        par_file = utils.get_file_from_substring([i.lower() for i in filts], src_dir)
+
+        if isinstance(par_file, list):
+            return par_file[0]
+        elif isinstance(par_file, str):
+            return par_file
+        else:
+            raise ValueError(f"Could not extract .par file from '{src_dir}' with filters: {filts}")
+
+    def get_angles(self, subject):
+
+        par_file = self.get_slicepar(subject)
+        cmd = [
+            "bash", "-c",
+            f"source call_bashhelper && read_par {par_file} \"Angulation midslice\""
+        ]
+
+        res = subprocess.run(cmd, capture_output=True, text=True)
+        try:
+            res = utils.string2float(res.stdout.strip())
+        except:
+            raise Exception(f"Something failed in the read_par subprocess")
+
+        return res 
+    
+    def get_angle_df(
+        self, 
+        columns=["ap","fh","lr"], 
+        index=True,
+        subjects=None
+        ):
+
+        if not isinstance(subjects, list):
+            subjs = self.get_subjects()
+        else:
+            subjs = subjects
+
+        df = []
+        for sub in subjs:
+            angles = pd.DataFrame(self.get_angles(sub)[np.newaxis,...], columns=columns)
+            angles["subject"] = sub.split('-')[-1]
+            df.append(angles)
+
+        df = pd.concat(df)
+
+        if index:
+            df.set_index(["subject"], inplace=True)
+        else:
+            df.reset_index(drop=True, inplace=True)
+
         return df
 
 def read_pdf_image(img):
