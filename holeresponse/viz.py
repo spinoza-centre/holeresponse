@@ -1147,6 +1147,7 @@ def _save_figure(
                 bbox_inches="tight",
                 dpi=300,
                 facecolor="white",
+                format=ext,
                 **kwargs
             )    
 
@@ -2007,6 +2008,7 @@ class MagnitudePerEvent():
         add_title=True,
         as_index=False,
         ref_stim="act",
+        plot=True,
         **kwargs
         ):
 
@@ -2066,23 +2068,25 @@ class MagnitudePerEvent():
         self.sub_ids = utils.get_unique_ids(self.max_df, id="subject")
         self.figsize = (2*len(self.sub_ids),4)
 
-        if not isinstance(axs, (dict,np.ndarray,list,mpl.figure.SubFigure)):
-            fig,self.axs = plt.subplots(
-                ncols=len(self.sub_ids), 
-                figsize=self.figsize,
-                constrained_layout=True
-            )
-        else:
-            if isinstance(axs, mpl.figure.SubFigure):
-                self.axs = axs.subplots(
-                    ncols=len(self.sub_ids),
+
+        if plot:
+            
+            if not isinstance(axs, (dict,np.ndarray,list,mpl.figure.SubFigure)):
+                fig,self.axs = plt.subplots(
+                    ncols=len(self.sub_ids), 
+                    figsize=self.figsize,
                     constrained_layout=True
                 )
             else:
-                self.axs = axs
+                if isinstance(axs, mpl.figure.SubFigure):
+                    self.axs = axs.subplots(
+                        ncols=len(self.sub_ids),
+                        constrained_layout=True
+                    )
+                else:
+                    self.axs = axs
 
-        self.plot_subjects(**kwargs)
-
+            self.plot_subjects(**kwargs)
     
     def plot_subjects(self, **kwargs):
 
